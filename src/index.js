@@ -1,17 +1,48 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+// index.js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import { createGlobalStyle } from 'styled-components'
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+import Main from './App/Main'
+
+const GlobalStyle = createGlobalStyle`
+  html,
+  body,
+  #app,
+  .wrapper {
+    min-height: 100vh;
+    height: 100%;
+  }
+
+  html {
+    box-sizing: border-box;
+    font-size: 100%;
+  }
+
+  * {
+    &,
+    &::after,
+    &::before {
+      box-sizing: inherit;
+    }
+  }
+
+  body {
+    padding: 0;
+    margin: 0;
+    font: 1rem / 1.414 arial, sans-serif;
+  }
+`
+
+const wrapper = document.getElementById('app')
+
+const App = () => (
+  <BrowserRouter>
+    <GlobalStyle/>
+    <Main />
+  </BrowserRouter>
+)
+
+ReactDOM.render(<App />, wrapper)
