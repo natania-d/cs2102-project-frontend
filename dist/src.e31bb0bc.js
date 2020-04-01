@@ -51239,9 +51239,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.default = RestaurantCard;
 
 var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
 
 var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
 
@@ -51259,46 +51261,83 @@ var _styles = require("@material-ui/core/styles");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const RCard = (0, _styles.styled)(_Card.default)({
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  "&:hover": {
-    cursor: 'pointer'
+const useStyles = (0, _styles.makeStyles)(theme => ({
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    "&:hover": {
+      cursor: 'pointer'
+    }
+  },
+  cardMedia: {
+    paddingTop: '56.25%' // 16:9
+
+  },
+  cardContent: {
+    flexGrow: 1
   }
-});
-const RCardMedia = (0, _styles.styled)(_CardMedia.default)({
-  paddingTop: '56.25%' // 16:9
+}));
 
-});
-const RCardContent = (0, _styles.styled)(_CardContent.default)({
-  flexGrow: 1
-});
+function RestaurantCard(props) {
+  const classes = useStyles();
+  let history = (0, _reactRouterDom.useHistory)();
 
-class RestaurantCard extends _react.default.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    return _react.default.createElement(RCard, {
-      onClick: () => {
-        alert("Hello from here");
-      }
-    }, _react.default.createElement(RCardMedia, {
-      image: this.props.imageUrl
-    }), _react.default.createElement(RCardContent, null, _react.default.createElement(_Typography.default, {
-      gutterBottom: true,
-      variant: "h5",
-      component: "h2"
-    }, this.props.title), _react.default.createElement(_Typography.default, null, this.props.description)));
+  function handleClick() {
+    history.push(props.restaurantUrl);
   }
 
-}
-
-exports.default = RestaurantCard;
-},{"react":"../node_modules/react/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"App/pages/RestaurantList.js":[function(require,module,exports) {
+  return _react.default.createElement(_Card.default, {
+    className: classes.card,
+    onClick: handleClick
+  }, _react.default.createElement(_CardMedia.default, {
+    className: classes.cardMedia,
+    image: props.imageUrl
+  }), _react.default.createElement(_CardContent.default, {
+    className: classes.cardContent
+  }, _react.default.createElement(_Typography.default, {
+    gutterBottom: true,
+    variant: "h5",
+    component: "h2"
+  }, props.title), _react.default.createElement(_Typography.default, null, props.description)));
+} // export default class RestaurantCard extends React.Component {
+//     constructor(props) {
+//         super(props)
+//         this.state = {
+//         }
+//     }
+//     handleClick() {
+//         let history = useHistory();
+//         history.push("/restaurant");
+//     }
+//     render() {
+//         return (
+//             <RCard onClick={this.handleClick}>
+//                 <RCardMedia
+//                 image={this.props.imageUrl}
+//                 />
+//                 <RCardContent>
+//                 <Typography gutterBottom variant="h5" component="h2">
+//                     {this.props.title}
+//                 </Typography>
+//                 <Typography>
+//                     {this.props.description}
+//                 </Typography>
+//                 </RCardContent>
+//                 {/* <CardActions>
+//                 <Button size="small" color="primary">
+//                     View
+//                 </Button>
+//                 <Button size="small" color="primary">
+//                     Edit
+//                 </Button>
+//                 </CardActions> */}
+//                 {/* <Route path="/:id" component={RestaurantPage}/> */}
+//             </RCard>
+//         );
+//     }
+// }
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"App/pages/RestaurantList.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51376,7 +51415,7 @@ const styles = theme => ({
   }
 });
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const cards = [1, 2, 3, 4];
 
 class RestaurantList extends _react.default.Component {
   constructor(props) {
@@ -51404,18 +51443,51 @@ class RestaurantList extends _react.default.Component {
     }, _react.default.createElement(_Grid.default, {
       container: true,
       spacing: 4
-    }, cards.map(card => _react.default.createElement(_Grid.default, {
+    }, _react.default.createElement(_Grid.default, {
       item: true,
-      key: card,
+      key: "kfc",
       xs: 12,
       sm: 6,
       md: 4
     }, _react.default.createElement(_RestaurantCard.default, {
-      imageUrl: "https://source.unsplash.com/JorKKx5rvA0/640x426",
-      redirectUrl: "",
-      title: "Genki Sushi",
-      description: "Japanese, Delivery, Sushi"
-    })))))), _react.default.createElement("footer", {
+      imageUrl: "https://source.unsplash.com/HYpXP6Zk1dw/640x428",
+      restaurantUrl: "/kfc",
+      title: "KFC",
+      description: "Fast Food"
+    })), _react.default.createElement(_Grid.default, {
+      item: true,
+      key: "mcdonalds",
+      xs: 12,
+      sm: 6,
+      md: 4
+    }, _react.default.createElement(_RestaurantCard.default, {
+      imageUrl: "https://source.unsplash.com/wqyanQ8ibTE/640x480",
+      restaurantUrl: "/mcdonalds",
+      title: "McDonalds",
+      description: "Fast Food"
+    })), _react.default.createElement(_Grid.default, {
+      item: true,
+      key: "domino-pizza",
+      xs: 12,
+      sm: 6,
+      md: 4
+    }, _react.default.createElement(_RestaurantCard.default, {
+      imageUrl: "https://source.unsplash.com/SU1LFoeEUkk/640x423",
+      restaurantUrl: "/domino-pizza",
+      title: "Domino Pizza",
+      description: "Pizza"
+    })), _react.default.createElement(_Grid.default, {
+      item: true,
+      key: "pizza-hut",
+      xs: 12,
+      sm: 6,
+      md: 4
+    }, _react.default.createElement(_RestaurantCard.default, {
+      imageUrl: "https://source.unsplash.com/SU1LFoeEUkk/640x423",
+      restaurantUrl: "/pizza-hut",
+      title: "Pizza Hut",
+      description: "Pizza"
+    }))))), _react.default.createElement("footer", {
       className: classes.footer
     }, _react.default.createElement(_Typography.default, {
       variant: "h6",
@@ -51434,7 +51506,9790 @@ class RestaurantList extends _react.default.Component {
 var _default = (0, _styles.withStyles)(styles)(RestaurantList);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","./../components/RestaurantCard":"App/components/RestaurantCard.js"}],"App/components/Nav.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","./../components/RestaurantCard":"App/components/RestaurantCard.js"}],"App/components/FoodCard.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = RestaurantCard;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
+
+var _Card = _interopRequireDefault(require("@material-ui/core/Card"));
+
+var _CardActions = _interopRequireDefault(require("@material-ui/core/CardActions"));
+
+var _CardContent = _interopRequireDefault(require("@material-ui/core/CardContent"));
+
+var _CardMedia = _interopRequireDefault(require("@material-ui/core/CardMedia"));
+
+var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
+
+var _styles = require("@material-ui/core/styles");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const useStyles = (0, _styles.makeStyles)(theme => ({
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  cardMedia: {
+    paddingTop: '56.25%' // 16:9
+
+  },
+  cardContent: {
+    flexGrow: 1
+  }
+}));
+
+function RestaurantCard(props) {
+  const classes = useStyles();
+
+  function handleClick() {}
+
+  return _react.default.createElement(_Card.default, {
+    className: classes.card,
+    onClick: handleClick
+  }, _react.default.createElement(_CardMedia.default, {
+    className: classes.cardMedia,
+    image: props.imageUrl
+  }), _react.default.createElement(_CardContent.default, {
+    className: classes.cardContent
+  }, _react.default.createElement(_Typography.default, {
+    gutterBottom: true,
+    variant: "h5",
+    component: "h2"
+  }, props.title), _react.default.createElement(_Typography.default, null, props.description)), _react.default.createElement(_CardActions.default, null, _react.default.createElement(_Button.default, {
+    size: "small",
+    color: "primary"
+  }, "Add")));
+}
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"App/pages/RestaurantPage.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _AppBar = _interopRequireDefault(require("@material-ui/core/AppBar"));
+
+var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
+
+var _PhotoCamera = _interopRequireDefault(require("@material-ui/icons/PhotoCamera"));
+
+var _CssBaseline = _interopRequireDefault(require("@material-ui/core/CssBaseline"));
+
+var _Grid = _interopRequireDefault(require("@material-ui/core/Grid"));
+
+var _Toolbar = _interopRequireDefault(require("@material-ui/core/Toolbar"));
+
+var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
+
+var _styles = require("@material-ui/core/styles");
+
+var _Container = _interopRequireDefault(require("@material-ui/core/Container"));
+
+var _Link = _interopRequireDefault(require("@material-ui/core/Link"));
+
+var _FoodCard = _interopRequireDefault(require("./../components/FoodCard"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const styles = theme => ({
+  icon: {
+    marginRight: theme.spacing(2)
+  },
+  heroContent: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(8, 0, 6)
+  },
+  heroButtons: {
+    marginTop: theme.spacing(4)
+  },
+  cardGrid: {
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(8)
+  },
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  cardMedia: {
+    paddingTop: '56.25%' // 16:9
+
+  },
+  cardContent: {
+    flexGrow: 1
+  },
+  footer: {
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(6)
+  }
+});
+
+const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+class RestaurantPage extends _react.default.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+      className: classes.heroContent
+    }, _react.default.createElement(_Container.default, {
+      maxWidth: "sm"
+    }, _react.default.createElement(_Typography.default, {
+      component: "h1",
+      variant: "h2",
+      align: "center",
+      color: "textPrimary",
+      gutterBottom: true
+    }, "PAGE"))), _react.default.createElement(_Container.default, {
+      className: classes.cardGrid,
+      maxWidth: "md"
+    }, _react.default.createElement(_Grid.default, {
+      container: true,
+      spacing: 4
+    }, cards.map(card => _react.default.createElement(_Grid.default, {
+      item: true,
+      key: card,
+      xs: 12,
+      sm: 6,
+      md: 4
+    }, _react.default.createElement(_FoodCard.default, {
+      imageUrl: "https://source.unsplash.com/JorKKx5rvA0/640x426",
+      title: "McSpicy Value Meal",
+      description: ""
+    }))))), _react.default.createElement("footer", {
+      className: classes.footer
+    }, _react.default.createElement(_Typography.default, {
+      variant: "h6",
+      align: "center",
+      gutterBottom: true
+    }, "Footer"), _react.default.createElement(_Typography.default, {
+      variant: "subtitle1",
+      align: "center",
+      color: "textSecondary",
+      component: "p"
+    }, "Something here to give the footer a purpose!")));
+  }
+
+}
+
+var _default = (0, _styles.withStyles)(styles)(RestaurantPage);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","./../components/FoodCard":"App/components/FoodCard.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createSvgIcon;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _SvgIcon = _interopRequireDefault(require("../../SvgIcon"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function createSvgIcon(path, displayName) {
+  var Component = React.memo(React.forwardRef(function (props, ref) {
+    return /*#__PURE__*/React.createElement(_SvgIcon.default, (0, _extends2.default)({}, props, {
+      ref: ref
+    }), path);
+  }));
+
+  if ("development" !== 'production') {
+    Component.displayName = "".concat(displayName, "Icon");
+  }
+
+  Component.muiName = _SvgIcon.default.muiName;
+  return Component;
+}
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","../../SvgIcon":"../node_modules/@material-ui/core/esm/SvgIcon/index.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/Person.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _createSvgIcon = _interopRequireDefault(require("./createSvgIcon"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @ignore - internal component.
+ */
+var _default = (0, _createSvgIcon.default)( /*#__PURE__*/React.createElement("path", {
+  d: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+}), 'Person');
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./createSvgIcon":"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js"}],"../node_modules/@material-ui/core/esm/Avatar/Avatar.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Person = _interopRequireDefault(require("../internal/svg-icons/Person"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0,
+      width: 40,
+      height: 40,
+      fontFamily: theme.typography.fontFamily,
+      fontSize: theme.typography.pxToRem(20),
+      lineHeight: 1,
+      borderRadius: '50%',
+      overflow: 'hidden',
+      userSelect: 'none'
+    },
+
+    /* Styles applied to the root element if not `src` or `srcSet`. */
+    colorDefault: {
+      color: theme.palette.background.default,
+      backgroundColor: theme.palette.type === 'light' ? theme.palette.grey[400] : theme.palette.grey[600]
+    },
+
+    /* Styles applied to the root element if `variant="circle"`. */
+    circle: {},
+
+    /* Styles applied to the root element if `variant="rounded"`. */
+    rounded: {
+      borderRadius: theme.shape.borderRadius
+    },
+
+    /* Styles applied to the root element if `variant="square"`. */
+    square: {
+      borderRadius: 0
+    },
+
+    /* Styles applied to the img element if either `src` or `srcSet` is defined. */
+    img: {
+      width: '100%',
+      height: '100%',
+      textAlign: 'center',
+      // Handle non-square image. The property isn't supported by IE 11.
+      objectFit: 'cover',
+      // Hide alt text.
+      color: 'transparent',
+      // Hide the image broken icon, only works on Chrome.
+      textIndent: 10000
+    },
+
+    /* Styles applied to the fallback icon */
+    fallback: {
+      width: '75%',
+      height: '75%'
+    }
+  };
+};
+
+exports.styles = styles;
+
+function useLoaded(_ref) {
+  var src = _ref.src,
+      srcSet = _ref.srcSet;
+
+  var _React$useState = React.useState(false),
+      loaded = _React$useState[0],
+      setLoaded = _React$useState[1];
+
+  React.useEffect(function () {
+    if (!src && !srcSet) {
+      return undefined;
+    }
+
+    setLoaded(false);
+    var active = true;
+    var image = new Image();
+    image.src = src;
+    image.srcSet = srcSet;
+
+    image.onload = function () {
+      if (!active) {
+        return;
+      }
+
+      setLoaded('loaded');
+    };
+
+    image.onerror = function () {
+      if (!active) {
+        return;
+      }
+
+      setLoaded('error');
+    };
+
+    return function () {
+      active = false;
+    };
+  }, [src, srcSet]);
+  return loaded;
+}
+
+var Avatar = React.forwardRef(function Avatar(props, ref) {
+  var alt = props.alt,
+      childrenProp = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'div' : _props$component,
+      imgProps = props.imgProps,
+      sizes = props.sizes,
+      src = props.src,
+      srcSet = props.srcSet,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'circle' : _props$variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["alt", "children", "classes", "className", "component", "imgProps", "sizes", "src", "srcSet", "variant"]);
+  var children = null; // Use a hook instead of onError on the img element to support server-side rendering.
+
+  var loaded = useLoaded({
+    src: src,
+    srcSet: srcSet
+  });
+  var hasImg = src || srcSet;
+  var hasImgNotFailing = hasImg && loaded !== 'error';
+
+  if (hasImgNotFailing) {
+    children = /*#__PURE__*/React.createElement("img", (0, _extends2.default)({
+      alt: alt,
+      src: src,
+      srcSet: srcSet,
+      sizes: sizes,
+      className: classes.img
+    }, imgProps));
+  } else if (childrenProp != null) {
+    children = childrenProp;
+  } else if (hasImg && alt) {
+    children = alt[0];
+  } else {
+    children = /*#__PURE__*/React.createElement(_Person.default, {
+      className: classes.fallback
+    });
+  }
+
+  return /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, classes.system, classes[variant], className, !hasImgNotFailing && classes.colorDefault),
+    ref: ref
+  }, other), children);
+});
+"development" !== "production" ? Avatar.propTypes = {
+  /**
+   * Used in combination with `src` or `srcSet` to
+   * provide an alt attribute for the rendered `img` element.
+   */
+  alt: _propTypes.default.string,
+
+  /**
+   * Used to render icon or text elements inside the Avatar if `src` is not set.
+   * This can be an element, or just a string.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType,
+
+  /**
+   * Attributes applied to the `img` element if the component is used to display an image.
+   * It can be used to listen for the loading error event.
+   */
+  imgProps: _propTypes.default.object,
+
+  /**
+   * The `sizes` attribute for the `img` element.
+   */
+  sizes: _propTypes.default.string,
+
+  /**
+   * The `src` attribute for the `img` element.
+   */
+  src: _propTypes.default.string,
+
+  /**
+   * The `srcSet` attribute for the `img` element.
+   * Use this attribute for responsive image display.
+   */
+  srcSet: _propTypes.default.string,
+
+  /**
+   * The shape of the avatar.
+   */
+  variant: _propTypes.default.oneOf(['circle', 'rounded', 'square'])
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiAvatar'
+})(Avatar);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../internal/svg-icons/Person":"../node_modules/@material-ui/core/esm/internal/svg-icons/Person.js"}],"../node_modules/@material-ui/core/esm/Avatar/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Avatar.default;
+  }
+});
+
+var _Avatar = _interopRequireDefault(require("./Avatar"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Avatar":"../node_modules/@material-ui/core/esm/Avatar/Avatar.js"}],"../node_modules/@material-ui/core/esm/FormControl/formControlState.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = formControlState;
+
+function formControlState(_ref) {
+  var props = _ref.props,
+      states = _ref.states,
+      muiFormControl = _ref.muiFormControl;
+  return states.reduce(function (acc, state) {
+    acc[state] = props[state];
+
+    if (muiFormControl) {
+      if (typeof props[state] === 'undefined') {
+        acc[state] = muiFormControl[state];
+      }
+    }
+
+    return acc;
+  }, {});
+}
+},{}],"../node_modules/@material-ui/core/esm/FormControl/FormControlContext.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useFormControl = useFormControl;
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @ignore - internal component.
+ */
+var FormControlContext = React.createContext();
+
+if ("development" !== 'production') {
+  FormControlContext.displayName = 'FormControlContext';
+}
+
+function useFormControl() {
+  return React.useContext(FormControlContext);
+}
+
+var _default = FormControlContext;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"../node_modules/@material-ui/core/esm/utils/debounce.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = debounce;
+
+// Corresponds to 10 frames at 60 Hz.
+// A few bytes payload overhead when lodash/debounce is ~3 kB and debounce ~300 B.
+function debounce(func) {
+  var wait = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 166;
+  var timeout;
+
+  function debounced() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    } // eslint-disable-next-line consistent-this
+
+
+    var that = this;
+
+    var later = function later() {
+      func.apply(that, args);
+    };
+
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  }
+
+  debounced.clear = function () {
+    clearTimeout(timeout);
+  };
+
+  return debounced;
+}
+},{}],"../node_modules/@material-ui/core/esm/TextareaAutosize/TextareaAutosize.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _debounce = _interopRequireDefault(require("../utils/debounce"));
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getStyleValue(computedStyle, property) {
+  return parseInt(computedStyle[property], 10) || 0;
+}
+
+var useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+var styles = {
+  /* Styles applied to the shadow textarea element. */
+  shadow: {
+    // Visibility needed to hide the extra text area on iPads
+    visibility: 'hidden',
+    // Remove from the content flow
+    position: 'absolute',
+    // Ignore the scrollbar width
+    overflow: 'hidden',
+    height: 0,
+    top: 0,
+    left: 0,
+    // Create a new layer, increase the isolation of the computed values
+    transform: 'translateZ(0)'
+  }
+};
+var TextareaAutosize = React.forwardRef(function TextareaAutosize(props, ref) {
+  var onChange = props.onChange,
+      rows = props.rows,
+      rowsMax = props.rowsMax,
+      _props$rowsMin = props.rowsMin,
+      rowsMinProp = _props$rowsMin === void 0 ? 1 : _props$rowsMin,
+      style = props.style,
+      value = props.value,
+      other = (0, _objectWithoutProperties2.default)(props, ["onChange", "rows", "rowsMax", "rowsMin", "style", "value"]);
+  var rowsMin = rows || rowsMinProp;
+
+  var _React$useRef = React.useRef(value != null),
+      isControlled = _React$useRef.current;
+
+  var inputRef = React.useRef(null);
+  var handleRef = (0, _useForkRef.default)(ref, inputRef);
+  var shadowRef = React.useRef(null);
+  var renders = React.useRef(0);
+
+  var _React$useState = React.useState({}),
+      state = _React$useState[0],
+      setState = _React$useState[1];
+
+  var syncHeight = React.useCallback(function () {
+    var input = inputRef.current;
+    var computedStyle = window.getComputedStyle(input);
+    var inputShallow = shadowRef.current;
+    inputShallow.style.width = computedStyle.width;
+    inputShallow.value = input.value || props.placeholder || 'x';
+    var boxSizing = computedStyle['box-sizing'];
+    var padding = getStyleValue(computedStyle, 'padding-bottom') + getStyleValue(computedStyle, 'padding-top');
+    var border = getStyleValue(computedStyle, 'border-bottom-width') + getStyleValue(computedStyle, 'border-top-width'); // The height of the inner content
+
+    var innerHeight = inputShallow.scrollHeight - padding; // Measure height of a textarea with a single row
+
+    inputShallow.value = 'x';
+    var singleRowHeight = inputShallow.scrollHeight - padding; // The height of the outer content
+
+    var outerHeight = innerHeight;
+
+    if (rowsMin) {
+      outerHeight = Math.max(Number(rowsMin) * singleRowHeight, outerHeight);
+    }
+
+    if (rowsMax) {
+      outerHeight = Math.min(Number(rowsMax) * singleRowHeight, outerHeight);
+    }
+
+    outerHeight = Math.max(outerHeight, singleRowHeight); // Take the box sizing into account for applying this value as a style.
+
+    var outerHeightStyle = outerHeight + (boxSizing === 'border-box' ? padding + border : 0);
+    var overflow = Math.abs(outerHeight - innerHeight) <= 1;
+    setState(function (prevState) {
+      // Need a large enough difference to update the height.
+      // This prevents infinite rendering loop.
+      if (renders.current < 20 && (outerHeightStyle > 0 && Math.abs((prevState.outerHeightStyle || 0) - outerHeightStyle) > 1 || prevState.overflow !== overflow)) {
+        renders.current += 1;
+        return {
+          overflow: overflow,
+          outerHeightStyle: outerHeightStyle
+        };
+      }
+
+      if ("development" !== 'production') {
+        if (renders.current === 20) {
+          console.error(['Material-UI: too many re-renders. The layout is unstable.', 'TextareaAutosize limits the number of renders to prevent an infinite loop.'].join('\n'));
+        }
+      }
+
+      return prevState;
+    });
+  }, [rowsMax, rowsMin, props.placeholder]);
+  React.useEffect(function () {
+    var handleResize = (0, _debounce.default)(function () {
+      renders.current = 0;
+      syncHeight();
+    });
+    window.addEventListener('resize', handleResize);
+    return function () {
+      handleResize.clear();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [syncHeight]);
+  useEnhancedEffect(function () {
+    syncHeight();
+  });
+  React.useEffect(function () {
+    renders.current = 0;
+  }, [value]);
+
+  var handleChange = function handleChange(event) {
+    renders.current = 0;
+
+    if (!isControlled) {
+      syncHeight();
+    }
+
+    if (onChange) {
+      onChange(event);
+    }
+  };
+
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("textarea", (0, _extends2.default)({
+    value: value,
+    onChange: handleChange,
+    ref: handleRef // Apply the rows prop to get a "correct" first SSR paint
+    ,
+    rows: rowsMin,
+    style: (0, _extends2.default)({
+      height: state.outerHeightStyle,
+      // Need a large enough difference to allow scrolling.
+      // This prevents infinite rendering loop.
+      overflow: state.overflow ? 'hidden' : null
+    }, style)
+  }, other)), /*#__PURE__*/React.createElement("textarea", {
+    "aria-hidden": true,
+    className: props.className,
+    readOnly: true,
+    ref: shadowRef,
+    tabIndex: -1,
+    style: (0, _extends2.default)({}, styles.shadow, {}, style)
+  }));
+});
+"development" !== "production" ? TextareaAutosize.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * @ignore
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  placeholder: _propTypes.default.string,
+
+  /**
+   * Use `rowsMin` instead. The prop will be removed in v5.
+   *
+   * @deprecated
+   */
+  rows: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
+
+  /**
+   * Maximum number of rows to display.
+   */
+  rowsMax: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
+
+  /**
+   * Minimum number of rows to display.
+   */
+  rowsMin: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
+
+  /**
+   * @ignore
+   */
+  style: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  value: _propTypes.default.oneOfType([_propTypes.default.arrayOf(_propTypes.default.string), _propTypes.default.number, _propTypes.default.string])
+} : void 0;
+var _default = TextareaAutosize;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../utils/debounce":"../node_modules/@material-ui/core/esm/utils/debounce.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/TextareaAutosize/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _TextareaAutosize.default;
+  }
+});
+
+var _TextareaAutosize = _interopRequireDefault(require("./TextareaAutosize"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./TextareaAutosize":"../node_modules/@material-ui/core/esm/TextareaAutosize/TextareaAutosize.js"}],"../node_modules/@material-ui/core/esm/InputBase/utils.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.hasValue = hasValue;
+exports.isFilled = isFilled;
+exports.isAdornedStart = isAdornedStart;
+
+// Supports determination of isControlled().
+// Controlled input accepts its current value as a prop.
+//
+// @see https://facebook.github.io/react/docs/forms.html#controlled-components
+// @param value
+// @returns {boolean} true if string (including '') or number (including zero)
+function hasValue(value) {
+  return value != null && !(Array.isArray(value) && value.length === 0);
+} // Determine if field is empty or filled.
+// Response determines if label is presented above field or as placeholder.
+//
+// @param obj
+// @param SSR
+// @returns {boolean} False when not present or empty string.
+//                    True when any number or string with length.
+
+
+function isFilled(obj) {
+  var SSR = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  return obj && (hasValue(obj.value) && obj.value !== '' || SSR && hasValue(obj.defaultValue) && obj.defaultValue !== '');
+} // Determine if an Input is adorned on start.
+// It's corresponding to the left with LTR.
+//
+// @param obj
+// @returns {boolean} False when no adornments.
+//                    True when adorned at the start.
+
+
+function isAdornedStart(obj) {
+  return obj.startAdornment;
+}
+},{}],"../node_modules/@material-ui/core/esm/InputBase/InputBase.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _formControlState = _interopRequireDefault(require("../FormControl/formControlState"));
+
+var _FormControlContext = _interopRequireWildcard(require("../FormControl/FormControlContext"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+var _TextareaAutosize = _interopRequireDefault(require("../TextareaAutosize"));
+
+var _utils2 = require("./utils");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
+var styles = function styles(theme) {
+  var light = theme.palette.type === 'light';
+  var placeholder = {
+    color: 'currentColor',
+    opacity: light ? 0.42 : 0.5,
+    transition: theme.transitions.create('opacity', {
+      duration: theme.transitions.duration.shorter
+    })
+  };
+  var placeholderHidden = {
+    opacity: '0 !important'
+  };
+  var placeholderVisible = {
+    opacity: light ? 0.42 : 0.5
+  };
+  return {
+    '@global': {
+      '@keyframes mui-auto-fill': {
+        from: {}
+      },
+      '@keyframes mui-auto-fill-cancel': {
+        from: {}
+      }
+    },
+
+    /* Styles applied to the root element. */
+    root: (0, _extends2.default)({}, theme.typography.body1, {
+      color: theme.palette.text.primary,
+      lineHeight: '1.1875em',
+      // Reset (19px), match the native input line-height
+      boxSizing: 'border-box',
+      // Prevent padding issue with fullWidth.
+      position: 'relative',
+      cursor: 'text',
+      display: 'inline-flex',
+      alignItems: 'center',
+      '&$disabled': {
+        color: theme.palette.text.disabled,
+        cursor: 'default'
+      }
+    }),
+
+    /* Styles applied to the root element if the component is a descendant of `FormControl`. */
+    formControl: {},
+
+    /* Styles applied to the root element if the component is focused. */
+    focused: {},
+
+    /* Styles applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the root element if `startAdornment` is provided. */
+    adornedStart: {},
+
+    /* Styles applied to the root element if `endAdornment` is provided. */
+    adornedEnd: {},
+
+    /* Pseudo-class applied to the root element if `error={true}`. */
+    error: {},
+
+    /* Styles applied to the `input` element if `margin="dense"`. */
+    marginDense: {},
+
+    /* Styles applied to the root element if `multiline={true}`. */
+    multiline: {
+      padding: "".concat(8 - 2, "px 0 ").concat(8 - 1, "px"),
+      '&$marginDense': {
+        paddingTop: 4 - 1
+      }
+    },
+
+    /* Styles applied to the root element if the color is secondary. */
+    colorSecondary: {},
+
+    /* Styles applied to the root element if `fullWidth={true}`. */
+    fullWidth: {
+      width: '100%'
+    },
+
+    /* Styles applied to the `input` element. */
+    input: {
+      font: 'inherit',
+      color: 'currentColor',
+      padding: "".concat(8 - 2, "px 0 ").concat(8 - 1, "px"),
+      border: 0,
+      boxSizing: 'content-box',
+      background: 'none',
+      height: '1.1875em',
+      // Reset (19px), match the native input line-height
+      margin: 0,
+      // Reset for Safari
+      WebkitTapHighlightColor: 'transparent',
+      display: 'block',
+      // Make the flex item shrink with Firefox
+      minWidth: 0,
+      width: '100%',
+      // Fix IE 11 width issue
+      animationName: 'mui-auto-fill-cancel',
+      '&::-webkit-input-placeholder': placeholder,
+      '&::-moz-placeholder': placeholder,
+      // Firefox 19+
+      '&:-ms-input-placeholder': placeholder,
+      // IE 11
+      '&::-ms-input-placeholder': placeholder,
+      // Edge
+      '&:focus': {
+        outline: 0
+      },
+      // Reset Firefox invalid required input style
+      '&:invalid': {
+        boxShadow: 'none'
+      },
+      '&::-webkit-search-decoration': {
+        // Remove the padding when type=search.
+        '-webkit-appearance': 'none'
+      },
+      // Show and hide the placeholder logic
+      'label[data-shrink=false] + $formControl &': {
+        '&::-webkit-input-placeholder': placeholderHidden,
+        '&::-moz-placeholder': placeholderHidden,
+        // Firefox 19+
+        '&:-ms-input-placeholder': placeholderHidden,
+        // IE 11
+        '&::-ms-input-placeholder': placeholderHidden,
+        // Edge
+        '&:focus::-webkit-input-placeholder': placeholderVisible,
+        '&:focus::-moz-placeholder': placeholderVisible,
+        // Firefox 19+
+        '&:focus:-ms-input-placeholder': placeholderVisible,
+        // IE 11
+        '&:focus::-ms-input-placeholder': placeholderVisible // Edge
+
+      },
+      '&$disabled': {
+        opacity: 1 // Reset iOS opacity
+
+      },
+      '&:-webkit-autofill': {
+        animationDuration: '5000s',
+        animationName: 'mui-auto-fill'
+      }
+    },
+
+    /* Styles applied to the `input` element if `margin="dense"`. */
+    inputMarginDense: {
+      paddingTop: 4 - 1
+    },
+
+    /* Styles applied to the `input` element if `multiline={true}`. */
+    inputMultiline: {
+      height: 'auto',
+      resize: 'none',
+      padding: 0
+    },
+
+    /* Styles applied to the `input` element if `type="search"`. */
+    inputTypeSearch: {
+      // Improve type search style.
+      '-moz-appearance': 'textfield',
+      '-webkit-appearance': 'textfield'
+    },
+
+    /* Styles applied to the `input` element if `startAdornment` is provided. */
+    inputAdornedStart: {},
+
+    /* Styles applied to the `input` element if `endAdornment` is provided. */
+    inputAdornedEnd: {},
+
+    /* Styles applied to the `input` element if `hiddenLabel={true}`. */
+    inputHiddenLabel: {}
+  };
+};
+
+exports.styles = styles;
+var useEnhancedEffect = typeof window === 'undefined' ? React.useEffect : React.useLayoutEffect;
+/**
+ * `InputBase` contains as few styles as possible.
+ * It aims to be a simple building block for creating an input.
+ * It contains a load of style reset and some state logic.
+ */
+
+var InputBase = React.forwardRef(function InputBase(props, ref) {
+  var ariaDescribedby = props['aria-describedby'],
+      autoComplete = props.autoComplete,
+      autoFocus = props.autoFocus,
+      classes = props.classes,
+      className = props.className,
+      color = props.color,
+      defaultValue = props.defaultValue,
+      disabled = props.disabled,
+      endAdornment = props.endAdornment,
+      error = props.error,
+      _props$fullWidth = props.fullWidth,
+      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
+      id = props.id,
+      _props$inputComponent = props.inputComponent,
+      inputComponent = _props$inputComponent === void 0 ? 'input' : _props$inputComponent,
+      _props$inputProps = props.inputProps,
+      inputPropsProp = _props$inputProps === void 0 ? {} : _props$inputProps,
+      inputRefProp = props.inputRef,
+      margin = props.margin,
+      _props$multiline = props.multiline,
+      multiline = _props$multiline === void 0 ? false : _props$multiline,
+      name = props.name,
+      onBlur = props.onBlur,
+      onChange = props.onChange,
+      onClick = props.onClick,
+      onFocus = props.onFocus,
+      onKeyDown = props.onKeyDown,
+      onKeyUp = props.onKeyUp,
+      placeholder = props.placeholder,
+      readOnly = props.readOnly,
+      renderSuffix = props.renderSuffix,
+      rows = props.rows,
+      rowsMax = props.rowsMax,
+      rowsMin = props.rowsMin,
+      startAdornment = props.startAdornment,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'text' : _props$type,
+      valueProp = props.value,
+      other = (0, _objectWithoutProperties2.default)(props, ["aria-describedby", "autoComplete", "autoFocus", "classes", "className", "color", "defaultValue", "disabled", "endAdornment", "error", "fullWidth", "id", "inputComponent", "inputProps", "inputRef", "margin", "multiline", "name", "onBlur", "onChange", "onClick", "onFocus", "onKeyDown", "onKeyUp", "placeholder", "readOnly", "renderSuffix", "rows", "rowsMax", "rowsMin", "startAdornment", "type", "value"]);
+  var value = inputPropsProp.value != null ? inputPropsProp.value : valueProp;
+
+  var _React$useRef = React.useRef(value != null),
+      isControlled = _React$useRef.current;
+
+  var inputRef = React.useRef();
+  var handleInputRefWarning = React.useCallback(function (instance) {
+    if ("development" !== 'production') {
+      if (instance && !(instance instanceof HTMLInputElement) && !instance.focus) {
+        console.error(['Material-UI: you have provided a `inputComponent` to the input component', 'that does not correctly handle the `inputRef` prop.', 'Make sure the `inputRef` prop is called with a HTMLInputElement.'].join('\n'));
+      }
+    }
+  }, []);
+  var handleInputPropsRefProp = (0, _useForkRef.default)(inputPropsProp.ref, handleInputRefWarning);
+  var handleInputRefProp = (0, _useForkRef.default)(inputRefProp, handleInputPropsRefProp);
+  var handleInputRef = (0, _useForkRef.default)(inputRef, handleInputRefProp);
+
+  var _React$useState = React.useState(false),
+      focused = _React$useState[0],
+      setFocused = _React$useState[1];
+
+  var muiFormControl = (0, _FormControlContext.useFormControl)();
+
+  if ("development" !== 'production') {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(function () {
+      if (muiFormControl) {
+        return muiFormControl.registerEffect();
+      }
+
+      return undefined;
+    }, [muiFormControl]);
+  }
+
+  var fcs = (0, _formControlState.default)({
+    props: props,
+    muiFormControl: muiFormControl,
+    states: ['color', 'disabled', 'error', 'hiddenLabel', 'margin', 'required', 'filled']
+  });
+  fcs.focused = muiFormControl ? muiFormControl.focused : focused; // The blur won't fire when the disabled state is set on a focused input.
+  // We need to book keep the focused state manually.
+
+  React.useEffect(function () {
+    if (!muiFormControl && disabled && focused) {
+      setFocused(false);
+
+      if (onBlur) {
+        onBlur();
+      }
+    }
+  }, [muiFormControl, disabled, focused, onBlur]);
+  var onFilled = muiFormControl && muiFormControl.onFilled;
+  var onEmpty = muiFormControl && muiFormControl.onEmpty;
+  var checkDirty = React.useCallback(function (obj) {
+    if ((0, _utils2.isFilled)(obj)) {
+      if (onFilled) {
+        onFilled();
+      }
+    } else if (onEmpty) {
+      onEmpty();
+    }
+  }, [onFilled, onEmpty]);
+  useEnhancedEffect(function () {
+    if (isControlled) {
+      checkDirty({
+        value: value
+      });
+    }
+  }, [value, checkDirty, isControlled]);
+
+  var handleFocus = function handleFocus(event) {
+    // Fix a bug with IE 11 where the focus/blur events are triggered
+    // while the input is disabled.
+    if (fcs.disabled) {
+      event.stopPropagation();
+      return;
+    }
+
+    if (onFocus) {
+      onFocus(event);
+    }
+
+    if (inputPropsProp.onFocus) {
+      inputPropsProp.onFocus(event);
+    }
+
+    if (muiFormControl && muiFormControl.onFocus) {
+      muiFormControl.onFocus(event);
+    } else {
+      setFocused(true);
+    }
+  };
+
+  var handleBlur = function handleBlur(event) {
+    if (onBlur) {
+      onBlur(event);
+    }
+
+    if (inputPropsProp.onBlur) {
+      inputPropsProp.onBlur(event);
+    }
+
+    if (muiFormControl && muiFormControl.onBlur) {
+      muiFormControl.onBlur(event);
+    } else {
+      setFocused(false);
+    }
+  };
+
+  var handleChange = function handleChange(event) {
+    if (!isControlled) {
+      var element = event.target || inputRef.current;
+
+      if (element == null) {
+        throw new TypeError('Material-UI: Expected valid input target. ' + 'Did you use a custom `inputComponent` and forget to forward refs? ' + 'See https://material-ui.com/r/input-component-ref-interface for more info.');
+      }
+
+      checkDirty({
+        value: element.value
+      });
+    }
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    if (inputPropsProp.onChange) {
+      inputPropsProp.onChange.apply(inputPropsProp, [event].concat(args));
+    } // Perform in the willUpdate
+
+
+    if (onChange) {
+      onChange.apply(void 0, [event].concat(args));
+    }
+  }; // Check the input state on mount, in case it was filled by the user
+  // or auto filled by the browser before the hydration (for SSR).
+
+
+  React.useEffect(function () {
+    checkDirty(inputRef.current);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  var handleClick = function handleClick(event) {
+    if (inputRef.current && event.currentTarget === event.target) {
+      inputRef.current.focus();
+    }
+
+    if (onClick) {
+      onClick(event);
+    }
+  };
+
+  var InputComponent = inputComponent;
+  var inputProps = (0, _extends2.default)({}, inputPropsProp, {
+    ref: handleInputRef
+  });
+
+  if (typeof InputComponent !== 'string') {
+    inputProps = (0, _extends2.default)({
+      // Rename ref to inputRef as we don't know the
+      // provided `inputComponent` structure.
+      inputRef: handleInputRef,
+      type: type
+    }, inputProps, {
+      ref: null
+    });
+  } else if (multiline) {
+    if (rows && !rowsMax && !rowsMin) {
+      InputComponent = 'textarea';
+    } else {
+      inputProps = (0, _extends2.default)({
+        rows: rows,
+        rowsMax: rowsMax
+      }, inputProps);
+      InputComponent = _TextareaAutosize.default;
+    }
+  } else {
+    inputProps = (0, _extends2.default)({
+      type: type
+    }, inputProps);
+  }
+
+  var handleAutoFill = function handleAutoFill(event) {
+    // Provide a fake value as Chrome might not let you access it for security reasons.
+    checkDirty(event.animationName === 'mui-auto-fill-cancel' ? inputRef.current : {
+      value: 'x'
+    });
+  };
+
+  React.useEffect(function () {
+    if (muiFormControl) {
+      muiFormControl.setAdornedStart(Boolean(startAdornment));
+    }
+  }, [muiFormControl, startAdornment]);
+  return /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, classes["color".concat((0, _capitalize.default)(fcs.color || 'primary'))], className, fcs.disabled && classes.disabled, fcs.error && classes.error, fullWidth && classes.fullWidth, fcs.focused && classes.focused, muiFormControl && classes.formControl, multiline && classes.multiline, startAdornment && classes.adornedStart, endAdornment && classes.adornedEnd, fcs.margin === 'dense' && classes.marginDense),
+    onClick: handleClick,
+    ref: ref
+  }, other), startAdornment, /*#__PURE__*/React.createElement(_FormControlContext.default.Provider, {
+    value: null
+  }, /*#__PURE__*/React.createElement(InputComponent, (0, _extends2.default)({
+    "aria-invalid": fcs.error,
+    "aria-describedby": ariaDescribedby,
+    autoComplete: autoComplete,
+    autoFocus: autoFocus,
+    defaultValue: defaultValue,
+    disabled: fcs.disabled,
+    id: id,
+    onAnimationStart: handleAutoFill,
+    name: name,
+    placeholder: placeholder,
+    readOnly: readOnly,
+    required: fcs.required,
+    rows: rows,
+    value: value,
+    onKeyDown: onKeyDown,
+    onKeyUp: onKeyUp
+  }, inputProps, {
+    className: (0, _clsx.default)(classes.input, inputPropsProp.className, fcs.disabled && classes.disabled, multiline && classes.inputMultiline, fcs.hiddenLabel && classes.inputHiddenLabel, startAdornment && classes.inputAdornedStart, endAdornment && classes.inputAdornedEnd, type === 'search' && classes.inputTypeSearch, fcs.margin === 'dense' && classes.inputMarginDense),
+    onBlur: handleBlur,
+    onChange: handleChange,
+    onFocus: handleFocus
+  }))), endAdornment, renderSuffix ? renderSuffix((0, _extends2.default)({}, fcs, {
+    startAdornment: startAdornment
+  })) : null);
+});
+"development" !== "production" ? InputBase.propTypes = {
+  /**
+   * @ignore
+   */
+  'aria-describedby': _propTypes.default.string,
+
+  /**
+   * This prop helps users to fill forms faster, especially on mobile devices.
+   * The name can be confusing, as it's more like an autofill.
+   * You can learn more about it [following the specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill).
+   */
+  autoComplete: _propTypes.default.string,
+
+  /**
+   * If `true`, the `input` element will be focused during the first mount.
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * The CSS class name of the wrapper element.
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['primary', 'secondary']),
+
+  /**
+   * The default `input` element value. Use when the component is not controlled.
+   */
+  defaultValue: _propTypes.default.any,
+
+  /**
+   * If `true`, the `input` element will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * End `InputAdornment` for this component.
+   */
+  endAdornment: _propTypes.default.node,
+
+  /**
+   * If `true`, the input will indicate an error. This is normally obtained via context from
+   * FormControl.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input will take up the full width of its container.
+   */
+  fullWidth: _propTypes.default.bool,
+
+  /**
+   * The id of the `input` element.
+   */
+  id: _propTypes.default.string,
+
+  /**
+   * The component used for the `input` element.
+   * Either a string to use a DOM element or a component.
+   */
+  inputComponent: _propTypes.default.elementType,
+
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _utils.refType,
+
+  /**
+   * If `dense`, will adjust vertical spacing. This is normally obtained via context from
+   * FormControl.
+   */
+  margin: _propTypes.default.oneOf(['dense', 'none']),
+
+  /**
+   * If `true`, a textarea element will be rendered.
+   */
+  multiline: _propTypes.default.bool,
+
+  /**
+   * Name attribute of the `input` element.
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * Callback fired when the input is blurred.
+   *
+   * Notice that the first argument (event) might be undefined.
+   */
+  onBlur: _propTypes.default.func,
+
+  /**
+   * Callback fired when the value is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (string).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  onClick: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  onFocus: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  onKeyDown: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  onKeyUp: _propTypes.default.func,
+
+  /**
+   * The short hint displayed in the input before the user enters a value.
+   */
+  placeholder: _propTypes.default.string,
+
+  /**
+   * It prevents the user from changing the value of the field
+   * (not from interacting with the field).
+   */
+  readOnly: _propTypes.default.bool,
+
+  /**
+   * @ignore
+   */
+  renderSuffix: _propTypes.default.func,
+
+  /**
+   * If `true`, the `input` element will be required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * Number of rows to display when multiline option is set to true.
+   */
+  rows: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Maximum number of rows to display when multiline option is set to true.
+   */
+  rowsMax: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Minimum number of rows to display when multiline option is set to true.
+   */
+  rowsMin: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Start `InputAdornment` for this component.
+   */
+  startAdornment: _propTypes.default.node,
+
+  /**
+   * Type of the `input` element. It should be [a valid HTML5 input type](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types).
+   */
+  type: _propTypes.default.string,
+
+  /**
+   * The value of the `input` element, required for a controlled component.
+   */
+  value: _propTypes.default.any
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiInputBase'
+})(InputBase);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../FormControl/formControlState":"../node_modules/@material-ui/core/esm/FormControl/formControlState.js","../FormControl/FormControlContext":"../node_modules/@material-ui/core/esm/FormControl/FormControlContext.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js","../TextareaAutosize":"../node_modules/@material-ui/core/esm/TextareaAutosize/index.js","./utils":"../node_modules/@material-ui/core/esm/InputBase/utils.js"}],"../node_modules/@material-ui/core/esm/InputBase/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _InputBase.default;
+  }
+});
+
+var _InputBase = _interopRequireDefault(require("./InputBase"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./InputBase":"../node_modules/@material-ui/core/esm/InputBase/InputBase.js"}],"../node_modules/@material-ui/core/esm/Input/Input.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _InputBase = _interopRequireDefault(require("../InputBase"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  var light = theme.palette.type === 'light';
+  var bottomLineColor = light ? 'rgba(0, 0, 0, 0.42)' : 'rgba(255, 255, 255, 0.7)';
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'relative'
+    },
+
+    /* Styles applied to the root element if the component is a descendant of `FormControl`. */
+    formControl: {
+      'label + &': {
+        marginTop: 16
+      }
+    },
+
+    /* Styles applied to the root element if the component is focused. */
+    focused: {},
+
+    /* Styles applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the root element if color secondary. */
+    colorSecondary: {
+      '&$underline:after': {
+        borderBottomColor: theme.palette.secondary.main
+      }
+    },
+
+    /* Styles applied to the root element if `disableUnderline={false}`. */
+    underline: {
+      '&:after': {
+        borderBottom: "2px solid ".concat(theme.palette.primary.main),
+        left: 0,
+        bottom: 0,
+        // Doing the other way around crash on IE 11 "''" https://github.com/cssinjs/jss/issues/242
+        content: '""',
+        position: 'absolute',
+        right: 0,
+        transform: 'scaleX(0)',
+        transition: theme.transitions.create('transform', {
+          duration: theme.transitions.duration.shorter,
+          easing: theme.transitions.easing.easeOut
+        }),
+        pointerEvents: 'none' // Transparent to the hover style.
+
+      },
+      '&$focused:after': {
+        transform: 'scaleX(1)'
+      },
+      '&$error:after': {
+        borderBottomColor: theme.palette.error.main,
+        transform: 'scaleX(1)' // error is always underlined in red
+
+      },
+      '&:before': {
+        borderBottom: "1px solid ".concat(bottomLineColor),
+        left: 0,
+        bottom: 0,
+        // Doing the other way around crash on IE 11 "''" https://github.com/cssinjs/jss/issues/242
+        content: '"\\00a0"',
+        position: 'absolute',
+        right: 0,
+        transition: theme.transitions.create('border-bottom-color', {
+          duration: theme.transitions.duration.shorter
+        }),
+        pointerEvents: 'none' // Transparent to the hover style.
+
+      },
+      '&:hover:not($disabled):before': {
+        borderBottom: "2px solid ".concat(theme.palette.text.primary),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          borderBottom: "1px solid ".concat(bottomLineColor)
+        }
+      },
+      '&$disabled:before': {
+        borderBottomStyle: 'dotted'
+      }
+    },
+
+    /* Pseudo-class applied to the root element if `error={true}`. */
+    error: {},
+
+    /* Styles applied to the `input` element if `margin="dense"`. */
+    marginDense: {},
+
+    /* Styles applied to the root element if `multiline={true}`. */
+    multiline: {},
+
+    /* Styles applied to the root element if `fullWidth={true}`. */
+    fullWidth: {},
+
+    /* Styles applied to the `input` element. */
+    input: {},
+
+    /* Styles applied to the `input` element if `margin="dense"`. */
+    inputMarginDense: {},
+
+    /* Styles applied to the `input` element if `multiline={true}`. */
+    inputMultiline: {},
+
+    /* Styles applied to the `input` element if `type="search"`. */
+    inputTypeSearch: {}
+  };
+};
+
+exports.styles = styles;
+var Input = React.forwardRef(function Input(props, ref) {
+  var disableUnderline = props.disableUnderline,
+      classes = props.classes,
+      _props$fullWidth = props.fullWidth,
+      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
+      _props$inputComponent = props.inputComponent,
+      inputComponent = _props$inputComponent === void 0 ? 'input' : _props$inputComponent,
+      _props$multiline = props.multiline,
+      multiline = _props$multiline === void 0 ? false : _props$multiline,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'text' : _props$type,
+      other = (0, _objectWithoutProperties2.default)(props, ["disableUnderline", "classes", "fullWidth", "inputComponent", "multiline", "type"]);
+  return /*#__PURE__*/React.createElement(_InputBase.default, (0, _extends2.default)({
+    classes: (0, _extends2.default)({}, classes, {
+      root: (0, _clsx.default)(classes.root, !disableUnderline && classes.underline),
+      underline: null
+    }),
+    fullWidth: fullWidth,
+    inputComponent: inputComponent,
+    multiline: multiline,
+    ref: ref,
+    type: type
+  }, other));
+});
+"development" !== "production" ? Input.propTypes = {
+  /**
+   * This prop helps users to fill forms faster, especially on mobile devices.
+   * The name can be confusing, as it's more like an autofill.
+   * You can learn more about it [following the specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill).
+   */
+  autoComplete: _propTypes.default.string,
+
+  /**
+   * If `true`, the `input` element will be focused during the first mount.
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * The CSS class name of the wrapper element.
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['primary', 'secondary']),
+
+  /**
+   * The default `input` element value. Use when the component is not controlled.
+   */
+  defaultValue: _propTypes.default.any,
+
+  /**
+   * If `true`, the `input` element will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input will not have an underline.
+   */
+  disableUnderline: _propTypes.default.bool,
+
+  /**
+   * End `InputAdornment` for this component.
+   */
+  endAdornment: _propTypes.default.node,
+
+  /**
+   * If `true`, the input will indicate an error. This is normally obtained via context from
+   * FormControl.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input will take up the full width of its container.
+   */
+  fullWidth: _propTypes.default.bool,
+
+  /**
+   * The id of the `input` element.
+   */
+  id: _propTypes.default.string,
+
+  /**
+   * The component used for the native input.
+   * Either a string to use a DOM element or a component.
+   */
+  inputComponent: _propTypes.default.elementType,
+
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _utils.refType,
+
+  /**
+   * If `dense`, will adjust vertical spacing. This is normally obtained via context from
+   * FormControl.
+   */
+  margin: _propTypes.default.oneOf(['dense', 'none']),
+
+  /**
+   * If `true`, a textarea element will be rendered.
+   */
+  multiline: _propTypes.default.bool,
+
+  /**
+   * Name attribute of the `input` element.
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * Callback fired when the value is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (string).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * The short hint displayed in the input before the user enters a value.
+   */
+  placeholder: _propTypes.default.string,
+
+  /**
+   * It prevents the user from changing the value of the field
+   * (not from interacting with the field).
+   */
+  readOnly: _propTypes.default.bool,
+
+  /**
+   * If `true`, the `input` element will be required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * Number of rows to display when multiline option is set to true.
+   */
+  rows: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Maximum number of rows to display when multiline option is set to true.
+   */
+  rowsMax: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Start `InputAdornment` for this component.
+   */
+  startAdornment: _propTypes.default.node,
+
+  /**
+   * Type of the `input` element. It should be [a valid HTML5 input type](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types).
+   */
+  type: _propTypes.default.string,
+
+  /**
+   * The value of the `input` element, required for a controlled component.
+   */
+  value: _propTypes.default.any
+} : void 0;
+Input.muiName = 'Input';
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiInput'
+})(Input);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../InputBase":"../node_modules/@material-ui/core/esm/InputBase/index.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js"}],"../node_modules/@material-ui/core/esm/Input/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Input.default;
+  }
+});
+
+var _Input = _interopRequireDefault(require("./Input"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Input":"../node_modules/@material-ui/core/esm/Input/Input.js"}],"../node_modules/@material-ui/core/esm/FilledInput/FilledInput.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _InputBase = _interopRequireDefault(require("../InputBase"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  var light = theme.palette.type === 'light';
+  var bottomLineColor = light ? 'rgba(0, 0, 0, 0.42)' : 'rgba(255, 255, 255, 0.7)';
+  var backgroundColor = light ? 'rgba(0, 0, 0, 0.09)' : 'rgba(255, 255, 255, 0.09)';
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'relative',
+      backgroundColor: backgroundColor,
+      borderTopLeftRadius: theme.shape.borderRadius,
+      borderTopRightRadius: theme.shape.borderRadius,
+      transition: theme.transitions.create('background-color', {
+        duration: theme.transitions.duration.shorter,
+        easing: theme.transitions.easing.easeOut
+      }),
+      '&:hover': {
+        backgroundColor: light ? 'rgba(0, 0, 0, 0.13)' : 'rgba(255, 255, 255, 0.13)',
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: backgroundColor
+        }
+      },
+      '&$focused': {
+        backgroundColor: light ? 'rgba(0, 0, 0, 0.09)' : 'rgba(255, 255, 255, 0.09)'
+      },
+      '&$disabled': {
+        backgroundColor: light ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)'
+      }
+    },
+
+    /* Styles applied to the root element if color secondary. */
+    colorSecondary: {
+      '&$underline:after': {
+        borderBottomColor: theme.palette.secondary.main
+      }
+    },
+
+    /* Styles applied to the root element if `disableUnderline={false}`. */
+    underline: {
+      '&:after': {
+        borderBottom: "2px solid ".concat(theme.palette.primary.main),
+        left: 0,
+        bottom: 0,
+        // Doing the other way around crash on IE 11 "''" https://github.com/cssinjs/jss/issues/242
+        content: '""',
+        position: 'absolute',
+        right: 0,
+        transform: 'scaleX(0)',
+        transition: theme.transitions.create('transform', {
+          duration: theme.transitions.duration.shorter,
+          easing: theme.transitions.easing.easeOut
+        }),
+        pointerEvents: 'none' // Transparent to the hover style.
+
+      },
+      '&$focused:after': {
+        transform: 'scaleX(1)'
+      },
+      '&$error:after': {
+        borderBottomColor: theme.palette.error.main,
+        transform: 'scaleX(1)' // error is always underlined in red
+
+      },
+      '&:before': {
+        borderBottom: "1px solid ".concat(bottomLineColor),
+        left: 0,
+        bottom: 0,
+        // Doing the other way around crash on IE 11 "''" https://github.com/cssinjs/jss/issues/242
+        content: '"\\00a0"',
+        position: 'absolute',
+        right: 0,
+        transition: theme.transitions.create('border-bottom-color', {
+          duration: theme.transitions.duration.shorter
+        }),
+        pointerEvents: 'none' // Transparent to the hover style.
+
+      },
+      '&:hover:before': {
+        borderBottom: "1px solid ".concat(theme.palette.text.primary)
+      },
+      '&$disabled:before': {
+        borderBottomStyle: 'dotted'
+      }
+    },
+
+    /* Pseudo-class applied to the root element if the component is focused. */
+    focused: {},
+
+    /* Pseudo-class applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the root element if `startAdornment` is provided. */
+    adornedStart: {
+      paddingLeft: 12
+    },
+
+    /* Styles applied to the root element if `endAdornment` is provided. */
+    adornedEnd: {
+      paddingRight: 12
+    },
+
+    /* Pseudo-class applied to the root element if `error={true}`. */
+    error: {},
+
+    /* Styles applied to the `input` element if `margin="dense"`. */
+    marginDense: {},
+
+    /* Styles applied to the root element if `multiline={true}`. */
+    multiline: {
+      padding: '27px 12px 10px',
+      '&$marginDense': {
+        paddingTop: 23,
+        paddingBottom: 6
+      }
+    },
+
+    /* Styles applied to the `input` element. */
+    input: {
+      padding: '27px 12px 10px',
+      '&:-webkit-autofill': {
+        WebkitBoxShadow: theme.palette.type === 'dark' ? '0 0 0 100px #266798 inset' : null,
+        WebkitTextFillColor: theme.palette.type === 'dark' ? '#fff' : null,
+        borderTopLeftRadius: 'inherit',
+        borderTopRightRadius: 'inherit'
+      }
+    },
+
+    /* Styles applied to the `input` element if `margin="dense"`. */
+    inputMarginDense: {
+      paddingTop: 23,
+      paddingBottom: 6
+    },
+
+    /* Styles applied to the `input` if in `<FormControl hiddenLabel />`. */
+    inputHiddenLabel: {
+      paddingTop: 18,
+      paddingBottom: 19,
+      '&$inputMarginDense': {
+        paddingTop: 10,
+        paddingBottom: 11
+      }
+    },
+
+    /* Styles applied to the `input` element if `multiline={true}`. */
+    inputMultiline: {
+      padding: 0
+    },
+
+    /* Styles applied to the `input` element if `startAdornment` is provided. */
+    inputAdornedStart: {
+      paddingLeft: 0
+    },
+
+    /* Styles applied to the `input` element if `endAdornment` is provided. */
+    inputAdornedEnd: {
+      paddingRight: 0
+    }
+  };
+};
+
+exports.styles = styles;
+var FilledInput = React.forwardRef(function FilledInput(props, ref) {
+  var disableUnderline = props.disableUnderline,
+      classes = props.classes,
+      _props$fullWidth = props.fullWidth,
+      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
+      _props$inputComponent = props.inputComponent,
+      inputComponent = _props$inputComponent === void 0 ? 'input' : _props$inputComponent,
+      _props$multiline = props.multiline,
+      multiline = _props$multiline === void 0 ? false : _props$multiline,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'text' : _props$type,
+      other = (0, _objectWithoutProperties2.default)(props, ["disableUnderline", "classes", "fullWidth", "inputComponent", "multiline", "type"]);
+  return /*#__PURE__*/React.createElement(_InputBase.default, (0, _extends2.default)({
+    classes: (0, _extends2.default)({}, classes, {
+      root: (0, _clsx.default)(classes.root, !disableUnderline && classes.underline),
+      underline: null
+    }),
+    fullWidth: fullWidth,
+    inputComponent: inputComponent,
+    multiline: multiline,
+    ref: ref,
+    type: type
+  }, other));
+});
+"development" !== "production" ? FilledInput.propTypes = {
+  /**
+   * This prop helps users to fill forms faster, especially on mobile devices.
+   * The name can be confusing, as it's more like an autofill.
+   * You can learn more about it [following the specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill).
+   */
+  autoComplete: _propTypes.default.string,
+
+  /**
+   * If `true`, the `input` element will be focused during the first mount.
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * The CSS class name of the wrapper element.
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['primary', 'secondary']),
+
+  /**
+   * The default `input` element value. Use when the component is not controlled.
+   */
+  defaultValue: _propTypes.default.any,
+
+  /**
+   * If `true`, the `input` element will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input will not have an underline.
+   */
+  disableUnderline: _propTypes.default.bool,
+
+  /**
+   * End `InputAdornment` for this component.
+   */
+  endAdornment: _propTypes.default.node,
+
+  /**
+   * If `true`, the input will indicate an error. This is normally obtained via context from
+   * FormControl.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input will take up the full width of its container.
+   */
+  fullWidth: _propTypes.default.bool,
+
+  /**
+   * The id of the `input` element.
+   */
+  id: _propTypes.default.string,
+
+  /**
+   * The component used for the native input.
+   * Either a string to use a DOM element or a component.
+   */
+  inputComponent: _propTypes.default.elementType,
+
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _utils.refType,
+
+  /**
+   * If `dense`, will adjust vertical spacing. This is normally obtained via context from
+   * FormControl.
+   */
+  margin: _propTypes.default.oneOf(['dense', 'none']),
+
+  /**
+   * If `true`, a textarea element will be rendered.
+   */
+  multiline: _propTypes.default.bool,
+
+  /**
+   * Name attribute of the `input` element.
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * Callback fired when the value is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (string).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * The short hint displayed in the input before the user enters a value.
+   */
+  placeholder: _propTypes.default.string,
+
+  /**
+   * It prevents the user from changing the value of the field
+   * (not from interacting with the field).
+   */
+  readOnly: _propTypes.default.bool,
+
+  /**
+   * If `true`, the `input` element will be required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * Number of rows to display when multiline option is set to true.
+   */
+  rows: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Maximum number of rows to display when multiline option is set to true.
+   */
+  rowsMax: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Start `InputAdornment` for this component.
+   */
+  startAdornment: _propTypes.default.node,
+
+  /**
+   * Type of the `input` element. It should be [a valid HTML5 input type](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types).
+   */
+  type: _propTypes.default.string,
+
+  /**
+   * The value of the `input` element, required for a controlled component.
+   */
+  value: _propTypes.default.any
+} : void 0;
+FilledInput.muiName = 'Input';
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiFilledInput'
+})(FilledInput);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../InputBase":"../node_modules/@material-ui/core/esm/InputBase/index.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js"}],"../node_modules/@material-ui/core/esm/FilledInput/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _FilledInput.default;
+  }
+});
+
+var _FilledInput = _interopRequireDefault(require("./FilledInput"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./FilledInput":"../node_modules/@material-ui/core/esm/FilledInput/FilledInput.js"}],"../node_modules/@material-ui/core/esm/OutlinedInput/NotchedOutline.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/defineProperty"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _useTheme = _interopRequireDefault(require("../styles/useTheme"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'absolute',
+      bottom: 0,
+      right: 0,
+      top: -5,
+      left: 0,
+      margin: 0,
+      padding: 0,
+      paddingLeft: 8,
+      pointerEvents: 'none',
+      borderRadius: 'inherit',
+      borderStyle: 'solid',
+      borderWidth: 1
+    },
+
+    /* Styles applied to the legend element when `labelWidth` is provided. */
+    legend: {
+      textAlign: 'left',
+      padding: 0,
+      lineHeight: '11px',
+      // sync with `height` in `legend` styles
+      transition: theme.transitions.create('width', {
+        duration: 150,
+        easing: theme.transitions.easing.easeOut
+      })
+    },
+
+    /* Styles applied to the legend element. */
+    legendLabelled: {
+      display: 'block',
+      width: 'auto',
+      textAlign: 'left',
+      padding: 0,
+      height: 11,
+      // sync with `lineHeight` in `legend` styles
+      fontSize: '0.75em',
+      visibility: 'hidden',
+      maxWidth: 0.01,
+      transition: theme.transitions.create('max-width', {
+        duration: 50,
+        easing: theme.transitions.easing.easeOut
+      }),
+      '& > span': {
+        paddingLeft: 5,
+        paddingRight: 5,
+        display: 'inline-block'
+      }
+    },
+
+    /* Styles applied to the legend element is notched. */
+    legendNotched: {
+      maxWidth: 1000,
+      transition: theme.transitions.create('max-width', {
+        duration: 100,
+        easing: theme.transitions.easing.easeOut,
+        delay: 50
+      })
+    }
+  };
+};
+/**
+ * @ignore - internal component.
+ */
+
+
+exports.styles = styles;
+var NotchedOutline = React.forwardRef(function NotchedOutline(props, ref) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      label = props.label,
+      labelWidthProp = props.labelWidth,
+      notched = props.notched,
+      style = props.style,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "label", "labelWidth", "notched", "style"]);
+  var theme = (0, _useTheme.default)();
+  var align = theme.direction === 'rtl' ? 'right' : 'left';
+
+  if (label !== undefined) {
+    return /*#__PURE__*/React.createElement("fieldset", (0, _extends2.default)({
+      "aria-hidden": true,
+      className: (0, _clsx.default)(classes.root, className),
+      ref: ref,
+      style: style
+    }, other), /*#__PURE__*/React.createElement("legend", {
+      className: (0, _clsx.default)(classes.legendLabelled, notched && classes.legendNotched)
+    }, label ? /*#__PURE__*/React.createElement("span", null, label) : /*#__PURE__*/React.createElement("span", {
+      dangerouslySetInnerHTML: {
+        __html: '&#8203;'
+      }
+    })));
+  }
+
+  var labelWidth = labelWidthProp > 0 ? labelWidthProp * 0.75 + 8 : 0.01;
+  return /*#__PURE__*/React.createElement("fieldset", (0, _extends2.default)({
+    "aria-hidden": true,
+    style: (0, _extends2.default)((0, _defineProperty2.default)({}, "padding".concat((0, _capitalize.default)(align)), 8), style),
+    className: (0, _clsx.default)(classes.root, className),
+    ref: ref
+  }, other), /*#__PURE__*/React.createElement("legend", {
+    className: classes.legend,
+    style: {
+      // IE 11: fieldset with legend does not render
+      // a border radius. This maintains consistency
+      // by always having a legend rendered
+      width: notched ? labelWidth : 0.01
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    dangerouslySetInnerHTML: {
+      __html: '&#8203;'
+    }
+  })));
+});
+"development" !== "production" ? NotchedOutline.propTypes = {
+  /**
+   * The content of the component.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The label.
+   */
+  label: _propTypes.default.node,
+
+  /**
+   * The width of the label.
+   */
+  labelWidth: _propTypes.default.number.isRequired,
+
+  /**
+   * If `true`, the outline is notched to accommodate the label.
+   */
+  notched: _propTypes.default.bool.isRequired,
+
+  /**
+   * @ignore
+   */
+  style: _propTypes.default.object
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'PrivateNotchedOutline'
+})(NotchedOutline);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/defineProperty":"../node_modules/@babel/runtime/helpers/esm/defineProperty.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../styles/useTheme":"../node_modules/@material-ui/core/esm/styles/useTheme.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js"}],"../node_modules/@material-ui/core/esm/OutlinedInput/OutlinedInput.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _InputBase = _interopRequireDefault(require("../InputBase"));
+
+var _NotchedOutline = _interopRequireDefault(require("./NotchedOutline"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  var borderColor = theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)';
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'relative',
+      borderRadius: theme.shape.borderRadius,
+      '&:hover $notchedOutline': {
+        borderColor: theme.palette.text.primary
+      },
+      // Reset on touch devices, it doesn't add specificity
+      '@media (hover: none)': {
+        '&:hover $notchedOutline': {
+          borderColor: borderColor
+        }
+      },
+      '&$focused $notchedOutline': {
+        borderColor: theme.palette.primary.main,
+        borderWidth: 2
+      },
+      '&$error $notchedOutline': {
+        borderColor: theme.palette.error.main
+      },
+      '&$disabled $notchedOutline': {
+        borderColor: theme.palette.action.disabled
+      }
+    },
+
+    /* Styles applied to the root element if the color is secondary. */
+    colorSecondary: {
+      '&$focused $notchedOutline': {
+        borderColor: theme.palette.secondary.main
+      }
+    },
+
+    /* Styles applied to the root element if the component is focused. */
+    focused: {},
+
+    /* Styles applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the root element if `startAdornment` is provided. */
+    adornedStart: {
+      paddingLeft: 14
+    },
+
+    /* Styles applied to the root element if `endAdornment` is provided. */
+    adornedEnd: {
+      paddingRight: 14
+    },
+
+    /* Pseudo-class applied to the root element if `error={true}`. */
+    error: {},
+
+    /* Styles applied to the `input` element if `margin="dense"`. */
+    marginDense: {},
+
+    /* Styles applied to the root element if `multiline={true}`. */
+    multiline: {
+      padding: '18.5px 14px',
+      '&$marginDense': {
+        paddingTop: 10.5,
+        paddingBottom: 10.5
+      }
+    },
+
+    /* Styles applied to the `NotchedOutline` element. */
+    notchedOutline: {
+      borderColor: borderColor
+    },
+
+    /* Styles applied to the `input` element. */
+    input: {
+      padding: '18.5px 14px',
+      '&:-webkit-autofill': {
+        WebkitBoxShadow: theme.palette.type === 'dark' ? '0 0 0 100px #266798 inset' : null,
+        WebkitTextFillColor: theme.palette.type === 'dark' ? '#fff' : null,
+        borderRadius: 'inherit'
+      }
+    },
+
+    /* Styles applied to the `input` element if `margin="dense"`. */
+    inputMarginDense: {
+      paddingTop: 10.5,
+      paddingBottom: 10.5
+    },
+
+    /* Styles applied to the `input` element if `multiline={true}`. */
+    inputMultiline: {
+      padding: 0
+    },
+
+    /* Styles applied to the `input` element if `startAdornment` is provided. */
+    inputAdornedStart: {
+      paddingLeft: 0
+    },
+
+    /* Styles applied to the `input` element if `endAdornment` is provided. */
+    inputAdornedEnd: {
+      paddingRight: 0
+    }
+  };
+};
+
+exports.styles = styles;
+var OutlinedInput = React.forwardRef(function OutlinedInput(props, ref) {
+  var classes = props.classes,
+      _props$fullWidth = props.fullWidth,
+      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
+      _props$inputComponent = props.inputComponent,
+      inputComponent = _props$inputComponent === void 0 ? 'input' : _props$inputComponent,
+      label = props.label,
+      _props$labelWidth = props.labelWidth,
+      labelWidth = _props$labelWidth === void 0 ? 0 : _props$labelWidth,
+      _props$multiline = props.multiline,
+      multiline = _props$multiline === void 0 ? false : _props$multiline,
+      notched = props.notched,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'text' : _props$type,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "fullWidth", "inputComponent", "label", "labelWidth", "multiline", "notched", "type"]);
+  return /*#__PURE__*/React.createElement(_InputBase.default, (0, _extends2.default)({
+    renderSuffix: function renderSuffix(state) {
+      return /*#__PURE__*/React.createElement(_NotchedOutline.default, {
+        className: classes.notchedOutline,
+        label: label,
+        labelWidth: labelWidth,
+        notched: typeof notched !== 'undefined' ? notched : Boolean(state.startAdornment || state.filled || state.focused)
+      });
+    },
+    classes: (0, _extends2.default)({}, classes, {
+      root: (0, _clsx.default)(classes.root, classes.underline),
+      notchedOutline: null
+    }),
+    fullWidth: fullWidth,
+    inputComponent: inputComponent,
+    multiline: multiline,
+    ref: ref,
+    type: type
+  }, other));
+});
+"development" !== "production" ? OutlinedInput.propTypes = {
+  /**
+   * This prop helps users to fill forms faster, especially on mobile devices.
+   * The name can be confusing, as it's more like an autofill.
+   * You can learn more about it [following the specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill).
+   */
+  autoComplete: _propTypes.default.string,
+
+  /**
+   * If `true`, the `input` element will be focused during the first mount.
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * The CSS class name of the wrapper element.
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['primary', 'secondary']),
+
+  /**
+   * The default `input` element value. Use when the component is not controlled.
+   */
+  defaultValue: _propTypes.default.any,
+
+  /**
+   * If `true`, the `input` element will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * End `InputAdornment` for this component.
+   */
+  endAdornment: _propTypes.default.node,
+
+  /**
+   * If `true`, the input will indicate an error. This is normally obtained via context from
+   * FormControl.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input will take up the full width of its container.
+   */
+  fullWidth: _propTypes.default.bool,
+
+  /**
+   * The id of the `input` element.
+   */
+  id: _propTypes.default.string,
+
+  /**
+   * The component used for the native input.
+   * Either a string to use a DOM element or a component.
+   */
+  inputComponent: _propTypes.default.elementType,
+
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _utils.refType,
+
+  /**
+   * The label of the input. It is only used for layout. The actual labelling
+   * is handled by `InputLabel`. If specified `labelWidth` is ignored.
+   */
+  label: _propTypes.default.node,
+
+  /**
+   * The width of the label. Is ignored if `label` is provided. Prefer `label`
+   * if the input label appears with a strike through.
+   */
+  labelWidth: _propTypes.default.number,
+
+  /**
+   * If `dense`, will adjust vertical spacing. This is normally obtained via context from
+   * FormControl.
+   */
+  margin: _propTypes.default.oneOf(['dense', 'none']),
+
+  /**
+   * If `true`, a textarea element will be rendered.
+   */
+  multiline: _propTypes.default.bool,
+
+  /**
+   * Name attribute of the `input` element.
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * If `true`, the outline is notched to accommodate the label.
+   */
+  notched: _propTypes.default.bool,
+
+  /**
+   * Callback fired when the value is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (string).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * The short hint displayed in the input before the user enters a value.
+   */
+  placeholder: _propTypes.default.string,
+
+  /**
+   * It prevents the user from changing the value of the field
+   * (not from interacting with the field).
+   */
+  readOnly: _propTypes.default.bool,
+
+  /**
+   * If `true`, the `input` element will be required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * Number of rows to display when multiline option is set to true.
+   */
+  rows: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Maximum number of rows to display when multiline option is set to true.
+   */
+  rowsMax: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Start `InputAdornment` for this component.
+   */
+  startAdornment: _propTypes.default.node,
+
+  /**
+   * Type of the `input` element. It should be [a valid HTML5 input type](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types).
+   */
+  type: _propTypes.default.string,
+
+  /**
+   * The value of the `input` element, required for a controlled component.
+   */
+  value: _propTypes.default.any
+} : void 0;
+OutlinedInput.muiName = 'Input';
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiOutlinedInput'
+})(OutlinedInput);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../InputBase":"../node_modules/@material-ui/core/esm/InputBase/index.js","./NotchedOutline":"../node_modules/@material-ui/core/esm/OutlinedInput/NotchedOutline.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js"}],"../node_modules/@material-ui/core/esm/OutlinedInput/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _OutlinedInput.default;
+  }
+});
+
+var _OutlinedInput = _interopRequireDefault(require("./OutlinedInput"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./OutlinedInput":"../node_modules/@material-ui/core/esm/OutlinedInput/OutlinedInput.js"}],"../node_modules/@material-ui/core/esm/FormControl/useFormControl.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = useFormControl;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _FormControlContext = _interopRequireDefault(require("./FormControlContext"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function useFormControl() {
+  return React.useContext(_FormControlContext.default);
+}
+},{"react":"../node_modules/react/index.js","./FormControlContext":"../node_modules/@material-ui/core/esm/FormControl/FormControlContext.js"}],"../node_modules/@material-ui/core/esm/FormLabel/FormLabel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _formControlState = _interopRequireDefault(require("../FormControl/formControlState"));
+
+var _useFormControl = _interopRequireDefault(require("../FormControl/useFormControl"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: (0, _extends2.default)({
+      color: theme.palette.text.secondary
+    }, theme.typography.body1, {
+      lineHeight: 1,
+      padding: 0,
+      '&$focused': {
+        color: theme.palette.primary.main
+      },
+      '&$disabled': {
+        color: theme.palette.text.disabled
+      },
+      '&$error': {
+        color: theme.palette.error.main
+      }
+    }),
+
+    /* Styles applied to the root element if the color is secondary. */
+    colorSecondary: {
+      '&$focused': {
+        color: theme.palette.secondary.main
+      }
+    },
+
+    /* Pseudo-class applied to the root element if `focused={true}`. */
+    focused: {},
+
+    /* Pseudo-class applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Pseudo-class applied to the root element if `error={true}`. */
+    error: {},
+
+    /* Pseudo-class applied to the root element if `filled={true}`. */
+    filled: {},
+
+    /* Pseudo-class applied to the root element if `required={true}`. */
+    required: {},
+
+    /* Styles applied to the asterisk element. */
+    asterisk: {
+      '&$error': {
+        color: theme.palette.error.main
+      }
+    }
+  };
+};
+
+exports.styles = styles;
+var FormLabel = React.forwardRef(function FormLabel(props, ref) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      color = props.color,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'label' : _props$component,
+      disabled = props.disabled,
+      error = props.error,
+      filled = props.filled,
+      focused = props.focused,
+      required = props.required,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "color", "component", "disabled", "error", "filled", "focused", "required"]);
+  var muiFormControl = (0, _useFormControl.default)();
+  var fcs = (0, _formControlState.default)({
+    props: props,
+    muiFormControl: muiFormControl,
+    states: ['color', 'required', 'focused', 'disabled', 'error', 'filled']
+  });
+  return /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, classes["color".concat((0, _capitalize.default)(fcs.color || 'primary'))], className, fcs.disabled && classes.disabled, fcs.error && classes.error, fcs.filled && classes.filled, fcs.focused && classes.focused, fcs.required && classes.required),
+    ref: ref
+  }, other), children, fcs.required && /*#__PURE__*/React.createElement("span", {
+    className: (0, _clsx.default)(classes.asterisk, fcs.error && classes.error)
+  }, "\u2009", '*'));
+});
+"development" !== "production" ? FormLabel.propTypes = {
+  /**
+   * The content of the component.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['primary', 'secondary']),
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType,
+
+  /**
+   * If `true`, the label should be displayed in a disabled state.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the label should be displayed in an error state.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * If `true`, the label should use filled classes key.
+   */
+  filled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input of this label is focused (used by `FormGroup` components).
+   */
+  focused: _propTypes.default.bool,
+
+  /**
+   * If `true`, the label will indicate that the input is required.
+   */
+  required: _propTypes.default.bool
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiFormLabel'
+})(FormLabel);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../FormControl/formControlState":"../node_modules/@material-ui/core/esm/FormControl/formControlState.js","../FormControl/useFormControl":"../node_modules/@material-ui/core/esm/FormControl/useFormControl.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js"}],"../node_modules/@material-ui/core/esm/FormLabel/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _FormLabel.default;
+  }
+});
+
+var _FormLabel = _interopRequireDefault(require("./FormLabel"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./FormLabel":"../node_modules/@material-ui/core/esm/FormLabel/FormLabel.js"}],"../node_modules/@material-ui/core/esm/InputLabel/InputLabel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _formControlState = _interopRequireDefault(require("../FormControl/formControlState"));
+
+var _useFormControl = _interopRequireDefault(require("../FormControl/useFormControl"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _FormLabel = _interopRequireDefault(require("../FormLabel"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      display: 'block',
+      transformOrigin: 'top left'
+    },
+
+    /* Pseudo-class applied to the root element if `focused={true}`. */
+    focused: {},
+
+    /* Pseudo-class applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Pseudo-class applied to the root element if `error={true}`. */
+    error: {},
+
+    /* Pseudo-class applied to the root element if `required={true}`. */
+    required: {},
+
+    /* Pseudo-class applied to the asterisk element. */
+    asterisk: {},
+
+    /* Styles applied to the root element if the component is a descendant of `FormControl`. */
+    formControl: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      // slight alteration to spec spacing to match visual spec result
+      transform: 'translate(0, 24px) scale(1)'
+    },
+
+    /* Styles applied to the root element if `margin="dense"`. */
+    marginDense: {
+      // Compensation for the `Input.inputDense` style.
+      transform: 'translate(0, 21px) scale(1)'
+    },
+
+    /* Styles applied to the `input` element if `shrink={true}`. */
+    shrink: {
+      transform: 'translate(0, 1.5px) scale(0.75)',
+      transformOrigin: 'top left'
+    },
+
+    /* Styles applied to the `input` element if `disableAnimation={false}`. */
+    animated: {
+      transition: theme.transitions.create(['color', 'transform'], {
+        duration: theme.transitions.duration.shorter,
+        easing: theme.transitions.easing.easeOut
+      })
+    },
+
+    /* Styles applied to the root element if `variant="filled"`. */
+    filled: {
+      // Chrome's autofill feature gives the input field a yellow background.
+      // Since the input field is behind the label in the HTML tree,
+      // the input field is drawn last and hides the label with an opaque background color.
+      // zIndex: 1 will raise the label above opaque background-colors of input.
+      zIndex: 1,
+      pointerEvents: 'none',
+      transform: 'translate(12px, 20px) scale(1)',
+      '&$marginDense': {
+        transform: 'translate(12px, 17px) scale(1)'
+      },
+      '&$shrink': {
+        transform: 'translate(12px, 10px) scale(0.75)',
+        '&$marginDense': {
+          transform: 'translate(12px, 7px) scale(0.75)'
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `variant="outlined"`. */
+    outlined: {
+      // see comment above on filled.zIndex
+      zIndex: 1,
+      pointerEvents: 'none',
+      transform: 'translate(14px, 20px) scale(1)',
+      '&$marginDense': {
+        transform: 'translate(14px, 12px) scale(1)'
+      },
+      '&$shrink': {
+        transform: 'translate(14px, -6px) scale(0.75)'
+      }
+    }
+  };
+};
+
+exports.styles = styles;
+var InputLabel = React.forwardRef(function InputLabel(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      _props$disableAnimati = props.disableAnimation,
+      disableAnimation = _props$disableAnimati === void 0 ? false : _props$disableAnimati,
+      margin = props.margin,
+      shrinkProp = props.shrink,
+      variant = props.variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "disableAnimation", "margin", "shrink", "variant"]);
+  var muiFormControl = (0, _useFormControl.default)();
+  var shrink = shrinkProp;
+
+  if (typeof shrink === 'undefined' && muiFormControl) {
+    shrink = muiFormControl.filled || muiFormControl.focused || muiFormControl.adornedStart;
+  }
+
+  var fcs = (0, _formControlState.default)({
+    props: props,
+    muiFormControl: muiFormControl,
+    states: ['margin', 'variant']
+  });
+  return /*#__PURE__*/React.createElement(_FormLabel.default, (0, _extends2.default)({
+    "data-shrink": shrink,
+    className: (0, _clsx.default)(classes.root, className, muiFormControl && classes.formControl, !disableAnimation && classes.animated, shrink && classes.shrink, fcs.margin === 'dense' && classes.marginDense, {
+      'filled': classes.filled,
+      'outlined': classes.outlined
+    }[fcs.variant]),
+    classes: {
+      focused: classes.focused,
+      disabled: classes.disabled,
+      error: classes.error,
+      required: classes.required,
+      asterisk: classes.asterisk
+    },
+    ref: ref
+  }, other));
+});
+"development" !== "production" ? InputLabel.propTypes = {
+  /**
+   * The contents of the `InputLabel`.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['primary', 'secondary']),
+
+  /**
+   * If `true`, the transition animation is disabled.
+   */
+  disableAnimation: _propTypes.default.bool,
+
+  /**
+   * If `true`, apply disabled class.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the label will be displayed in an error state.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * If `true`, the input of this label is focused.
+   */
+  focused: _propTypes.default.bool,
+
+  /**
+   * If `dense`, will adjust vertical spacing. This is normally obtained via context from
+   * FormControl.
+   */
+  margin: _propTypes.default.oneOf(['dense']),
+
+  /**
+   * if `true`, the label will indicate that the input is required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * If `true`, the label is shrunk.
+   */
+  shrink: _propTypes.default.bool,
+
+  /**
+   * The variant to use.
+   */
+  variant: _propTypes.default.oneOf(['standard', 'outlined', 'filled'])
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiInputLabel'
+})(InputLabel);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../FormControl/formControlState":"../node_modules/@material-ui/core/esm/FormControl/formControlState.js","../FormControl/useFormControl":"../node_modules/@material-ui/core/esm/FormControl/useFormControl.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../FormLabel":"../node_modules/@material-ui/core/esm/FormLabel/index.js"}],"../node_modules/@material-ui/core/esm/InputLabel/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _InputLabel.default;
+  }
+});
+
+var _InputLabel = _interopRequireDefault(require("./InputLabel"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./InputLabel":"../node_modules/@material-ui/core/esm/InputLabel/InputLabel.js"}],"../node_modules/@material-ui/core/esm/utils/isMuiElement.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isMuiElement;
+
+var React = _interopRequireWildcard(require("react"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function isMuiElement(element, muiNames) {
+  return React.isValidElement(element) && muiNames.indexOf(element.type.muiName) !== -1;
+}
+},{"react":"../node_modules/react/index.js"}],"../node_modules/@material-ui/core/esm/FormControl/FormControl.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("../InputBase/utils");
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+var _isMuiElement = _interopRequireDefault(require("../utils/isMuiElement"));
+
+var _FormControlContext = _interopRequireDefault(require("./FormControlContext"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    display: 'inline-flex',
+    flexDirection: 'column',
+    position: 'relative',
+    // Reset fieldset default style.
+    minWidth: 0,
+    padding: 0,
+    margin: 0,
+    border: 0,
+    verticalAlign: 'top' // Fix alignment issue on Safari.
+
+  },
+
+  /* Styles applied to the root element if `margin="normal"`. */
+  marginNormal: {
+    marginTop: 16,
+    marginBottom: 8
+  },
+
+  /* Styles applied to the root element if `margin="dense"`. */
+  marginDense: {
+    marginTop: 8,
+    marginBottom: 4
+  },
+
+  /* Styles applied to the root element if `fullWidth={true}`. */
+  fullWidth: {
+    width: '100%'
+  }
+};
+/**
+ * Provides context such as filled/focused/error/required for form inputs.
+ * Relying on the context provides high flexibility and ensures that the state always stays
+ * consistent across the children of the `FormControl`.
+ * This context is used by the following components:
+ *
+ *  - FormLabel
+ *  - FormHelperText
+ *  - Input
+ *  - InputLabel
+ *
+ * You can find one composition example below and more going to [the demos](/components/text-fields/#components).
+ *
+ * ```jsx
+ * <FormControl>
+ *   <InputLabel htmlFor="my-input">Email address</InputLabel>
+ *   <Input id="my-input" aria-describedby="my-helper-text" />
+ *   <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText>
+ * </FormControl>
+ * ```
+ *
+ * ⚠️Only one input can be used within a FormControl.
+ */
+
+exports.styles = styles;
+var FormControl = React.forwardRef(function FormControl(props, ref) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$color = props.color,
+      color = _props$color === void 0 ? 'primary' : _props$color,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'div' : _props$component,
+      _props$disabled = props.disabled,
+      disabled = _props$disabled === void 0 ? false : _props$disabled,
+      _props$error = props.error,
+      error = _props$error === void 0 ? false : _props$error,
+      _props$fullWidth = props.fullWidth,
+      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
+      _props$hiddenLabel = props.hiddenLabel,
+      hiddenLabel = _props$hiddenLabel === void 0 ? false : _props$hiddenLabel,
+      _props$margin = props.margin,
+      margin = _props$margin === void 0 ? 'none' : _props$margin,
+      _props$required = props.required,
+      required = _props$required === void 0 ? false : _props$required,
+      size = props.size,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'standard' : _props$variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "color", "component", "disabled", "error", "fullWidth", "hiddenLabel", "margin", "required", "size", "variant"]);
+
+  var _React$useState = React.useState(function () {
+    // We need to iterate through the children and find the Input in order
+    // to fully support server-side rendering.
+    var initialAdornedStart = false;
+
+    if (children) {
+      React.Children.forEach(children, function (child) {
+        if (!(0, _isMuiElement.default)(child, ['Input', 'Select'])) {
+          return;
+        }
+
+        var input = (0, _isMuiElement.default)(child, ['Select']) ? child.props.input : child;
+
+        if (input && (0, _utils.isAdornedStart)(input.props)) {
+          initialAdornedStart = true;
+        }
+      });
+    }
+
+    return initialAdornedStart;
+  }),
+      adornedStart = _React$useState[0],
+      setAdornedStart = _React$useState[1];
+
+  var _React$useState2 = React.useState(function () {
+    // We need to iterate through the children and find the Input in order
+    // to fully support server-side rendering.
+    var initialFilled = false;
+
+    if (children) {
+      React.Children.forEach(children, function (child) {
+        if (!(0, _isMuiElement.default)(child, ['Input', 'Select'])) {
+          return;
+        }
+
+        if ((0, _utils.isFilled)(child.props, true)) {
+          initialFilled = true;
+        }
+      });
+    }
+
+    return initialFilled;
+  }),
+      filled = _React$useState2[0],
+      setFilled = _React$useState2[1];
+
+  var _React$useState3 = React.useState(false),
+      focused = _React$useState3[0],
+      setFocused = _React$useState3[1];
+
+  if (disabled && focused) {
+    setFocused(false);
+  }
+
+  var registerEffect;
+
+  if ("development" !== 'production') {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    var registeredInput = React.useRef(false);
+
+    registerEffect = function registerEffect() {
+      if (registeredInput.current) {
+        console.error(['Material-UI: there are multiple InputBase components inside a FormControl.', 'This is not supported. It might cause infinite rendering loops.', 'Only use one InputBase.'].join('\n'));
+      }
+
+      registeredInput.current = true;
+      return function () {
+        registeredInput.current = false;
+      };
+    };
+  }
+
+  var onFilled = React.useCallback(function () {
+    setFilled(true);
+  }, []);
+  var onEmpty = React.useCallback(function () {
+    setFilled(false);
+  }, []);
+  var childContext = {
+    adornedStart: adornedStart,
+    setAdornedStart: setAdornedStart,
+    color: color,
+    disabled: disabled,
+    error: error,
+    filled: filled,
+    focused: focused,
+    fullWidth: fullWidth,
+    hiddenLabel: hiddenLabel,
+    margin: (size === 'small' ? 'dense' : undefined) || margin,
+    onBlur: function onBlur() {
+      setFocused(false);
+    },
+    onEmpty: onEmpty,
+    onFilled: onFilled,
+    onFocus: function onFocus() {
+      setFocused(true);
+    },
+    registerEffect: registerEffect,
+    required: required,
+    variant: variant
+  };
+  return /*#__PURE__*/React.createElement(_FormControlContext.default.Provider, {
+    value: childContext
+  }, /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className, margin !== 'none' && classes["margin".concat((0, _capitalize.default)(margin))], fullWidth && classes.fullWidth),
+    ref: ref
+  }, other), children));
+});
+"development" !== "production" ? FormControl.propTypes = {
+  /**
+   * The contents of the form control.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['primary', 'secondary']),
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType,
+
+  /**
+   * If `true`, the label, input and helper text should be displayed in a disabled state.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the label should be displayed in an error state.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * If `true`, the component will take up the full width of its container.
+   */
+  fullWidth: _propTypes.default.bool,
+
+  /**
+   * If `true`, the label will be hidden.
+   * This is used to increase density for a `FilledInput`.
+   * Be sure to add `aria-label` to the `input` element.
+   */
+  hiddenLabel: _propTypes.default.bool,
+
+  /**
+   * If `dense` or `normal`, will adjust vertical spacing of this and contained components.
+   */
+  margin: _propTypes.default.oneOf(['none', 'dense', 'normal']),
+
+  /**
+   * If `true`, the label will indicate that the input is required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * The size of the text field.
+   */
+  size: _propTypes.default.oneOf(['small', 'medium']),
+
+  /**
+   * The variant to use.
+   */
+  variant: _propTypes.default.oneOf(['standard', 'outlined', 'filled'])
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiFormControl'
+})(FormControl);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../InputBase/utils":"../node_modules/@material-ui/core/esm/InputBase/utils.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js","../utils/isMuiElement":"../node_modules/@material-ui/core/esm/utils/isMuiElement.js","./FormControlContext":"../node_modules/@material-ui/core/esm/FormControl/FormControlContext.js"}],"../node_modules/@material-ui/core/esm/FormControl/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _FormControl.default;
+  }
+});
+Object.defineProperty(exports, "useFormControl", {
+  enumerable: true,
+  get: function () {
+    return _useFormControl.default;
+  }
+});
+
+var _FormControl = _interopRequireDefault(require("./FormControl"));
+
+var _useFormControl = _interopRequireDefault(require("./useFormControl"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./FormControl":"../node_modules/@material-ui/core/esm/FormControl/FormControl.js","./useFormControl":"../node_modules/@material-ui/core/esm/FormControl/useFormControl.js"}],"../node_modules/@material-ui/core/esm/FormHelperText/FormHelperText.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _formControlState = _interopRequireDefault(require("../FormControl/formControlState"));
+
+var _useFormControl = _interopRequireDefault(require("../FormControl/useFormControl"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: (0, _extends2.default)({
+      color: theme.palette.text.secondary
+    }, theme.typography.caption, {
+      textAlign: 'left',
+      marginTop: 3,
+      margin: 0,
+      '&$disabled': {
+        color: theme.palette.text.disabled
+      },
+      '&$error': {
+        color: theme.palette.error.main
+      }
+    }),
+
+    /* Pseudo-class applied to the root element if `error={true}`. */
+    error: {},
+
+    /* Pseudo-class applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the root element if `margin="dense"`. */
+    marginDense: {
+      marginTop: 4
+    },
+
+    /* Styles applied to the root element if `variant="filled"` or `variant="outlined"`. */
+    contained: {
+      marginLeft: 14,
+      marginRight: 14
+    },
+
+    /* Pseudo-class applied to the root element if `focused={true}`. */
+    focused: {},
+
+    /* Pseudo-class applied to the root element if `filled={true}`. */
+    filled: {},
+
+    /* Pseudo-class applied to the root element if `required={true}`. */
+    required: {}
+  };
+};
+
+exports.styles = styles;
+var FormHelperText = React.forwardRef(function FormHelperText(props, ref) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'p' : _props$component,
+      disabled = props.disabled,
+      error = props.error,
+      filled = props.filled,
+      focused = props.focused,
+      margin = props.margin,
+      required = props.required,
+      variant = props.variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "component", "disabled", "error", "filled", "focused", "margin", "required", "variant"]);
+  var muiFormControl = (0, _useFormControl.default)();
+  var fcs = (0, _formControlState.default)({
+    props: props,
+    muiFormControl: muiFormControl,
+    states: ['variant', 'margin', 'disabled', 'error', 'filled', 'focused', 'required']
+  });
+  return /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, (fcs.variant === 'filled' || fcs.variant === 'outlined') && classes.contained, className, fcs.disabled && classes.disabled, fcs.error && classes.error, fcs.filled && classes.filled, fcs.focused && classes.focused, fcs.required && classes.required, fcs.margin === 'dense' && classes.marginDense),
+    ref: ref
+  }, other), children === ' ' ?
+  /*#__PURE__*/
+  // eslint-disable-next-line react/no-danger
+  React.createElement("span", {
+    dangerouslySetInnerHTML: {
+      __html: '&#8203;'
+    }
+  }) : children);
+});
+"development" !== "production" ? FormHelperText.propTypes = {
+  /**
+   * The content of the component.
+   *
+   * If `' '` is provided, the component reserves one line height for displaying a future message.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType,
+
+  /**
+   * If `true`, the helper text should be displayed in a disabled state.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, helper text should be displayed in an error state.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * If `true`, the helper text should use filled classes key.
+   */
+  filled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the helper text should use focused classes key.
+   */
+  focused: _propTypes.default.bool,
+
+  /**
+   * If `dense`, will adjust vertical spacing. This is normally obtained via context from
+   * FormControl.
+   */
+  margin: _propTypes.default.oneOf(['dense']),
+
+  /**
+   * If `true`, the helper text should use required classes key.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * The variant to use.
+   */
+  variant: _propTypes.default.oneOf(['standard', 'outlined', 'filled'])
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiFormHelperText'
+})(FormHelperText);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../FormControl/formControlState":"../node_modules/@material-ui/core/esm/FormControl/formControlState.js","../FormControl/useFormControl":"../node_modules/@material-ui/core/esm/FormControl/useFormControl.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js"}],"../node_modules/@material-ui/core/esm/FormHelperText/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _FormHelperText.default;
+  }
+});
+
+var _FormHelperText = _interopRequireDefault(require("./FormHelperText"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./FormHelperText":"../node_modules/@material-ui/core/esm/FormHelperText/FormHelperText.js"}],"../node_modules/@material-ui/core/esm/utils/ownerDocument.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ownerDocument;
+
+function ownerDocument(node) {
+  return node && node.ownerDocument || document;
+}
+},{}],"../node_modules/@material-ui/core/esm/utils/ownerWindow.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ownerWindow;
+
+var _ownerDocument = _interopRequireDefault(require("./ownerDocument"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ownerWindow(node) {
+  var doc = (0, _ownerDocument.default)(node);
+  return doc.defaultView || window;
+}
+},{"./ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js"}],"../node_modules/@material-ui/core/esm/utils/createChainedFunction.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createChainedFunction;
+
+/**
+ * Safe chained function
+ *
+ * Will only create a new function if needed,
+ * otherwise will pass back existing functions or null.
+ *
+ * @param {function} functions to chain
+ * @returns {function|null}
+ */
+function createChainedFunction() {
+  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  return funcs.reduce(function (acc, func) {
+    if (func == null) {
+      return acc;
+    }
+
+    if ("development" !== 'production') {
+      if (typeof func !== 'function') {
+        console.error('Material-UI: invalid Argument Type, must only provide functions, undefined, or null.');
+      }
+    }
+
+    return function chainedFunction() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      acc.apply(this, args);
+      func.apply(this, args);
+    };
+  }, function () {});
+}
+},{}],"../node_modules/@material-ui/core/esm/Portal/Portal.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _utils = require("@material-ui/utils");
+
+var _setRef = _interopRequireDefault(require("../utils/setRef"));
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function getContainer(container) {
+  container = typeof container === 'function' ? container() : container; // #StrictMode ready
+
+  return ReactDOM.findDOMNode(container);
+}
+
+var useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+/**
+ * Portals provide a first-class way to render children into a DOM node
+ * that exists outside the DOM hierarchy of the parent component.
+ */
+
+var Portal = React.forwardRef(function Portal(props, ref) {
+  var children = props.children,
+      container = props.container,
+      _props$disablePortal = props.disablePortal,
+      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
+      onRendered = props.onRendered;
+
+  var _React$useState = React.useState(null),
+      mountNode = _React$useState[0],
+      setMountNode = _React$useState[1];
+
+  var handleRef = (0, _useForkRef.default)(React.isValidElement(children) ? children.ref : null, ref);
+  useEnhancedEffect(function () {
+    if (!disablePortal) {
+      setMountNode(getContainer(container) || document.body);
+    }
+  }, [container, disablePortal]);
+  useEnhancedEffect(function () {
+    if (mountNode && !disablePortal) {
+      (0, _setRef.default)(ref, mountNode);
+      return function () {
+        (0, _setRef.default)(ref, null);
+      };
+    }
+
+    return undefined;
+  }, [ref, mountNode, disablePortal]);
+  useEnhancedEffect(function () {
+    if (onRendered && (mountNode || disablePortal)) {
+      onRendered();
+    }
+  }, [onRendered, mountNode, disablePortal]);
+
+  if (disablePortal) {
+    if (React.isValidElement(children)) {
+      return React.cloneElement(children, {
+        ref: handleRef
+      });
+    }
+
+    return children;
+  }
+
+  return mountNode ? ReactDOM.createPortal(children, mountNode) : mountNode;
+});
+"development" !== "production" ? Portal.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * The children to render into the `container`.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * A node, component instance, or function that returns either.
+   * The `container` will have the portal children appended to it.
+   * By default, it uses the body of the top-level document object,
+   * so it's simply `document.body` most of the time.
+   */
+  container: _propTypes.default.oneOfType([_propTypes.default.func, _propTypes.default.instanceOf(React.Component), _propTypes.default.instanceOf(typeof Element === 'undefined' ? Object : Element)]),
+
+  /**
+   * Disable the portal behavior.
+   * The children stay within it's parent DOM hierarchy.
+   */
+  disablePortal: _propTypes.default.bool,
+
+  /**
+   * Callback fired once the children has been mounted into the `container`.
+   *
+   * This prop will be deprecated and removed in v5, the ref can be used instead.
+   */
+  onRendered: _propTypes.default.func
+} : void 0;
+
+if ("development" !== 'production') {
+  // eslint-disable-next-line
+  Portal['propTypes' + ''] = (0, _utils.exactProp)(Portal.propTypes);
+}
+
+var _default = Portal;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../utils/setRef":"../node_modules/@material-ui/core/esm/utils/setRef.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/Portal/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Portal.default;
+  }
+});
+
+var _Portal = _interopRequireDefault(require("./Portal"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Portal":"../node_modules/@material-ui/core/esm/Portal/Portal.js"}],"../node_modules/@material-ui/core/esm/utils/getScrollbarSize.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getScrollbarSize;
+
+// A change of the browser zoom change the scrollbar size.
+// Credit https://github.com/twbs/bootstrap/blob/3ffe3a5d82f6f561b82ff78d82b32a7d14aed558/js/src/modal.js#L512-L519
+function getScrollbarSize() {
+  var scrollDiv = document.createElement('div');
+  scrollDiv.style.width = '99px';
+  scrollDiv.style.height = '99px';
+  scrollDiv.style.position = 'absolute';
+  scrollDiv.style.top = '-9999px';
+  scrollDiv.style.overflow = 'scroll';
+  document.body.appendChild(scrollDiv);
+  var scrollbarSize = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+  document.body.removeChild(scrollDiv);
+  return scrollbarSize;
+}
+},{}],"../node_modules/@material-ui/core/esm/Modal/ModalManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ariaHidden = ariaHidden;
+exports.default = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/createClass"));
+
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/toConsumableArray"));
+
+var _getScrollbarSize = _interopRequireDefault(require("../utils/getScrollbarSize"));
+
+var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
+
+var _ownerWindow = _interopRequireDefault(require("../utils/ownerWindow"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Is a vertical scrollbar displayed?
+function isOverflowing(container) {
+  var doc = (0, _ownerDocument.default)(container);
+
+  if (doc.body === container) {
+    return (0, _ownerWindow.default)(doc).innerWidth > doc.documentElement.clientWidth;
+  }
+
+  return container.scrollHeight > container.clientHeight;
+}
+
+function ariaHidden(node, show) {
+  if (show) {
+    node.setAttribute('aria-hidden', 'true');
+  } else {
+    node.removeAttribute('aria-hidden');
+  }
+}
+
+function getPaddingRight(node) {
+  return parseInt(window.getComputedStyle(node)['padding-right'], 10) || 0;
+}
+
+function ariaHiddenSiblings(container, mountNode, currentNode) {
+  var nodesToExclude = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+  var show = arguments.length > 4 ? arguments[4] : undefined;
+  var blacklist = [mountNode, currentNode].concat((0, _toConsumableArray2.default)(nodesToExclude));
+  var blacklistTagNames = ['TEMPLATE', 'SCRIPT', 'STYLE'];
+  [].forEach.call(container.children, function (node) {
+    if (node.nodeType === 1 && blacklist.indexOf(node) === -1 && blacklistTagNames.indexOf(node.tagName) === -1) {
+      ariaHidden(node, show);
+    }
+  });
+}
+
+function findIndexOf(containerInfo, callback) {
+  var idx = -1;
+  containerInfo.some(function (item, index) {
+    if (callback(item)) {
+      idx = index;
+      return true;
+    }
+
+    return false;
+  });
+  return idx;
+}
+
+function handleContainer(containerInfo, props) {
+  var restoreStyle = [];
+  var restorePaddings = [];
+  var container = containerInfo.container;
+  var fixedNodes;
+
+  if (!props.disableScrollLock) {
+    if (isOverflowing(container)) {
+      // Compute the size before applying overflow hidden to avoid any scroll jumps.
+      var scrollbarSize = (0, _getScrollbarSize.default)();
+      restoreStyle.push({
+        value: container.style.paddingRight,
+        key: 'padding-right',
+        el: container
+      }); // Use computed style, here to get the real padding to add our scrollbar width.
+
+      container.style['padding-right'] = "".concat(getPaddingRight(container) + scrollbarSize, "px"); // .mui-fixed is a global helper.
+
+      fixedNodes = (0, _ownerDocument.default)(container).querySelectorAll('.mui-fixed');
+      [].forEach.call(fixedNodes, function (node) {
+        restorePaddings.push(node.style.paddingRight);
+        node.style.paddingRight = "".concat(getPaddingRight(node) + scrollbarSize, "px");
+      });
+    } // Improve Gatsby support
+    // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
+
+
+    var parent = container.parentElement;
+    var scrollContainer = parent.nodeName === 'HTML' && window.getComputedStyle(parent)['overflow-y'] === 'scroll' ? parent : container; // Block the scroll even if no scrollbar is visible to account for mobile keyboard
+    // screensize shrink.
+
+    restoreStyle.push({
+      value: scrollContainer.style.overflow,
+      key: 'overflow',
+      el: scrollContainer
+    });
+    scrollContainer.style.overflow = 'hidden';
+  }
+
+  var restore = function restore() {
+    if (fixedNodes) {
+      [].forEach.call(fixedNodes, function (node, i) {
+        if (restorePaddings[i]) {
+          node.style.paddingRight = restorePaddings[i];
+        } else {
+          node.style.removeProperty('padding-right');
+        }
+      });
+    }
+
+    restoreStyle.forEach(function (_ref) {
+      var value = _ref.value,
+          el = _ref.el,
+          key = _ref.key;
+
+      if (value) {
+        el.style.setProperty(key, value);
+      } else {
+        el.style.removeProperty(key);
+      }
+    });
+  };
+
+  return restore;
+}
+
+function getHiddenSiblings(container) {
+  var hiddenSiblings = [];
+  [].forEach.call(container.children, function (node) {
+    if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') {
+      hiddenSiblings.push(node);
+    }
+  });
+  return hiddenSiblings;
+}
+/**
+ * @ignore - do not document.
+ *
+ * Proper state management for containers and the modals in those containers.
+ * Simplified, but inspired by react-overlay's ModalManager class.
+ * Used by the Modal to ensure proper styling of containers.
+ */
+
+
+var ModalManager = /*#__PURE__*/function () {
+  function ModalManager() {
+    (0, _classCallCheck2.default)(this, ModalManager); // this.modals[modalIndex] = modal
+
+    this.modals = []; // this.containers[containerIndex] = {
+    //   modals: [],
+    //   container,
+    //   restore: null,
+    // }
+
+    this.containers = [];
+  }
+
+  (0, _createClass2.default)(ModalManager, [{
+    key: "add",
+    value: function add(modal, container) {
+      var modalIndex = this.modals.indexOf(modal);
+
+      if (modalIndex !== -1) {
+        return modalIndex;
+      }
+
+      modalIndex = this.modals.length;
+      this.modals.push(modal); // If the modal we are adding is already in the DOM.
+
+      if (modal.modalRef) {
+        ariaHidden(modal.modalRef, false);
+      }
+
+      var hiddenSiblingNodes = getHiddenSiblings(container);
+      ariaHiddenSiblings(container, modal.mountNode, modal.modalRef, hiddenSiblingNodes, true);
+      var containerIndex = findIndexOf(this.containers, function (item) {
+        return item.container === container;
+      });
+
+      if (containerIndex !== -1) {
+        this.containers[containerIndex].modals.push(modal);
+        return modalIndex;
+      }
+
+      this.containers.push({
+        modals: [modal],
+        container: container,
+        restore: null,
+        hiddenSiblingNodes: hiddenSiblingNodes
+      });
+      return modalIndex;
+    }
+  }, {
+    key: "mount",
+    value: function mount(modal, props) {
+      var containerIndex = findIndexOf(this.containers, function (item) {
+        return item.modals.indexOf(modal) !== -1;
+      });
+      var containerInfo = this.containers[containerIndex];
+
+      if (!containerInfo.restore) {
+        containerInfo.restore = handleContainer(containerInfo, props);
+      }
+    }
+  }, {
+    key: "remove",
+    value: function remove(modal) {
+      var modalIndex = this.modals.indexOf(modal);
+
+      if (modalIndex === -1) {
+        return modalIndex;
+      }
+
+      var containerIndex = findIndexOf(this.containers, function (item) {
+        return item.modals.indexOf(modal) !== -1;
+      });
+      var containerInfo = this.containers[containerIndex];
+      containerInfo.modals.splice(containerInfo.modals.indexOf(modal), 1);
+      this.modals.splice(modalIndex, 1); // If that was the last modal in a container, clean up the container.
+
+      if (containerInfo.modals.length === 0) {
+        // The modal might be closed before it had the chance to be mounted in the DOM.
+        if (containerInfo.restore) {
+          containerInfo.restore();
+        }
+
+        if (modal.modalRef) {
+          // In case the modal wasn't in the DOM yet.
+          ariaHidden(modal.modalRef, true);
+        }
+
+        ariaHiddenSiblings(containerInfo.container, modal.mountNode, modal.modalRef, containerInfo.hiddenSiblingNodes, false);
+        this.containers.splice(containerIndex, 1);
+      } else {
+        // Otherwise make sure the next top modal is visible to a screen reader.
+        var nextTop = containerInfo.modals[containerInfo.modals.length - 1]; // as soon as a modal is adding its modalRef is undefined. it can't set
+        // aria-hidden because the dom element doesn't exist either
+        // when modal was unmounted before modalRef gets null
+
+        if (nextTop.modalRef) {
+          ariaHidden(nextTop.modalRef, false);
+        }
+      }
+
+      return modalIndex;
+    }
+  }, {
+    key: "isTopModal",
+    value: function isTopModal(modal) {
+      return this.modals.length > 0 && this.modals[this.modals.length - 1] === modal;
+    }
+  }]);
+  return ModalManager;
+}();
+
+exports.default = ModalManager;
+},{"@babel/runtime/helpers/esm/classCallCheck":"../node_modules/@babel/runtime/helpers/esm/classCallCheck.js","@babel/runtime/helpers/esm/createClass":"../node_modules/@babel/runtime/helpers/esm/createClass.js","@babel/runtime/helpers/esm/toConsumableArray":"../node_modules/@babel/runtime/helpers/esm/toConsumableArray.js","../utils/getScrollbarSize":"../node_modules/@material-ui/core/esm/utils/getScrollbarSize.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../utils/ownerWindow":"../node_modules/@material-ui/core/esm/utils/ownerWindow.js"}],"../node_modules/@material-ui/core/esm/Modal/TrapFocus.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/* eslint-disable consistent-return, jsx-a11y/no-noninteractive-tabindex */
+
+/**
+ * @ignore - internal component.
+ */
+function TrapFocus(props) {
+  var children = props.children,
+      _props$disableAutoFoc = props.disableAutoFocus,
+      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
+      _props$disableEnforce = props.disableEnforceFocus,
+      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
+      _props$disableRestore = props.disableRestoreFocus,
+      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
+      getDoc = props.getDoc,
+      isEnabled = props.isEnabled,
+      open = props.open;
+  var ignoreNextEnforceFocus = React.useRef();
+  var sentinelStart = React.useRef(null);
+  var sentinelEnd = React.useRef(null);
+  var nodeToRestore = React.useRef();
+  var rootRef = React.useRef(null); // can be removed once we drop support for non ref forwarding class components
+
+  var handleOwnRef = React.useCallback(function (instance) {
+    // #StrictMode ready
+    rootRef.current = ReactDOM.findDOMNode(instance);
+  }, []);
+  var handleRef = (0, _useForkRef.default)(children.ref, handleOwnRef); // ⚠️ You may rely on React.useMemo as a performance optimization, not as a semantic guarantee.
+  // https://reactjs.org/docs/hooks-reference.html#usememo
+
+  React.useMemo(function () {
+    if (!open || typeof window === 'undefined') {
+      return;
+    }
+
+    nodeToRestore.current = getDoc().activeElement;
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  React.useEffect(function () {
+    if (!open) {
+      return;
+    }
+
+    var doc = (0, _ownerDocument.default)(rootRef.current); // We might render an empty child.
+
+    if (!disableAutoFocus && rootRef.current && !rootRef.current.contains(doc.activeElement)) {
+      if (!rootRef.current.hasAttribute('tabIndex')) {
+        if ("development" !== 'production') {
+          console.error(['Material-UI: the modal content node does not accept focus.', 'For the benefit of assistive technologies, ' + 'the tabIndex of the node is being set to "-1".'].join('\n'));
+        }
+
+        rootRef.current.setAttribute('tabIndex', -1);
+      }
+
+      rootRef.current.focus();
+    }
+
+    var contain = function contain() {
+      if (disableEnforceFocus || !isEnabled() || ignoreNextEnforceFocus.current) {
+        ignoreNextEnforceFocus.current = false;
+        return;
+      }
+
+      if (rootRef.current && !rootRef.current.contains(doc.activeElement)) {
+        rootRef.current.focus();
+      }
+    };
+
+    var loopFocus = function loopFocus(event) {
+      // 9 = Tab
+      if (disableEnforceFocus || !isEnabled() || event.keyCode !== 9) {
+        return;
+      } // Make sure the next tab starts from the right place.
+
+
+      if (doc.activeElement === rootRef.current) {
+        // We need to ignore the next contain as
+        // it will try to move the focus back to the rootRef element.
+        ignoreNextEnforceFocus.current = true;
+
+        if (event.shiftKey) {
+          sentinelEnd.current.focus();
+        } else {
+          sentinelStart.current.focus();
+        }
+      }
+    };
+
+    doc.addEventListener('focus', contain, true);
+    doc.addEventListener('keydown', loopFocus, true); // With Edge, Safari and Firefox, no focus related events are fired when the focused area stops being a focused area
+    // e.g. https://bugzilla.mozilla.org/show_bug.cgi?id=559561.
+    //
+    // The whatwg spec defines how the browser should behave but does not explicitly mention any events:
+    // https://html.spec.whatwg.org/multipage/interaction.html#focus-fixup-rule.
+
+    var interval = setInterval(function () {
+      contain();
+    }, 50);
+    return function () {
+      clearInterval(interval);
+      doc.removeEventListener('focus', contain, true);
+      doc.removeEventListener('keydown', loopFocus, true); // restoreLastFocus()
+
+      if (!disableRestoreFocus) {
+        // In IE 11 it is possible for document.activeElement to be null resulting
+        // in nodeToRestore.current being null.
+        // Not all elements in IE 11 have a focus method.
+        // Once IE 11 support is dropped the focus() call can be unconditional.
+        if (nodeToRestore.current && nodeToRestore.current.focus) {
+          nodeToRestore.current.focus();
+        }
+
+        nodeToRestore.current = null;
+      }
+    };
+  }, [disableAutoFocus, disableEnforceFocus, disableRestoreFocus, isEnabled, open]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    tabIndex: 0,
+    ref: sentinelStart,
+    "data-test": "sentinelStart"
+  }), React.cloneElement(children, {
+    ref: handleRef
+  }), /*#__PURE__*/React.createElement("div", {
+    tabIndex: 0,
+    ref: sentinelEnd,
+    "data-test": "sentinelEnd"
+  }));
+}
+
+"development" !== "production" ? TrapFocus.propTypes = {
+  /**
+   * A single child content element.
+   */
+  children: _propTypes.default.element.isRequired,
+
+  /**
+   * If `true`, the modal will not automatically shift focus to itself when it opens, and
+   * replace it to the last focused element when it closes.
+   * This also works correctly with any modal children that have the `disableAutoFocus` prop.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableAutoFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, the modal will not prevent focus from leaving the modal while open.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableEnforceFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, the modal will not restore focus to previously focused element once
+   * modal is hidden.
+   */
+  disableRestoreFocus: _propTypes.default.bool,
+
+  /**
+   * Return the document to consider.
+   * We use it to implement the restore focus between different browser documents.
+   */
+  getDoc: _propTypes.default.func.isRequired,
+
+  /**
+   * Do we still want to enforce the focus?
+   * This prop helps nesting TrapFocus elements.
+   */
+  isEnabled: _propTypes.default.func.isRequired,
+
+  /**
+   * If `true`, the modal is open.
+   */
+  open: _propTypes.default.bool.isRequired
+} : void 0;
+/*
+
+In the future, we should be able to replace TrapFocus with:
+https://github.com/facebook/react/blob/master/packages/react-events/docs/FocusScope.md
+
+```jsx
+import FocusScope from 'react-dom/FocusScope';
+
+function TrapFocus(props) {
+  const {
+    children
+    disableAutoFocus = false,
+    disableEnforceFocus = false,
+    disableRestoreFocus = false,
+    open,
+  } = props;
+
+  if (!open) {
+    return children;
+  }
+
+  return (
+    <FocusScope
+      autoFocus={!disableAutoFocus}
+      contain={!disableEnforceFocus}
+      restoreFocus={!disableRestoreFocus}
+    >
+      {children}
+    </FocusScope>
+  );
+}
+```
+
+*/
+
+var _default = TrapFocus;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/Modal/SimpleBackdrop.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    zIndex: -1,
+    position: 'fixed',
+    right: 0,
+    bottom: 0,
+    top: 0,
+    left: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    WebkitTapHighlightColor: 'transparent'
+  },
+
+  /* Styles applied to the root element if `invisible={true}`. */
+  invisible: {
+    backgroundColor: 'transparent'
+  }
+};
+/**
+ * @ignore - internal component.
+ */
+
+exports.styles = styles;
+var SimpleBackdrop = React.forwardRef(function SimpleBackdrop(props, ref) {
+  var _props$invisible = props.invisible,
+      invisible = _props$invisible === void 0 ? false : _props$invisible,
+      open = props.open,
+      other = (0, _objectWithoutProperties2.default)(props, ["invisible", "open"]);
+  return open ? /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
+    "aria-hidden": true,
+    ref: ref
+  }, other, {
+    style: (0, _extends2.default)({}, styles.root, {}, invisible ? styles.invisible : {}, {}, other.style)
+  })) : null;
+});
+"development" !== "production" ? SimpleBackdrop.propTypes = {
+  /**
+   * If `true`, the backdrop is invisible.
+   * It can be used when rendering a popover or a custom select component.
+   */
+  invisible: _propTypes.default.bool,
+
+  /**
+   * If `true`, the backdrop is open.
+   */
+  open: _propTypes.default.bool.isRequired
+} : void 0;
+var _default = SimpleBackdrop;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"../node_modules/@material-ui/core/esm/Modal/Modal.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _styles = require("@material-ui/styles");
+
+var _utils = require("@material-ui/utils");
+
+var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
+
+var _Portal = _interopRequireDefault(require("../Portal"));
+
+var _createChainedFunction = _interopRequireDefault(require("../utils/createChainedFunction"));
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+var _useEventCallback = _interopRequireDefault(require("../utils/useEventCallback"));
+
+var _zIndex = _interopRequireDefault(require("../styles/zIndex"));
+
+var _ModalManager = _interopRequireWildcard(require("./ModalManager"));
+
+var _TrapFocus = _interopRequireDefault(require("./TrapFocus"));
+
+var _SimpleBackdrop = _interopRequireDefault(require("./SimpleBackdrop"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getContainer(container) {
+  container = typeof container === 'function' ? container() : container;
+  return ReactDOM.findDOMNode(container);
+}
+
+function getHasTransition(props) {
+  return props.children ? props.children.props.hasOwnProperty('in') : false;
+} // A modal manager used to track and manage the state of open Modals.
+// Modals don't open on the server so this won't conflict with concurrent requests.
+
+
+var defaultManager = new _ModalManager.default();
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'fixed',
+      zIndex: theme.zIndex.modal,
+      right: 0,
+      bottom: 0,
+      top: 0,
+      left: 0
+    },
+
+    /* Styles applied to the root element if the `Modal` has exited. */
+    hidden: {
+      visibility: 'hidden'
+    }
+  };
+};
+/**
+ * Modal is a lower-level construct that is leveraged by the following components:
+ *
+ * - [Dialog](/api/dialog/)
+ * - [Drawer](/api/drawer/)
+ * - [Menu](/api/menu/)
+ * - [Popover](/api/popover/)
+ *
+ * If you are creating a modal dialog, you probably want to use the [Dialog](/api/dialog/) component
+ * rather than directly using Modal.
+ *
+ * This component shares many concepts with [react-overlays](https://react-bootstrap.github.io/react-overlays/#modals).
+ */
+
+
+exports.styles = styles;
+var Modal = React.forwardRef(function Modal(inProps, ref) {
+  var theme = (0, _styles.useTheme)();
+  var props = (0, _styles.getThemeProps)({
+    name: 'MuiModal',
+    props: (0, _extends2.default)({}, inProps),
+    theme: theme
+  });
+  var _props$BackdropCompon = props.BackdropComponent,
+      BackdropComponent = _props$BackdropCompon === void 0 ? _SimpleBackdrop.default : _props$BackdropCompon,
+      BackdropProps = props.BackdropProps,
+      children = props.children,
+      _props$closeAfterTran = props.closeAfterTransition,
+      closeAfterTransition = _props$closeAfterTran === void 0 ? false : _props$closeAfterTran,
+      container = props.container,
+      _props$disableAutoFoc = props.disableAutoFocus,
+      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
+      _props$disableBackdro = props.disableBackdropClick,
+      disableBackdropClick = _props$disableBackdro === void 0 ? false : _props$disableBackdro,
+      _props$disableEnforce = props.disableEnforceFocus,
+      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
+      _props$disableEscapeK = props.disableEscapeKeyDown,
+      disableEscapeKeyDown = _props$disableEscapeK === void 0 ? false : _props$disableEscapeK,
+      _props$disablePortal = props.disablePortal,
+      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
+      _props$disableRestore = props.disableRestoreFocus,
+      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
+      _props$disableScrollL = props.disableScrollLock,
+      disableScrollLock = _props$disableScrollL === void 0 ? false : _props$disableScrollL,
+      _props$hideBackdrop = props.hideBackdrop,
+      hideBackdrop = _props$hideBackdrop === void 0 ? false : _props$hideBackdrop,
+      _props$keepMounted = props.keepMounted,
+      keepMounted = _props$keepMounted === void 0 ? false : _props$keepMounted,
+      _props$manager = props.manager,
+      manager = _props$manager === void 0 ? defaultManager : _props$manager,
+      onBackdropClick = props.onBackdropClick,
+      onClose = props.onClose,
+      onEscapeKeyDown = props.onEscapeKeyDown,
+      onRendered = props.onRendered,
+      open = props.open,
+      other = (0, _objectWithoutProperties2.default)(props, ["BackdropComponent", "BackdropProps", "children", "closeAfterTransition", "container", "disableAutoFocus", "disableBackdropClick", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onEscapeKeyDown", "onRendered", "open"]);
+
+  var _React$useState = React.useState(true),
+      exited = _React$useState[0],
+      setExited = _React$useState[1];
+
+  var modal = React.useRef({});
+  var mountNodeRef = React.useRef(null);
+  var modalRef = React.useRef(null);
+  var handleRef = (0, _useForkRef.default)(modalRef, ref);
+  var hasTransition = getHasTransition(props);
+
+  var getDoc = function getDoc() {
+    return (0, _ownerDocument.default)(mountNodeRef.current);
+  };
+
+  var getModal = function getModal() {
+    modal.current.modalRef = modalRef.current;
+    modal.current.mountNode = mountNodeRef.current;
+    return modal.current;
+  };
+
+  var handleMounted = function handleMounted() {
+    manager.mount(getModal(), {
+      disableScrollLock: disableScrollLock
+    }); // Fix a bug on Chrome where the scroll isn't initially 0.
+
+    modalRef.current.scrollTop = 0;
+  };
+
+  var handleOpen = (0, _useEventCallback.default)(function () {
+    var resolvedContainer = getContainer(container) || getDoc().body;
+    manager.add(getModal(), resolvedContainer); // The element was already mounted.
+
+    if (modalRef.current) {
+      handleMounted();
+    }
+  });
+  var isTopModal = React.useCallback(function () {
+    return manager.isTopModal(getModal());
+  }, [manager]);
+  var handlePortalRef = (0, _useEventCallback.default)(function (node) {
+    mountNodeRef.current = node;
+
+    if (!node) {
+      return;
+    }
+
+    if (onRendered) {
+      onRendered();
+    }
+
+    if (open && isTopModal()) {
+      handleMounted();
+    } else {
+      (0, _ModalManager.ariaHidden)(modalRef.current, true);
+    }
+  });
+  var handleClose = React.useCallback(function () {
+    manager.remove(getModal());
+  }, [manager]);
+  React.useEffect(function () {
+    return function () {
+      handleClose();
+    };
+  }, [handleClose]);
+  React.useEffect(function () {
+    if (open) {
+      handleOpen();
+    } else if (!hasTransition || !closeAfterTransition) {
+      handleClose();
+    }
+  }, [open, handleClose, hasTransition, closeAfterTransition, handleOpen]);
+
+  if (!keepMounted && !open && (!hasTransition || exited)) {
+    return null;
+  }
+
+  var handleEnter = function handleEnter() {
+    setExited(false);
+  };
+
+  var handleExited = function handleExited() {
+    setExited(true);
+
+    if (closeAfterTransition) {
+      handleClose();
+    }
+  };
+
+  var handleBackdropClick = function handleBackdropClick(event) {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
+    if (onBackdropClick) {
+      onBackdropClick(event);
+    }
+
+    if (!disableBackdropClick && onClose) {
+      onClose(event, 'backdropClick');
+    }
+  };
+
+  var handleKeyDown = function handleKeyDown(event) {
+    // The handler doesn't take event.defaultPrevented into account:
+    //
+    // event.preventDefault() is meant to stop default behaviours like
+    // clicking a checkbox to check it, hitting a button to submit a form,
+    // and hitting left arrow to move the cursor in a text input etc.
+    // Only special HTML elements have these default behaviors.
+    if (event.key !== 'Escape' || !isTopModal()) {
+      return;
+    } // Swallow the event, in case someone is listening for the escape key on the body.
+
+
+    event.stopPropagation();
+
+    if (onEscapeKeyDown) {
+      onEscapeKeyDown(event);
+    }
+
+    if (!disableEscapeKeyDown && onClose) {
+      onClose(event, 'escapeKeyDown');
+    }
+  };
+
+  var inlineStyle = styles(theme || {
+    zIndex: _zIndex.default
+  });
+  var childProps = {};
+
+  if (children.props.tabIndex === undefined) {
+    childProps.tabIndex = children.props.tabIndex || '-1';
+  } // It's a Transition like component
+
+
+  if (hasTransition) {
+    childProps.onEnter = (0, _createChainedFunction.default)(handleEnter, children.props.onEnter);
+    childProps.onExited = (0, _createChainedFunction.default)(handleExited, children.props.onExited);
+  }
+
+  return /*#__PURE__*/React.createElement(_Portal.default, {
+    ref: handlePortalRef,
+    container: container,
+    disablePortal: disablePortal
+  }, /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
+    ref: handleRef,
+    onKeyDown: handleKeyDown,
+    role: "presentation"
+  }, other, {
+    style: (0, _extends2.default)({}, inlineStyle.root, {}, !open && exited ? inlineStyle.hidden : {}, {}, other.style)
+  }), hideBackdrop ? null : /*#__PURE__*/React.createElement(BackdropComponent, (0, _extends2.default)({
+    open: open,
+    onClick: handleBackdropClick
+  }, BackdropProps)), /*#__PURE__*/React.createElement(_TrapFocus.default, {
+    disableEnforceFocus: disableEnforceFocus,
+    disableAutoFocus: disableAutoFocus,
+    disableRestoreFocus: disableRestoreFocus,
+    getDoc: getDoc,
+    isEnabled: isTopModal,
+    open: open
+  }, React.cloneElement(children, childProps))));
+});
+"development" !== "production" ? Modal.propTypes = {
+  /**
+   * A backdrop component. This prop enables custom backdrop rendering.
+   */
+  BackdropComponent: _propTypes.default.elementType,
+
+  /**
+   * Props applied to the [`Backdrop`](/api/backdrop/) element.
+   */
+  BackdropProps: _propTypes.default.object,
+
+  /**
+   * A single child content element.
+   */
+  children: _utils.elementAcceptingRef.isRequired,
+
+  /**
+   * When set to true the Modal waits until a nested Transition is completed before closing.
+   */
+  closeAfterTransition: _propTypes.default.bool,
+
+  /**
+   * A node, component instance, or function that returns either.
+   * The `container` will have the portal children appended to it.
+   */
+  container: _propTypes.default.oneOfType([_propTypes.default.object, _propTypes.default.func]),
+
+  /**
+   * If `true`, the modal will not automatically shift focus to itself when it opens, and
+   * replace it to the last focused element when it closes.
+   * This also works correctly with any modal children that have the `disableAutoFocus` prop.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableAutoFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, clicking the backdrop will not fire any callback.
+   */
+  disableBackdropClick: _propTypes.default.bool,
+
+  /**
+   * If `true`, the modal will not prevent focus from leaving the modal while open.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableEnforceFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, hitting escape will not fire any callback.
+   */
+  disableEscapeKeyDown: _propTypes.default.bool,
+
+  /**
+   * Disable the portal behavior.
+   * The children stay within it's parent DOM hierarchy.
+   */
+  disablePortal: _propTypes.default.bool,
+
+  /**
+   * If `true`, the modal will not restore focus to previously focused element once
+   * modal is hidden.
+   */
+  disableRestoreFocus: _propTypes.default.bool,
+
+  /**
+   * Disable the scroll lock behavior.
+   */
+  disableScrollLock: _propTypes.default.bool,
+
+  /**
+   * If `true`, the backdrop is not rendered.
+   */
+  hideBackdrop: _propTypes.default.bool,
+
+  /**
+   * Always keep the children in the DOM.
+   * This prop can be useful in SEO situation or
+   * when you want to maximize the responsiveness of the Modal.
+   */
+  keepMounted: _propTypes.default.bool,
+
+  /**
+   * @ignore
+   */
+  manager: _propTypes.default.object,
+
+  /**
+   * Callback fired when the backdrop is clicked.
+   */
+  onBackdropClick: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component requests to be closed.
+   * The `reason` parameter can optionally be used to control the response to `onClose`.
+   *
+   * @param {object} event The event source of the callback.
+   * @param {string} reason Can be: `"escapeKeyDown"`, `"backdropClick"`.
+   */
+  onClose: _propTypes.default.func,
+
+  /**
+   * Callback fired when the escape key is pressed,
+   * `disableEscapeKeyDown` is false and the modal is in focus.
+   */
+  onEscapeKeyDown: _propTypes.default.func,
+
+  /**
+   * Callback fired once the children has been mounted into the `container`.
+   * It signals that the `open={true}` prop took effect.
+   *
+   * This prop will be deprecated and removed in v5, the ref can be used instead.
+   */
+  onRendered: _propTypes.default.func,
+
+  /**
+   * If `true`, the modal is open.
+   */
+  open: _propTypes.default.bool.isRequired
+} : void 0;
+var _default = Modal;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","@material-ui/styles":"../node_modules/@material-ui/styles/esm/index.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../Portal":"../node_modules/@material-ui/core/esm/Portal/index.js","../utils/createChainedFunction":"../node_modules/@material-ui/core/esm/utils/createChainedFunction.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js","../utils/useEventCallback":"../node_modules/@material-ui/core/esm/utils/useEventCallback.js","../styles/zIndex":"../node_modules/@material-ui/core/esm/styles/zIndex.js","./ModalManager":"../node_modules/@material-ui/core/esm/Modal/ModalManager.js","./TrapFocus":"../node_modules/@material-ui/core/esm/Modal/TrapFocus.js","./SimpleBackdrop":"../node_modules/@material-ui/core/esm/Modal/SimpleBackdrop.js"}],"../node_modules/@material-ui/core/esm/Modal/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Modal.default;
+  }
+});
+Object.defineProperty(exports, "ModalManager", {
+  enumerable: true,
+  get: function () {
+    return _ModalManager.default;
+  }
+});
+
+var _Modal = _interopRequireDefault(require("./Modal"));
+
+var _ModalManager = _interopRequireDefault(require("./ModalManager"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Modal":"../node_modules/@material-ui/core/esm/Modal/Modal.js","./ModalManager":"../node_modules/@material-ui/core/esm/Modal/ModalManager.js"}],"../node_modules/@material-ui/core/esm/transitions/utils.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getTransitionProps = getTransitionProps;
+exports.reflow = void 0;
+
+var reflow = function reflow(node) {
+  return node.scrollTop;
+};
+
+exports.reflow = reflow;
+
+function getTransitionProps(props, options) {
+  var timeout = props.timeout,
+      _props$style = props.style,
+      style = _props$style === void 0 ? {} : _props$style;
+  return {
+    duration: style.transitionDuration || typeof timeout === 'number' ? timeout : timeout[options.mode] || 0,
+    delay: style.transitionDelay
+  };
+}
+},{}],"../node_modules/@material-ui/core/esm/Grow/Grow.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _reactTransitionGroup = require("react-transition-group");
+
+var _useTheme = _interopRequireDefault(require("../styles/useTheme"));
+
+var _utils = require("../transitions/utils");
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getScale(value) {
+  return "scale(".concat(value, ", ").concat(Math.pow(value, 2), ")");
+}
+
+var styles = {
+  entering: {
+    opacity: 1,
+    transform: getScale(1)
+  },
+  entered: {
+    opacity: 1,
+    transform: 'none'
+  }
+};
+/**
+ * The Grow transition is used by the [Tooltip](/components/tooltips/) and
+ * [Popover](/components/popover/) components.
+ * It uses [react-transition-group](https://github.com/reactjs/react-transition-group) internally.
+ */
+
+var Grow = React.forwardRef(function Grow(props, ref) {
+  var children = props.children,
+      inProp = props.in,
+      onEnter = props.onEnter,
+      onExit = props.onExit,
+      style = props.style,
+      _props$timeout = props.timeout,
+      timeout = _props$timeout === void 0 ? 'auto' : _props$timeout,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "in", "onEnter", "onExit", "style", "timeout"]);
+  var timer = React.useRef();
+  var autoTimeout = React.useRef();
+  var handleRef = (0, _useForkRef.default)(children.ref, ref);
+  var theme = (0, _useTheme.default)();
+
+  var handleEnter = function handleEnter(node, isAppearing) {
+    (0, _utils.reflow)(node); // So the animation always start from the start.
+
+    var _getTransitionProps = (0, _utils.getTransitionProps)({
+      style: style,
+      timeout: timeout
+    }, {
+      mode: 'enter'
+    }),
+        transitionDuration = _getTransitionProps.duration,
+        delay = _getTransitionProps.delay;
+
+    var duration;
+
+    if (timeout === 'auto') {
+      duration = theme.transitions.getAutoHeightDuration(node.clientHeight);
+      autoTimeout.current = duration;
+    } else {
+      duration = transitionDuration;
+    }
+
+    node.style.transition = [theme.transitions.create('opacity', {
+      duration: duration,
+      delay: delay
+    }), theme.transitions.create('transform', {
+      duration: duration * 0.666,
+      delay: delay
+    })].join(',');
+
+    if (onEnter) {
+      onEnter(node, isAppearing);
+    }
+  };
+
+  var handleExit = function handleExit(node) {
+    var _getTransitionProps2 = (0, _utils.getTransitionProps)({
+      style: style,
+      timeout: timeout
+    }, {
+      mode: 'exit'
+    }),
+        transitionDuration = _getTransitionProps2.duration,
+        delay = _getTransitionProps2.delay;
+
+    var duration;
+
+    if (timeout === 'auto') {
+      duration = theme.transitions.getAutoHeightDuration(node.clientHeight);
+      autoTimeout.current = duration;
+    } else {
+      duration = transitionDuration;
+    }
+
+    node.style.transition = [theme.transitions.create('opacity', {
+      duration: duration,
+      delay: delay
+    }), theme.transitions.create('transform', {
+      duration: duration * 0.666,
+      delay: delay || duration * 0.333
+    })].join(',');
+    node.style.opacity = '0';
+    node.style.transform = getScale(0.75);
+
+    if (onExit) {
+      onExit(node);
+    }
+  };
+
+  var addEndListener = function addEndListener(_, next) {
+    if (timeout === 'auto') {
+      timer.current = setTimeout(next, autoTimeout.current || 0);
+    }
+  };
+
+  React.useEffect(function () {
+    return function () {
+      clearTimeout(timer.current);
+    };
+  }, []);
+  return /*#__PURE__*/React.createElement(_reactTransitionGroup.Transition, (0, _extends2.default)({
+    appear: true,
+    in: inProp,
+    onEnter: handleEnter,
+    onExit: handleExit,
+    addEndListener: addEndListener,
+    timeout: timeout === 'auto' ? null : timeout
+  }, other), function (state, childProps) {
+    return React.cloneElement(children, (0, _extends2.default)({
+      style: (0, _extends2.default)({
+        opacity: 0,
+        transform: getScale(0.75),
+        visibility: state === 'exited' && !inProp ? 'hidden' : undefined
+      }, styles[state], {}, style, {}, children.props.style),
+      ref: handleRef
+    }, childProps));
+  });
+});
+"development" !== "production" ? Grow.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * A single child content element.
+   */
+  children: _propTypes.default.element,
+
+  /**
+   * If `true`, show the component; triggers the enter or exit animation.
+   */
+  in: _propTypes.default.bool,
+
+  /**
+   * @ignore
+   */
+  onEnter: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  onExit: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  style: _propTypes.default.object,
+
+  /**
+   * The duration for the transition, in milliseconds.
+   * You may specify a single timeout for all transitions, or individually with an object.
+   *
+   * Set to 'auto' to automatically calculate transition time based on height.
+   */
+  timeout: _propTypes.default.oneOfType([_propTypes.default.oneOf(['auto']), _propTypes.default.number, _propTypes.default.shape({
+    appear: _propTypes.default.number,
+    enter: _propTypes.default.number,
+    exit: _propTypes.default.number
+  })])
+} : void 0;
+Grow.muiSupportAuto = true;
+var _default = Grow;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-transition-group":"../node_modules/react-transition-group/esm/index.js","../styles/useTheme":"../node_modules/@material-ui/core/esm/styles/useTheme.js","../transitions/utils":"../node_modules/@material-ui/core/esm/transitions/utils.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/Grow/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Grow.default;
+  }
+});
+
+var _Grow = _interopRequireDefault(require("./Grow"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Grow":"../node_modules/@material-ui/core/esm/Grow/Grow.js"}],"../node_modules/@material-ui/core/esm/Popover/Popover.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getOffsetTop = getOffsetTop;
+exports.getOffsetLeft = getOffsetLeft;
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
+
+var _debounce = _interopRequireDefault(require("../utils/debounce"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
+
+var _ownerWindow = _interopRequireDefault(require("../utils/ownerWindow"));
+
+var _createChainedFunction = _interopRequireDefault(require("../utils/createChainedFunction"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Modal = _interopRequireDefault(require("../Modal"));
+
+var _Grow = _interopRequireDefault(require("../Grow"));
+
+var _Paper = _interopRequireDefault(require("../Paper"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getOffsetTop(rect, vertical) {
+  var offset = 0;
+
+  if (typeof vertical === 'number') {
+    offset = vertical;
+  } else if (vertical === 'center') {
+    offset = rect.height / 2;
+  } else if (vertical === 'bottom') {
+    offset = rect.height;
+  }
+
+  return offset;
+}
+
+function getOffsetLeft(rect, horizontal) {
+  var offset = 0;
+
+  if (typeof horizontal === 'number') {
+    offset = horizontal;
+  } else if (horizontal === 'center') {
+    offset = rect.width / 2;
+  } else if (horizontal === 'right') {
+    offset = rect.width;
+  }
+
+  return offset;
+}
+
+function getTransformOriginValue(transformOrigin) {
+  return [transformOrigin.horizontal, transformOrigin.vertical].map(function (n) {
+    return typeof n === 'number' ? "".concat(n, "px") : n;
+  }).join(' ');
+} // Sum the scrollTop between two elements.
+
+
+function getScrollParent(parent, child) {
+  var element = child;
+  var scrollTop = 0;
+
+  while (element && element !== parent) {
+    element = element.parentElement;
+    scrollTop += element.scrollTop;
+  }
+
+  return scrollTop;
+}
+
+function getAnchorEl(anchorEl) {
+  return typeof anchorEl === 'function' ? anchorEl() : anchorEl;
+}
+
+var styles = {
+  /* Styles applied to the root element */
+  root: {},
+
+  /* Styles applied to the `Paper` component. */
+  paper: {
+    position: 'absolute',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    // So we see the popover when it's empty.
+    // It's most likely on issue on userland.
+    minWidth: 16,
+    minHeight: 16,
+    maxWidth: 'calc(100% - 32px)',
+    maxHeight: 'calc(100% - 32px)',
+    // We disable the focus ring for mouse, touch and keyboard users.
+    outline: 0
+  }
+};
+exports.styles = styles;
+var Popover = React.forwardRef(function Popover(props, ref) {
+  var action = props.action,
+      anchorEl = props.anchorEl,
+      _props$anchorOrigin = props.anchorOrigin,
+      anchorOrigin = _props$anchorOrigin === void 0 ? {
+    vertical: 'top',
+    horizontal: 'left'
+  } : _props$anchorOrigin,
+      anchorPosition = props.anchorPosition,
+      _props$anchorReferenc = props.anchorReference,
+      anchorReference = _props$anchorReferenc === void 0 ? 'anchorEl' : _props$anchorReferenc,
+      children = props.children,
+      classes = props.classes,
+      className = props.className,
+      containerProp = props.container,
+      _props$elevation = props.elevation,
+      elevation = _props$elevation === void 0 ? 8 : _props$elevation,
+      getContentAnchorEl = props.getContentAnchorEl,
+      _props$marginThreshol = props.marginThreshold,
+      marginThreshold = _props$marginThreshol === void 0 ? 16 : _props$marginThreshol,
+      onEnter = props.onEnter,
+      onEntered = props.onEntered,
+      onEntering = props.onEntering,
+      onExit = props.onExit,
+      onExited = props.onExited,
+      onExiting = props.onExiting,
+      open = props.open,
+      _props$PaperProps = props.PaperProps,
+      PaperProps = _props$PaperProps === void 0 ? {} : _props$PaperProps,
+      _props$transformOrigi = props.transformOrigin,
+      transformOrigin = _props$transformOrigi === void 0 ? {
+    vertical: 'top',
+    horizontal: 'left'
+  } : _props$transformOrigi,
+      _props$TransitionComp = props.TransitionComponent,
+      TransitionComponent = _props$TransitionComp === void 0 ? _Grow.default : _props$TransitionComp,
+      _props$transitionDura = props.transitionDuration,
+      transitionDurationProp = _props$transitionDura === void 0 ? 'auto' : _props$transitionDura,
+      _props$TransitionProp = props.TransitionProps,
+      TransitionProps = _props$TransitionProp === void 0 ? {} : _props$TransitionProp,
+      other = (0, _objectWithoutProperties2.default)(props, ["action", "anchorEl", "anchorOrigin", "anchorPosition", "anchorReference", "children", "classes", "className", "container", "elevation", "getContentAnchorEl", "marginThreshold", "onEnter", "onEntered", "onEntering", "onExit", "onExited", "onExiting", "open", "PaperProps", "transformOrigin", "TransitionComponent", "transitionDuration", "TransitionProps"]);
+  var paperRef = React.useRef(); // Returns the top/left offset of the position
+  // to attach to on the anchor element (or body if none is provided)
+
+  var getAnchorOffset = React.useCallback(function (contentAnchorOffset) {
+    if (anchorReference === 'anchorPosition') {
+      if ("development" !== 'production') {
+        if (!anchorPosition) {
+          console.error('Material-UI: you need to provide a `anchorPosition` prop when using ' + '<Popover anchorReference="anchorPosition" />.');
+        }
+      }
+
+      return anchorPosition;
+    }
+
+    var resolvedAnchorEl = getAnchorEl(anchorEl);
+    var containerWindow = (0, _ownerWindow.default)(resolvedAnchorEl); // If an anchor element wasn't provided, just use the parent body element of this Popover
+
+    var anchorElement = resolvedAnchorEl instanceof containerWindow.Element ? resolvedAnchorEl : (0, _ownerDocument.default)(paperRef.current).body;
+    var anchorRect = anchorElement.getBoundingClientRect();
+
+    if ("development" !== 'production') {
+      var box = anchorElement.getBoundingClientRect();
+
+      if ("development" !== 'test' && box.top === 0 && box.left === 0 && box.right === 0 && box.bottom === 0) {
+        console.warn(['Material-UI: the `anchorEl` prop provided to the component is invalid.', 'The anchor element should be part of the document layout.', "Make sure the element is present in the document or that it's not display none."].join('\n'));
+      }
+    }
+
+    var anchorVertical = contentAnchorOffset === 0 ? anchorOrigin.vertical : 'center';
+    return {
+      top: anchorRect.top + getOffsetTop(anchorRect, anchorVertical),
+      left: anchorRect.left + getOffsetLeft(anchorRect, anchorOrigin.horizontal)
+    };
+  }, [anchorEl, anchorOrigin.horizontal, anchorOrigin.vertical, anchorPosition, anchorReference]); // Returns the vertical offset of inner content to anchor the transform on if provided
+
+  var getContentAnchorOffset = React.useCallback(function (element) {
+    var contentAnchorOffset = 0;
+
+    if (getContentAnchorEl && anchorReference === 'anchorEl') {
+      var contentAnchorEl = getContentAnchorEl(element);
+
+      if (contentAnchorEl && element.contains(contentAnchorEl)) {
+        var scrollTop = getScrollParent(element, contentAnchorEl);
+        contentAnchorOffset = contentAnchorEl.offsetTop + contentAnchorEl.clientHeight / 2 - scrollTop || 0;
+      } // != the default value
+
+
+      if ("development" !== 'production') {
+        if (anchorOrigin.vertical !== 'top') {
+          console.error(['Material-UI: you can not change the default `anchorOrigin.vertical` value ', 'when also providing the `getContentAnchorEl` prop to the popover component.', 'Only use one of the two props.', 'Set `getContentAnchorEl` to `null | undefined`' + ' or leave `anchorOrigin.vertical` unchanged.'].join('\n'));
+        }
+      }
+    }
+
+    return contentAnchorOffset;
+  }, [anchorOrigin.vertical, anchorReference, getContentAnchorEl]); // Return the base transform origin using the element
+  // and taking the content anchor offset into account if in use
+
+  var getTransformOrigin = React.useCallback(function (elemRect) {
+    var contentAnchorOffset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    return {
+      vertical: getOffsetTop(elemRect, transformOrigin.vertical) + contentAnchorOffset,
+      horizontal: getOffsetLeft(elemRect, transformOrigin.horizontal)
+    };
+  }, [transformOrigin.horizontal, transformOrigin.vertical]);
+  var getPositioningStyle = React.useCallback(function (element) {
+    // Check if the parent has requested anchoring on an inner content node
+    var contentAnchorOffset = getContentAnchorOffset(element);
+    var elemRect = {
+      width: element.offsetWidth,
+      height: element.offsetHeight
+    }; // Get the transform origin point on the element itself
+
+    var elemTransformOrigin = getTransformOrigin(elemRect, contentAnchorOffset);
+
+    if (anchorReference === 'none') {
+      return {
+        top: null,
+        left: null,
+        transformOrigin: getTransformOriginValue(elemTransformOrigin)
+      };
+    } // Get the offset of of the anchoring element
+
+
+    var anchorOffset = getAnchorOffset(contentAnchorOffset); // Calculate element positioning
+
+    var top = anchorOffset.top - elemTransformOrigin.vertical;
+    var left = anchorOffset.left - elemTransformOrigin.horizontal;
+    var bottom = top + elemRect.height;
+    var right = left + elemRect.width; // Use the parent window of the anchorEl if provided
+
+    var containerWindow = (0, _ownerWindow.default)(getAnchorEl(anchorEl)); // Window thresholds taking required margin into account
+
+    var heightThreshold = containerWindow.innerHeight - marginThreshold;
+    var widthThreshold = containerWindow.innerWidth - marginThreshold; // Check if the vertical axis needs shifting
+
+    if (top < marginThreshold) {
+      var diff = top - marginThreshold;
+      top -= diff;
+      elemTransformOrigin.vertical += diff;
+    } else if (bottom > heightThreshold) {
+      var _diff = bottom - heightThreshold;
+
+      top -= _diff;
+      elemTransformOrigin.vertical += _diff;
+    }
+
+    if ("development" !== 'production') {
+      if (elemRect.height > heightThreshold && elemRect.height && heightThreshold) {
+        console.error(['Material-UI: the popover component is too tall.', "Some part of it can not be seen on the screen (".concat(elemRect.height - heightThreshold, "px)."), 'Please consider adding a `max-height` to improve the user-experience.'].join('\n'));
+      }
+    } // Check if the horizontal axis needs shifting
+
+
+    if (left < marginThreshold) {
+      var _diff2 = left - marginThreshold;
+
+      left -= _diff2;
+      elemTransformOrigin.horizontal += _diff2;
+    } else if (right > widthThreshold) {
+      var _diff3 = right - widthThreshold;
+
+      left -= _diff3;
+      elemTransformOrigin.horizontal += _diff3;
+    }
+
+    return {
+      top: "".concat(Math.round(top), "px"),
+      left: "".concat(Math.round(left), "px"),
+      transformOrigin: getTransformOriginValue(elemTransformOrigin)
+    };
+  }, [anchorEl, anchorReference, getAnchorOffset, getContentAnchorOffset, getTransformOrigin, marginThreshold]);
+  var setPositioningStyles = React.useCallback(function () {
+    var element = paperRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    var positioning = getPositioningStyle(element);
+
+    if (positioning.top !== null) {
+      element.style.top = positioning.top;
+    }
+
+    if (positioning.left !== null) {
+      element.style.left = positioning.left;
+    }
+
+    element.style.transformOrigin = positioning.transformOrigin;
+  }, [getPositioningStyle]);
+
+  var handleEntering = function handleEntering(element, isAppearing) {
+    if (onEntering) {
+      onEntering(element, isAppearing);
+    }
+
+    setPositioningStyles();
+  };
+
+  var handlePaperRef = React.useCallback(function (instance) {
+    // #StrictMode ready
+    paperRef.current = ReactDOM.findDOMNode(instance);
+  }, []);
+  React.useEffect(function () {
+    if (open) {
+      setPositioningStyles();
+    }
+  });
+  React.useImperativeHandle(action, function () {
+    return open ? {
+      updatePosition: function updatePosition() {
+        setPositioningStyles();
+      }
+    } : null;
+  }, [open, setPositioningStyles]);
+  React.useEffect(function () {
+    if (!open) {
+      return undefined;
+    }
+
+    var handleResize = (0, _debounce.default)(function () {
+      setPositioningStyles();
+    });
+    window.addEventListener('resize', handleResize);
+    return function () {
+      handleResize.clear();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [open, setPositioningStyles]);
+  var transitionDuration = transitionDurationProp;
+
+  if (transitionDurationProp === 'auto' && !TransitionComponent.muiSupportAuto) {
+    transitionDuration = undefined;
+  } // If the container prop is provided, use that
+  // If the anchorEl prop is provided, use its parent body element as the container
+  // If neither are provided let the Modal take care of choosing the container
+
+
+  var container = containerProp || (anchorEl ? (0, _ownerDocument.default)(getAnchorEl(anchorEl)).body : undefined);
+  return /*#__PURE__*/React.createElement(_Modal.default, (0, _extends2.default)({
+    container: container,
+    open: open,
+    ref: ref,
+    BackdropProps: {
+      invisible: true
+    },
+    className: (0, _clsx.default)(classes.root, className)
+  }, other), /*#__PURE__*/React.createElement(TransitionComponent, (0, _extends2.default)({
+    appear: true,
+    in: open,
+    onEnter: onEnter,
+    onEntered: onEntered,
+    onExit: onExit,
+    onExited: onExited,
+    onExiting: onExiting,
+    timeout: transitionDuration
+  }, TransitionProps, {
+    onEntering: (0, _createChainedFunction.default)(handleEntering, TransitionProps.onEntering)
+  }), /*#__PURE__*/React.createElement(_Paper.default, (0, _extends2.default)({
+    elevation: elevation,
+    ref: handlePaperRef
+  }, PaperProps, {
+    className: (0, _clsx.default)(classes.paper, PaperProps.className)
+  }), children)));
+});
+"development" !== "production" ? Popover.propTypes = {
+  /**
+   * A ref for imperative actions.
+   * It currently only supports updatePosition() action.
+   */
+  action: _utils.refType,
+
+  /**
+   * This is the DOM element, or a function that returns the DOM element,
+   * that may be used to set the position of the popover.
+   */
+  anchorEl: (0, _utils.chainPropTypes)(_propTypes.default.oneOfType([_propTypes.default.object, _propTypes.default.func]), function (props) {
+    if (props.open && (!props.anchorReference || props.anchorReference === 'anchorEl')) {
+      var resolvedAnchorEl = getAnchorEl(props.anchorEl);
+      var containerWindow = (0, _ownerWindow.default)(resolvedAnchorEl);
+
+      if (resolvedAnchorEl instanceof containerWindow.Element) {
+        var box = resolvedAnchorEl.getBoundingClientRect();
+
+        if ("development" !== 'test' && box.top === 0 && box.left === 0 && box.right === 0 && box.bottom === 0) {
+          return new Error(['Material-UI: the `anchorEl` prop provided to the component is invalid.', 'The anchor element should be part of the document layout.', "Make sure the element is present in the document or that it's not display none."].join('\n'));
+        }
+      } else {
+        return new Error(['Material-UI: the `anchorEl` prop provided to the component is invalid.', "It should be an Element instance but it's `".concat(resolvedAnchorEl, "` instead.")].join('\n'));
+      }
+    }
+
+    return null;
+  }),
+
+  /**
+   * This is the point on the anchor where the popover's
+   * `anchorEl` will attach to. This is not used when the
+   * anchorReference is 'anchorPosition'.
+   *
+   * Options:
+   * vertical: [top, center, bottom];
+   * horizontal: [left, center, right].
+   */
+  anchorOrigin: _propTypes.default.shape({
+    horizontal: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.oneOf(['left', 'center', 'right'])]).isRequired,
+    vertical: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.oneOf(['top', 'center', 'bottom'])]).isRequired
+  }),
+
+  /**
+   * This is the position that may be used
+   * to set the position of the popover.
+   * The coordinates are relative to
+   * the application's client area.
+   */
+  anchorPosition: _propTypes.default.shape({
+    left: _propTypes.default.number.isRequired,
+    top: _propTypes.default.number.isRequired
+  }),
+
+  /*
+   * This determines which anchor prop to refer to to set
+   * the position of the popover.
+   */
+  anchorReference: _propTypes.default.oneOf(['anchorEl', 'anchorPosition', 'none']),
+
+  /**
+   * The content of the component.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * A node, component instance, or function that returns either.
+   * The `container` will passed to the Modal component.
+   * By default, it uses the body of the anchorEl's top-level document object,
+   * so it's simply `document.body` most of the time.
+   */
+  container: _propTypes.default.oneOfType([_propTypes.default.object, _propTypes.default.func]),
+
+  /**
+   * The elevation of the popover.
+   */
+  elevation: _propTypes.default.number,
+
+  /**
+   * This function is called in order to retrieve the content anchor element.
+   * It's the opposite of the `anchorEl` prop.
+   * The content anchor element should be an element inside the popover.
+   * It's used to correctly scroll and set the position of the popover.
+   * The positioning strategy tries to make the content anchor element just above the
+   * anchor element.
+   */
+  getContentAnchorEl: _propTypes.default.func,
+
+  /**
+   * Specifies how close to the edge of the window the popover can appear.
+   */
+  marginThreshold: _propTypes.default.number,
+
+  /**
+   * Callback fired when the component requests to be closed.
+   *
+   * @param {object} event The event source of the callback.
+   * @param {string} reason Can be: `"escapeKeyDown"`, `"backdropClick"`.
+   */
+  onClose: _propTypes.default.func,
+
+  /**
+   * Callback fired before the component is entering.
+   */
+  onEnter: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component has entered.
+   */
+  onEntered: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component is entering.
+   */
+  onEntering: _propTypes.default.func,
+
+  /**
+   * Callback fired before the component is exiting.
+   */
+  onExit: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component has exited.
+   */
+  onExited: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component is exiting.
+   */
+  onExiting: _propTypes.default.func,
+
+  /**
+   * If `true`, the popover is visible.
+   */
+  open: _propTypes.default.bool.isRequired,
+
+  /**
+   * Props applied to the [`Paper`](/api/paper/) element.
+   */
+  PaperProps: _propTypes.default.shape({
+    component: _utils.elementTypeAcceptingRef
+  }),
+
+  /**
+   * This is the point on the popover which
+   * will attach to the anchor's origin.
+   *
+   * Options:
+   * vertical: [top, center, bottom, x(px)];
+   * horizontal: [left, center, right, x(px)].
+   */
+  transformOrigin: _propTypes.default.shape({
+    horizontal: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.oneOf(['left', 'center', 'right'])]).isRequired,
+    vertical: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.oneOf(['top', 'center', 'bottom'])]).isRequired
+  }),
+
+  /**
+   * The component used for the transition.
+   * [Follow this guide](/components/transitions/#transitioncomponent-prop) to learn more about the requirements for this component.
+   */
+  TransitionComponent: _propTypes.default.elementType,
+
+  /**
+   * Set to 'auto' to automatically calculate transition time based on height.
+   */
+  transitionDuration: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.shape({
+    enter: _propTypes.default.number,
+    exit: _propTypes.default.number
+  }), _propTypes.default.oneOf(['auto'])]),
+
+  /**
+   * Props applied to the [`Transition`](http://reactcommunity.org/react-transition-group/transition#Transition-props) element.
+   */
+  TransitionProps: _propTypes.default.object
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiPopover'
+})(Popover);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-dom":"../node_modules/react-dom/index.js","../utils/debounce":"../node_modules/@material-ui/core/esm/utils/debounce.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../utils/ownerWindow":"../node_modules/@material-ui/core/esm/utils/ownerWindow.js","../utils/createChainedFunction":"../node_modules/@material-ui/core/esm/utils/createChainedFunction.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../Modal":"../node_modules/@material-ui/core/esm/Modal/index.js","../Grow":"../node_modules/@material-ui/core/esm/Grow/index.js","../Paper":"../node_modules/@material-ui/core/esm/Paper/index.js"}],"../node_modules/@material-ui/core/esm/Popover/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Popover.default;
+  }
+});
+
+var _Popover = _interopRequireDefault(require("./Popover"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Popover":"../node_modules/@material-ui/core/esm/Popover/Popover.js"}],"../node_modules/@material-ui/core/esm/List/ListContext.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @ignore - internal component.
+ */
+var ListContext = React.createContext({});
+
+if ("development" !== 'production') {
+  ListContext.displayName = 'ListContext';
+}
+
+var _default = ListContext;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"../node_modules/@material-ui/core/esm/List/List.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _ListContext = _interopRequireDefault(require("./ListContext"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+    position: 'relative'
+  },
+
+  /* Styles applied to the root element if `disablePadding={false}`. */
+  padding: {
+    paddingTop: 8,
+    paddingBottom: 8
+  },
+
+  /* Styles applied to the root element if dense. */
+  dense: {},
+
+  /* Styles applied to the root element if a `subheader` is provided. */
+  subheader: {
+    paddingTop: 0
+  }
+};
+exports.styles = styles;
+var List = React.forwardRef(function List(props, ref) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'ul' : _props$component,
+      _props$dense = props.dense,
+      dense = _props$dense === void 0 ? false : _props$dense,
+      _props$disablePadding = props.disablePadding,
+      disablePadding = _props$disablePadding === void 0 ? false : _props$disablePadding,
+      subheader = props.subheader,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "component", "dense", "disablePadding", "subheader"]);
+  var context = React.useMemo(function () {
+    return {
+      dense: dense
+    };
+  }, [dense]);
+  return /*#__PURE__*/React.createElement(_ListContext.default.Provider, {
+    value: context
+  }, /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className, dense && classes.dense, !disablePadding && classes.padding, subheader && classes.subheader),
+    ref: ref
+  }, other), subheader, children));
+});
+"development" !== "production" ? List.propTypes = {
+  /**
+   * The content of the component.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType,
+
+  /**
+   * If `true`, compact vertical padding designed for keyboard and mouse input will be used for
+   * the list and list items.
+   * The prop is available to descendant components as the `dense` context.
+   */
+  dense: _propTypes.default.bool,
+
+  /**
+   * If `true`, vertical padding will be removed from the list.
+   */
+  disablePadding: _propTypes.default.bool,
+
+  /**
+   * The content of the subheader, normally `ListSubheader`.
+   */
+  subheader: _propTypes.default.node
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiList'
+})(List);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","./ListContext":"../node_modules/@material-ui/core/esm/List/ListContext.js"}],"../node_modules/@material-ui/core/esm/List/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _List.default;
+  }
+});
+
+var _List = _interopRequireDefault(require("./List"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./List":"../node_modules/@material-ui/core/esm/List/List.js"}],"../node_modules/@material-ui/core/esm/MenuList/MenuList.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _reactIs = require("react-is");
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
+
+var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
+
+var _List = _interopRequireDefault(require("../List"));
+
+var _getScrollbarSize = _interopRequireDefault(require("../utils/getScrollbarSize"));
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function nextItem(list, item, disableListWrap) {
+  if (list === item) {
+    return list.firstChild;
+  }
+
+  if (item && item.nextElementSibling) {
+    return item.nextElementSibling;
+  }
+
+  return disableListWrap ? null : list.firstChild;
+}
+
+function previousItem(list, item, disableListWrap) {
+  if (list === item) {
+    return disableListWrap ? list.firstChild : list.lastChild;
+  }
+
+  if (item && item.previousElementSibling) {
+    return item.previousElementSibling;
+  }
+
+  return disableListWrap ? null : list.lastChild;
+}
+
+function textCriteriaMatches(nextFocus, textCriteria) {
+  if (textCriteria === undefined) {
+    return true;
+  }
+
+  var text = nextFocus.innerText;
+
+  if (text === undefined) {
+    // jsdom doesn't support innerText
+    text = nextFocus.textContent;
+  }
+
+  text = text.trim().toLowerCase();
+
+  if (text.length === 0) {
+    return false;
+  }
+
+  if (textCriteria.repeating) {
+    return text[0] === textCriteria.keys[0];
+  }
+
+  return text.indexOf(textCriteria.keys.join('')) === 0;
+}
+
+function moveFocus(list, currentFocus, disableListWrap, disabledItemsFocusable, traversalFunction, textCriteria) {
+  var wrappedOnce = false;
+  var nextFocus = traversalFunction(list, currentFocus, currentFocus ? disableListWrap : false);
+
+  while (nextFocus) {
+    // Prevent infinite loop.
+    if (nextFocus === list.firstChild) {
+      if (wrappedOnce) {
+        return;
+      }
+
+      wrappedOnce = true;
+    } // Same logic as useAutocomplete.js
+
+
+    var nextFocusDisabled = disabledItemsFocusable ? false : nextFocus.disabled || nextFocus.getAttribute('aria-disabled') === 'true';
+
+    if (!nextFocus.hasAttribute('tabindex') || !textCriteriaMatches(nextFocus, textCriteria) || nextFocusDisabled) {
+      // Move to the next element.
+      nextFocus = traversalFunction(list, nextFocus, disableListWrap);
+    } else {
+      nextFocus.focus();
+      return;
+    }
+  }
+}
+
+var useEnhancedEffect = typeof window === 'undefined' ? React.useEffect : React.useLayoutEffect;
+/**
+ * A permanently displayed menu following https://www.w3.org/TR/wai-aria-practices/#menubutton.
+ * It's exposed to help customization of the [`Menu`](/api/menu/) component. If you
+ * use it separately you need to move focus into the component manually. Once
+ * the focus is placed inside the component it is fully keyboard accessible.
+ */
+
+var MenuList = React.forwardRef(function MenuList(props, ref) {
+  var actions = props.actions,
+      _props$autoFocus = props.autoFocus,
+      autoFocus = _props$autoFocus === void 0 ? false : _props$autoFocus,
+      _props$autoFocusItem = props.autoFocusItem,
+      autoFocusItem = _props$autoFocusItem === void 0 ? false : _props$autoFocusItem,
+      children = props.children,
+      className = props.className,
+      _props$disabledItemsF = props.disabledItemsFocusable,
+      disabledItemsFocusable = _props$disabledItemsF === void 0 ? false : _props$disabledItemsF,
+      _props$disableListWra = props.disableListWrap,
+      disableListWrap = _props$disableListWra === void 0 ? false : _props$disableListWra,
+      onKeyDown = props.onKeyDown,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'selectedMenu' : _props$variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["actions", "autoFocus", "autoFocusItem", "children", "className", "disabledItemsFocusable", "disableListWrap", "onKeyDown", "variant"]);
+  var listRef = React.useRef(null);
+  var textCriteriaRef = React.useRef({
+    keys: [],
+    repeating: true,
+    previousKeyMatched: true,
+    lastTime: null
+  });
+  useEnhancedEffect(function () {
+    if (autoFocus) {
+      listRef.current.focus();
+    }
+  }, [autoFocus]);
+  React.useImperativeHandle(actions, function () {
+    return {
+      adjustStyleForScrollbar: function adjustStyleForScrollbar(containerElement, theme) {
+        // Let's ignore that piece of logic if users are already overriding the width
+        // of the menu.
+        var noExplicitWidth = !listRef.current.style.width;
+
+        if (containerElement.clientHeight < listRef.current.clientHeight && noExplicitWidth) {
+          var scrollbarSize = "".concat((0, _getScrollbarSize.default)(true), "px");
+          listRef.current.style[theme.direction === 'rtl' ? 'paddingLeft' : 'paddingRight'] = scrollbarSize;
+          listRef.current.style.width = "calc(100% + ".concat(scrollbarSize, ")");
+        }
+
+        return listRef.current;
+      }
+    };
+  }, []);
+
+  var handleKeyDown = function handleKeyDown(event) {
+    var list = listRef.current;
+    var key = event.key;
+    /**
+     * @type {Element} - will always be defined since we are in a keydown handler
+     * attached to an element. A keydown event is either dispatched to the activeElement
+     * or document.body or document.documentElement. Only the first case will
+     * trigger this specific handler.
+     */
+
+    var currentFocus = (0, _ownerDocument.default)(list).activeElement;
+
+    if (key === 'ArrowDown') {
+      // Prevent scroll of the page
+      event.preventDefault();
+      moveFocus(list, currentFocus, disableListWrap, disabledItemsFocusable, nextItem);
+    } else if (key === 'ArrowUp') {
+      event.preventDefault();
+      moveFocus(list, currentFocus, disableListWrap, disabledItemsFocusable, previousItem);
+    } else if (key === 'Home') {
+      event.preventDefault();
+      moveFocus(list, null, disableListWrap, disabledItemsFocusable, nextItem);
+    } else if (key === 'End') {
+      event.preventDefault();
+      moveFocus(list, null, disableListWrap, disabledItemsFocusable, previousItem);
+    } else if (key.length === 1) {
+      var criteria = textCriteriaRef.current;
+      var lowerKey = key.toLowerCase();
+      var currTime = performance.now();
+
+      if (criteria.keys.length > 0) {
+        // Reset
+        if (currTime - criteria.lastTime > 500) {
+          criteria.keys = [];
+          criteria.repeating = true;
+          criteria.previousKeyMatched = true;
+        } else if (criteria.repeating && lowerKey !== criteria.keys[0]) {
+          criteria.repeating = false;
+        }
+      }
+
+      criteria.lastTime = currTime;
+      criteria.keys.push(lowerKey);
+      var keepFocusOnCurrent = currentFocus && !criteria.repeating && textCriteriaMatches(currentFocus, criteria);
+
+      if (criteria.previousKeyMatched && (keepFocusOnCurrent || moveFocus(list, currentFocus, false, disabledItemsFocusable, nextItem, criteria))) {
+        event.preventDefault();
+      } else {
+        criteria.previousKeyMatched = false;
+      }
+    }
+
+    if (onKeyDown) {
+      onKeyDown(event);
+    }
+  };
+
+  var handleOwnRef = React.useCallback(function (instance) {
+    // #StrictMode ready
+    listRef.current = ReactDOM.findDOMNode(instance);
+  }, []);
+  var handleRef = (0, _useForkRef.default)(handleOwnRef, ref);
+  /**
+   * the index of the item should receive focus
+   * in a `variant="selectedMenu"` it's the first `selected` item
+   * otherwise it's the very first item.
+   */
+
+  var activeItemIndex = -1; // since we inject focus related props into children we have to do a lookahead
+  // to check if there is a `selected` item. We're looking for the last `selected`
+  // item and use the first valid item as a fallback
+
+  React.Children.forEach(children, function (child, index) {
+    if (!React.isValidElement(child)) {
+      return;
+    }
+
+    if ("development" !== 'production') {
+      if ((0, _reactIs.isFragment)(child)) {
+        console.error(["Material-UI: the Menu component doesn't accept a Fragment as a child.", 'Consider providing an array instead.'].join('\n'));
+      }
+    }
+
+    if (!child.props.disabled) {
+      if (variant === 'selectedMenu' && child.props.selected) {
+        activeItemIndex = index;
+      } else if (activeItemIndex === -1) {
+        activeItemIndex = index;
+      }
+    }
+  });
+  var items = React.Children.map(children, function (child, index) {
+    if (index === activeItemIndex) {
+      var newChildProps = {};
+
+      if (autoFocusItem) {
+        newChildProps.autoFocus = true;
+      }
+
+      if (child.props.tabIndex === undefined && variant === 'selectedMenu') {
+        newChildProps.tabIndex = 0;
+      }
+
+      return React.cloneElement(child, newChildProps);
+    }
+
+    return child;
+  });
+  return /*#__PURE__*/React.createElement(_List.default, (0, _extends2.default)({
+    role: "menu",
+    ref: handleRef,
+    className: className,
+    onKeyDown: handleKeyDown,
+    tabIndex: autoFocus ? 0 : -1
+  }, other), items);
+});
+"development" !== "production" ? MenuList.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * If `true`, will focus the `[role="menu"]` container and move into tab order.
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, will focus the first menuitem if `variant="menu"` or selected item
+   * if `variant="selectedMenu"`.
+   */
+  autoFocusItem: _propTypes.default.bool,
+
+  /**
+   * MenuList contents, normally `MenuItem`s.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * If `true`, will allow focus on disabled items.
+   */
+  disabledItemsFocusable: _propTypes.default.bool,
+
+  /**
+   * If `true`, the menu items will not wrap focus.
+   */
+  disableListWrap: _propTypes.default.bool,
+
+  /**
+   * @ignore
+   */
+  onKeyDown: _propTypes.default.func,
+
+  /**
+   * The variant to use. Use `menu` to prevent selected items from impacting the initial focus
+   * and the vertical alignment relative to the anchor element.
+   */
+  variant: _propTypes.default.oneOf(['menu', 'selectedMenu'])
+} : void 0;
+var _default = MenuList;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","react-is":"../node_modules/react-is/index.js","prop-types":"../node_modules/prop-types/index.js","react-dom":"../node_modules/react-dom/index.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../List":"../node_modules/@material-ui/core/esm/List/index.js","../utils/getScrollbarSize":"../node_modules/@material-ui/core/esm/utils/getScrollbarSize.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/MenuList/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _MenuList.default;
+  }
+});
+
+var _MenuList = _interopRequireDefault(require("./MenuList"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./MenuList":"../node_modules/@material-ui/core/esm/MenuList/MenuList.js"}],"../node_modules/@material-ui/core/esm/Menu/Menu.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _reactIs = require("react-is");
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Popover = _interopRequireDefault(require("../Popover"));
+
+var _MenuList = _interopRequireDefault(require("../MenuList"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
+
+var _setRef = _interopRequireDefault(require("../utils/setRef"));
+
+var _useTheme = _interopRequireDefault(require("../styles/useTheme"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var RTL_ORIGIN = {
+  vertical: 'top',
+  horizontal: 'right'
+};
+var LTR_ORIGIN = {
+  vertical: 'top',
+  horizontal: 'left'
+};
+var styles = {
+  /* Styles applied to the `Paper` component. */
+  paper: {
+    // specZ: The maximum height of a simple menu should be one or more rows less than the view
+    // height. This ensures a tapable area outside of the simple menu with which to dismiss
+    // the menu.
+    maxHeight: 'calc(100% - 96px)',
+    // Add iOS momentum scrolling.
+    WebkitOverflowScrolling: 'touch'
+  },
+
+  /* Styles applied to the `List` component via `MenuList`. */
+  list: {
+    // We disable the focus ring for mouse, touch and keyboard users.
+    outline: 0
+  }
+};
+exports.styles = styles;
+var Menu = React.forwardRef(function Menu(props, ref) {
+  var _props$autoFocus = props.autoFocus,
+      autoFocus = _props$autoFocus === void 0 ? true : _props$autoFocus,
+      children = props.children,
+      classes = props.classes,
+      _props$disableAutoFoc = props.disableAutoFocusItem,
+      disableAutoFocusItem = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
+      _props$MenuListProps = props.MenuListProps,
+      MenuListProps = _props$MenuListProps === void 0 ? {} : _props$MenuListProps,
+      onClose = props.onClose,
+      onEntering = props.onEntering,
+      open = props.open,
+      _props$PaperProps = props.PaperProps,
+      PaperProps = _props$PaperProps === void 0 ? {} : _props$PaperProps,
+      PopoverClasses = props.PopoverClasses,
+      _props$transitionDura = props.transitionDuration,
+      transitionDuration = _props$transitionDura === void 0 ? 'auto' : _props$transitionDura,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'selectedMenu' : _props$variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["autoFocus", "children", "classes", "disableAutoFocusItem", "MenuListProps", "onClose", "onEntering", "open", "PaperProps", "PopoverClasses", "transitionDuration", "variant"]);
+  var theme = (0, _useTheme.default)();
+  var autoFocusItem = autoFocus && !disableAutoFocusItem && open;
+  var menuListActionsRef = React.useRef(null);
+  var contentAnchorRef = React.useRef(null);
+
+  var getContentAnchorEl = function getContentAnchorEl() {
+    return contentAnchorRef.current;
+  };
+
+  var handleEntering = function handleEntering(element, isAppearing) {
+    if (menuListActionsRef.current) {
+      menuListActionsRef.current.adjustStyleForScrollbar(element, theme);
+    }
+
+    if (onEntering) {
+      onEntering(element, isAppearing);
+    }
+  };
+
+  var handleListKeyDown = function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+
+      if (onClose) {
+        onClose(event, 'tabKeyDown');
+      }
+    }
+  };
+  /**
+   * the index of the item should receive focus
+   * in a `variant="selectedMenu"` it's the first `selected` item
+   * otherwise it's the very first item.
+   */
+
+
+  var activeItemIndex = -1; // since we inject focus related props into children we have to do a lookahead
+  // to check if there is a `selected` item. We're looking for the last `selected`
+  // item and use the first valid item as a fallback
+
+  React.Children.map(children, function (child, index) {
+    if (!React.isValidElement(child)) {
+      return;
+    }
+
+    if ("development" !== 'production') {
+      if ((0, _reactIs.isFragment)(child)) {
+        console.error(["Material-UI: the Menu component doesn't accept a Fragment as a child.", 'Consider providing an array instead.'].join('\n'));
+      }
+    }
+
+    if (!child.props.disabled) {
+      if (variant !== "menu" && child.props.selected) {
+        activeItemIndex = index;
+      } else if (activeItemIndex === -1) {
+        activeItemIndex = index;
+      }
+    }
+  });
+  var items = React.Children.map(children, function (child, index) {
+    if (index === activeItemIndex) {
+      return React.cloneElement(child, {
+        ref: function ref(instance) {
+          // #StrictMode ready
+          contentAnchorRef.current = ReactDOM.findDOMNode(instance);
+          (0, _setRef.default)(child.ref, instance);
+        }
+      });
+    }
+
+    return child;
+  });
+  return /*#__PURE__*/React.createElement(_Popover.default, (0, _extends2.default)({
+    getContentAnchorEl: getContentAnchorEl,
+    classes: PopoverClasses,
+    onClose: onClose,
+    onEntering: handleEntering,
+    anchorOrigin: theme.direction === 'rtl' ? RTL_ORIGIN : LTR_ORIGIN,
+    transformOrigin: theme.direction === 'rtl' ? RTL_ORIGIN : LTR_ORIGIN,
+    PaperProps: (0, _extends2.default)({}, PaperProps, {
+      classes: (0, _extends2.default)({}, PaperProps.classes, {
+        root: classes.paper
+      })
+    }),
+    open: open,
+    ref: ref,
+    transitionDuration: transitionDuration
+  }, other), /*#__PURE__*/React.createElement(_MenuList.default, (0, _extends2.default)({
+    onKeyDown: handleListKeyDown,
+    actions: menuListActionsRef,
+    autoFocus: autoFocus && (activeItemIndex === -1 || disableAutoFocusItem),
+    autoFocusItem: autoFocusItem,
+    variant: variant
+  }, MenuListProps, {
+    className: (0, _clsx.default)(classes.list, MenuListProps.className)
+  }), items));
+});
+"development" !== "production" ? Menu.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * The DOM element used to set the position of the menu.
+   */
+  anchorEl: _propTypes.default.oneOfType([_propTypes.default.func, _propTypes.default.instanceOf(typeof Element === 'undefined' ? Object : Element)]),
+
+  /**
+   * If `true` (Default) will focus the `[role="menu"]` if no focusable child is found. Disabled
+   * children are not focusable. If you set this prop to `false` focus will be placed
+   * on the parent modal container. This has severe accessibility implications
+   * and should only be considered if you manage focus otherwise.
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * Menu contents, normally `MenuItem`s.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * When opening the menu will not focus the active item but the `[role="menu"]`
+   * unless `autoFocus` is also set to `false`. Not using the default means not
+   * following WAI-ARIA authoring practices. Please be considerate about possible
+   * accessibility implications.
+   */
+  disableAutoFocusItem: _propTypes.default.bool,
+
+  /**
+   * Props applied to the [`MenuList`](/api/menu-list/) element.
+   */
+  MenuListProps: _propTypes.default.object,
+
+  /**
+   * Callback fired when the component requests to be closed.
+   *
+   * @param {object} event The event source of the callback.
+   * @param {string} reason Can be: `"escapeKeyDown"`, `"backdropClick"`, `"tabKeyDown"`.
+   */
+  onClose: _propTypes.default.func,
+
+  /**
+   * Callback fired before the Menu enters.
+   */
+  onEnter: _propTypes.default.func,
+
+  /**
+   * Callback fired when the Menu has entered.
+   */
+  onEntered: _propTypes.default.func,
+
+  /**
+   * Callback fired when the Menu is entering.
+   */
+  onEntering: _propTypes.default.func,
+
+  /**
+   * Callback fired before the Menu exits.
+   */
+  onExit: _propTypes.default.func,
+
+  /**
+   * Callback fired when the Menu has exited.
+   */
+  onExited: _propTypes.default.func,
+
+  /**
+   * Callback fired when the Menu is exiting.
+   */
+  onExiting: _propTypes.default.func,
+
+  /**
+   * If `true`, the menu is visible.
+   */
+  open: _propTypes.default.bool.isRequired,
+
+  /**
+   * @ignore
+   */
+  PaperProps: _propTypes.default.object,
+
+  /**
+   * `classes` prop applied to the [`Popover`](/api/popover/) element.
+   */
+  PopoverClasses: _propTypes.default.object,
+
+  /**
+   * The length of the transition in `ms`, or 'auto'
+   */
+  transitionDuration: _propTypes.default.oneOfType([_propTypes.default.oneOf(['auto']), _propTypes.default.number, _propTypes.default.shape({
+    appear: _propTypes.default.number,
+    enter: _propTypes.default.number,
+    exit: _propTypes.default.number
+  })]),
+
+  /**
+   * The variant to use. Use `menu` to prevent selected items from impacting the initial focus
+   * and the vertical alignment relative to the anchor element.
+   */
+  variant: _propTypes.default.oneOf(['menu', 'selectedMenu'])
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiMenu'
+})(Menu);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","react-is":"../node_modules/react-is/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../Popover":"../node_modules/@material-ui/core/esm/Popover/index.js","../MenuList":"../node_modules/@material-ui/core/esm/MenuList/index.js","react-dom":"../node_modules/react-dom/index.js","../utils/setRef":"../node_modules/@material-ui/core/esm/utils/setRef.js","../styles/useTheme":"../node_modules/@material-ui/core/esm/styles/useTheme.js"}],"../node_modules/@material-ui/core/esm/utils/useControlled.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = useControlled;
+
+var React = _interopRequireWildcard(require("react"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/* eslint-disable react-hooks/rules-of-hooks, react-hooks/exhaustive-deps */
+function useControlled(_ref) {
+  var controlled = _ref.controlled,
+      defaultProp = _ref.default,
+      name = _ref.name;
+
+  var _React$useRef = React.useRef(controlled !== undefined),
+      isControlled = _React$useRef.current;
+
+  var _React$useState = React.useState(defaultProp),
+      valueState = _React$useState[0],
+      setValue = _React$useState[1];
+
+  var value = isControlled ? controlled : valueState;
+
+  if ("development" !== 'production') {
+    React.useEffect(function () {
+      if (isControlled !== (controlled !== undefined)) {
+        console.error(["Material-UI: A component is changing ".concat(isControlled ? 'a ' : 'an un', "controlled ").concat(name, " to be ").concat(isControlled ? 'un' : '', "controlled."), 'Elements should not switch from uncontrolled to controlled (or vice versa).', "Decide between using a controlled or uncontrolled ".concat(name, " ") + 'element for the lifetime of the component.', 'More info: https://fb.me/react-controlled-components'].join('\n'));
+      }
+    }, [controlled]);
+
+    var _React$useRef2 = React.useRef(defaultProp),
+        defaultValue = _React$useRef2.current;
+
+    React.useEffect(function () {
+      if (defaultValue !== defaultProp) {
+        console.error(["Material-UI: A component is changing the default value of an uncontrolled ".concat(name, " after being initialized. ") + "To suppress this warning opt to use a controlled ".concat(name, ".")].join('\n'));
+      }
+    }, [JSON.stringify(defaultProp)]);
+  }
+
+  var setValueIfUncontrolled = React.useCallback(function (newValue) {
+    if (!isControlled) {
+      setValue(newValue);
+    }
+  }, []);
+  return [value, setValueIfUncontrolled];
+}
+},{"react":"../node_modules/react/index.js"}],"../node_modules/@material-ui/core/esm/Select/SelectInput.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/toConsumableArray"));
+
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/slicedToArray"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/typeof"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _reactIs = require("react-is");
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+var _utils = require("@material-ui/utils");
+
+var _Menu = _interopRequireDefault(require("../Menu/Menu"));
+
+var _utils2 = require("../InputBase/utils");
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+var _useControlled3 = _interopRequireDefault(require("../utils/useControlled"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function areEqualValues(a, b) {
+  if ((0, _typeof2.default)(b) === 'object' && b !== null) {
+    return a === b;
+  }
+
+  return String(a) === String(b);
+}
+
+function isEmpty(display) {
+  return display == null || typeof display === 'string' && !display.trim();
+}
+/**
+ * @ignore - internal component.
+ */
+
+
+var SelectInput = React.forwardRef(function SelectInput(props, ref) {
+  var autoFocus = props.autoFocus,
+      autoWidth = props.autoWidth,
+      children = props.children,
+      classes = props.classes,
+      className = props.className,
+      defaultValue = props.defaultValue,
+      disabled = props.disabled,
+      displayEmpty = props.displayEmpty,
+      IconComponent = props.IconComponent,
+      inputRefProp = props.inputRef,
+      labelId = props.labelId,
+      _props$MenuProps = props.MenuProps,
+      MenuProps = _props$MenuProps === void 0 ? {} : _props$MenuProps,
+      multiple = props.multiple,
+      name = props.name,
+      onBlur = props.onBlur,
+      onChange = props.onChange,
+      onClose = props.onClose,
+      onFocus = props.onFocus,
+      onOpen = props.onOpen,
+      openProp = props.open,
+      readOnly = props.readOnly,
+      renderValue = props.renderValue,
+      required = props.required,
+      _props$SelectDisplayP = props.SelectDisplayProps,
+      SelectDisplayProps = _props$SelectDisplayP === void 0 ? {} : _props$SelectDisplayP,
+      tabIndexProp = props.tabIndex,
+      type = props.type,
+      valueProp = props.value,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'standard' : _props$variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["autoFocus", "autoWidth", "children", "classes", "className", "defaultValue", "disabled", "displayEmpty", "IconComponent", "inputRef", "labelId", "MenuProps", "multiple", "name", "onBlur", "onChange", "onClose", "onFocus", "onOpen", "open", "readOnly", "renderValue", "required", "SelectDisplayProps", "tabIndex", "type", "value", "variant"]);
+
+  var _useControlled = (0, _useControlled3.default)({
+    controlled: valueProp,
+    default: defaultValue,
+    name: 'SelectInput'
+  }),
+      _useControlled2 = (0, _slicedToArray2.default)(_useControlled, 2),
+      value = _useControlled2[0],
+      setValue = _useControlled2[1];
+
+  var inputRef = React.useRef(null);
+
+  var _React$useState = React.useState(null),
+      displayNode = _React$useState[0],
+      setDisplayNode = _React$useState[1];
+
+  var _React$useRef = React.useRef(openProp != null),
+      isOpenControlled = _React$useRef.current;
+
+  var _React$useState2 = React.useState(),
+      menuMinWidthState = _React$useState2[0],
+      setMenuMinWidthState = _React$useState2[1];
+
+  var _React$useState3 = React.useState(false),
+      openState = _React$useState3[0],
+      setOpenState = _React$useState3[1];
+
+  var handleRef = (0, _useForkRef.default)(ref, inputRefProp);
+  React.useImperativeHandle(handleRef, function () {
+    return {
+      focus: function focus() {
+        displayNode.focus();
+      },
+      node: inputRef.current,
+      value: value
+    };
+  }, [displayNode, value]);
+  React.useEffect(function () {
+    if (autoFocus && displayNode) {
+      displayNode.focus();
+    }
+  }, [autoFocus, displayNode]);
+
+  var update = function update(open, event) {
+    if (open) {
+      if (onOpen) {
+        onOpen(event);
+      }
+    } else if (onClose) {
+      onClose(event);
+    }
+
+    if (!isOpenControlled) {
+      setMenuMinWidthState(autoWidth ? null : displayNode.clientWidth);
+      setOpenState(open);
+    }
+  };
+
+  var handleMouseDown = function handleMouseDown(event) {
+    // Ignore everything but left-click
+    if (event.button !== 0) {
+      return;
+    } // Hijack the default focus behavior.
+
+
+    event.preventDefault();
+    displayNode.focus();
+    update(true, event);
+  };
+
+  var handleClose = function handleClose(event) {
+    update(false, event);
+  };
+
+  var handleItemClick = function handleItemClick(child) {
+    return function (event) {
+      if (!multiple) {
+        update(false, event);
+      }
+
+      var newValue;
+
+      if (multiple) {
+        newValue = Array.isArray(value) ? (0, _toConsumableArray2.default)(value) : [];
+        var itemIndex = value.indexOf(child.props.value);
+
+        if (itemIndex === -1) {
+          newValue.push(child.props.value);
+        } else {
+          newValue.splice(itemIndex, 1);
+        }
+      } else {
+        newValue = child.props.value;
+      }
+
+      setValue(newValue);
+
+      if (onChange) {
+        event.persist(); // Preact support, target is read only property on a native event.
+
+        Object.defineProperty(event, 'target', {
+          writable: true,
+          value: {
+            value: newValue,
+            name: name
+          }
+        });
+        onChange(event, child);
+      }
+    };
+  };
+
+  var handleKeyDown = function handleKeyDown(event) {
+    if (!readOnly) {
+      var validKeys = [' ', 'ArrowUp', 'ArrowDown', // The native select doesn't respond to enter on MacOS, but it's recommended by
+      // https://www.w3.org/TR/wai-aria-practices/examples/listbox/listbox-collapsible.html
+      'Enter'];
+
+      if (validKeys.indexOf(event.key) !== -1) {
+        event.preventDefault();
+        update(true, event);
+      }
+    }
+  };
+
+  var open = displayNode !== null && (isOpenControlled ? openProp : openState);
+
+  var handleBlur = function handleBlur(event) {
+    // if open event.stopImmediatePropagation
+    if (!open && onBlur) {
+      event.persist(); // Preact support, target is read only property on a native event.
+
+      Object.defineProperty(event, 'target', {
+        writable: true,
+        value: {
+          value: value,
+          name: name
+        }
+      });
+      onBlur(event);
+    }
+  };
+
+  delete other['aria-invalid'];
+  var display;
+  var displaySingle;
+  var displayMultiple = [];
+  var computeDisplay = false;
+  var foundMatch = false; // No need to display any value if the field is empty.
+
+  if ((0, _utils2.isFilled)({
+    value: value
+  }) || displayEmpty) {
+    if (renderValue) {
+      display = renderValue(value);
+    } else {
+      computeDisplay = true;
+    }
+  }
+
+  var items = React.Children.map(children, function (child) {
+    if (!React.isValidElement(child)) {
+      return null;
+    }
+
+    if ("development" !== 'production') {
+      if ((0, _reactIs.isFragment)(child)) {
+        console.error(["Material-UI: the Select component doesn't accept a Fragment as a child.", 'Consider providing an array instead.'].join('\n'));
+      }
+    }
+
+    var selected;
+
+    if (multiple) {
+      if (!Array.isArray(value)) {
+        throw new Error('Material-UI: the `value` prop must be an array ' + 'when using the `Select` component with `multiple`.');
+      }
+
+      selected = value.some(function (v) {
+        return areEqualValues(v, child.props.value);
+      });
+
+      if (selected && computeDisplay) {
+        displayMultiple.push(child.props.children);
+      }
+    } else {
+      selected = areEqualValues(value, child.props.value);
+
+      if (selected && computeDisplay) {
+        displaySingle = child.props.children;
+      }
+    }
+
+    if (selected) {
+      foundMatch = true;
+    }
+
+    return React.cloneElement(child, {
+      'aria-selected': selected ? 'true' : undefined,
+      onClick: handleItemClick(child),
+      onKeyUp: function onKeyUp(event) {
+        if (event.key === ' ') {
+          // otherwise our MenuItems dispatches a click event
+          // it's not behavior of the native <option> and causes
+          // the select to close immediately since we open on space keydown
+          event.preventDefault();
+        }
+
+        var onKeyUp = child.props.onKeyUp;
+
+        if (typeof onKeyUp === 'function') {
+          onKeyUp(event);
+        }
+      },
+      role: 'option',
+      selected: selected,
+      value: undefined,
+      // The value is most likely not a valid HTML attribute.
+      'data-value': child.props.value // Instead, we provide it as a data attribute.
+
+    });
+  });
+
+  if ("development" !== 'production') {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    React.useEffect(function () {
+      if (!foundMatch && !multiple && value !== '') {
+        var values = React.Children.toArray(children).map(function (child) {
+          return child.props.value;
+        });
+        console.warn(["Material-UI: you have provided an out-of-range value `".concat(value, "` for the select ").concat(name ? "(name=\"".concat(name, "\") ") : '', "component."), "Consider providing a value that matches one of the available options or ''.", "The available values are ".concat(values.filter(function (x) {
+          return x != null;
+        }).map(function (x) {
+          return "`".concat(x, "`");
+        }).join(', ') || '""', ".")].join('\n'));
+      }
+    }, [foundMatch, children, multiple, name, value]);
+  }
+
+  if (computeDisplay) {
+    display = multiple ? displayMultiple.join(', ') : displaySingle;
+  } // Avoid performing a layout computation in the render method.
+
+
+  var menuMinWidth = menuMinWidthState;
+
+  if (!autoWidth && isOpenControlled && displayNode) {
+    menuMinWidth = displayNode.clientWidth;
+  }
+
+  var tabIndex;
+
+  if (typeof tabIndexProp !== 'undefined') {
+    tabIndex = tabIndexProp;
+  } else {
+    tabIndex = disabled ? null : 0;
+  }
+
+  var buttonId = SelectDisplayProps.id || (name ? "mui-component-select-".concat(name) : undefined);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, // TODO v5: merge root and select
+    classes.select, classes.selectMenu, classes[variant], className, disabled && classes.disabled),
+    ref: setDisplayNode,
+    tabIndex: tabIndex,
+    role: "button",
+    "aria-expanded": open ? 'true' : undefined,
+    "aria-labelledby": "".concat(labelId || '', " ").concat(buttonId || ''),
+    "aria-haspopup": "listbox",
+    onKeyDown: handleKeyDown,
+    onMouseDown: disabled || readOnly ? null : handleMouseDown,
+    onBlur: handleBlur,
+    onFocus: onFocus
+  }, SelectDisplayProps, {
+    // The id is required for proper a11y
+    id: buttonId
+  }), isEmpty(display) ?
+  /*#__PURE__*/
+  // eslint-disable-next-line react/no-danger
+  React.createElement("span", {
+    dangerouslySetInnerHTML: {
+      __html: '&#8203;'
+    }
+  }) : display), /*#__PURE__*/React.createElement("input", (0, _extends2.default)({
+    value: Array.isArray(value) ? value.join(',') : value,
+    name: name,
+    ref: inputRef,
+    type: "hidden",
+    autoFocus: autoFocus
+  }, other)), /*#__PURE__*/React.createElement(IconComponent, {
+    className: (0, _clsx.default)(classes.icon, classes["icon".concat((0, _capitalize.default)(variant))], open && classes.iconOpen, disabled && classes.disabled)
+  }), /*#__PURE__*/React.createElement(_Menu.default, (0, _extends2.default)({
+    id: "menu-".concat(name || ''),
+    anchorEl: displayNode,
+    open: open,
+    onClose: handleClose
+  }, MenuProps, {
+    MenuListProps: (0, _extends2.default)({
+      'aria-labelledby': labelId,
+      role: 'listbox',
+      disableListWrap: true
+    }, MenuProps.MenuListProps),
+    PaperProps: (0, _extends2.default)({}, MenuProps.PaperProps, {
+      style: (0, _extends2.default)({
+        minWidth: menuMinWidth
+      }, MenuProps.PaperProps != null ? MenuProps.PaperProps.style : null)
+    })
+  }), items));
+});
+"development" !== "production" ? SelectInput.propTypes = {
+  /**
+   * @ignore
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, the width of the popover will automatically be set according to the items inside the
+   * menu, otherwise it will be at least the width of the select input.
+   */
+  autoWidth: _propTypes.default.bool,
+
+  /**
+   * The option elements to populate the select with.
+   * Can be some `<MenuItem>` elements.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * The CSS class name of the select element.
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The default element value. Use when the component is not controlled.
+   */
+  defaultValue: _propTypes.default.any,
+
+  /**
+   * If `true`, the select will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the selected item is displayed even if its value is empty.
+   */
+  displayEmpty: _propTypes.default.bool,
+
+  /**
+   * The icon that displays the arrow.
+   */
+  IconComponent: _propTypes.default.elementType.isRequired,
+
+  /**
+   * Imperative handle implementing `{ value: T, node: HTMLElement, focus(): void }`
+   * Equivalent to `ref`
+   */
+  inputRef: _utils.refType,
+
+  /**
+   * The ID of an element that acts as an additional label. The Select will
+   * be labelled by the additional label and the selected value.
+   */
+  labelId: _propTypes.default.string,
+
+  /**
+   * Props applied to the [`Menu`](/api/menu/) element.
+   */
+  MenuProps: _propTypes.default.object,
+
+  /**
+   * If `true`, `value` must be an array and the menu will support multiple selections.
+   */
+  multiple: _propTypes.default.bool,
+
+  /**
+   * Name attribute of the `select` or hidden `input` element.
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * @ignore
+   */
+  onBlur: _propTypes.default.func,
+
+  /**
+   * Callback function fired when a menu item is selected.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (any).
+   * @param {object} [child] The react element that was selected.
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component requests to be closed.
+   * Use in controlled mode (see open).
+   *
+   * @param {object} event The event source of the callback.
+   */
+  onClose: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  onFocus: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component requests to be opened.
+   * Use in controlled mode (see open).
+   *
+   * @param {object} event The event source of the callback.
+   */
+  onOpen: _propTypes.default.func,
+
+  /**
+   * Control `select` open state.
+   */
+  open: _propTypes.default.bool,
+
+  /**
+   * @ignore
+   */
+  readOnly: _propTypes.default.bool,
+
+  /**
+   * Render the selected value.
+   *
+   * @param {any} value The `value` provided to the component.
+   * @returns {ReactNode}
+   */
+  renderValue: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * Props applied to the clickable div element.
+   */
+  SelectDisplayProps: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  tabIndex: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
+
+  /**
+   * @ignore
+   */
+  type: _propTypes.default.any,
+
+  /**
+   * The input value.
+   */
+  value: _propTypes.default.any,
+
+  /**
+   * The variant to use.
+   */
+  variant: _propTypes.default.oneOf(['standard', 'outlined', 'filled'])
+} : void 0;
+var _default = SelectInput;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/toConsumableArray":"../node_modules/@babel/runtime/helpers/esm/toConsumableArray.js","@babel/runtime/helpers/esm/slicedToArray":"../node_modules/@babel/runtime/helpers/esm/slicedToArray.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/typeof":"../node_modules/@babel/runtime/helpers/esm/typeof.js","react":"../node_modules/react/index.js","react-is":"../node_modules/react-is/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../Menu/Menu":"../node_modules/@material-ui/core/esm/Menu/Menu.js","../InputBase/utils":"../node_modules/@material-ui/core/esm/InputBase/utils.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js","../utils/useControlled":"../node_modules/@material-ui/core/esm/utils/useControlled.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/ArrowDropDown.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _createSvgIcon = _interopRequireDefault(require("./createSvgIcon"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @ignore - internal component.
+ */
+var _default = (0, _createSvgIcon.default)( /*#__PURE__*/React.createElement("path", {
+  d: "M7 10l5 5 5-5z"
+}), 'ArrowDropDown');
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./createSvgIcon":"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js"}],"../node_modules/@material-ui/core/esm/NativeSelect/NativeSelectInput.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @ignore - internal component.
+ */
+var NativeSelectInput = React.forwardRef(function NativeSelectInput(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      disabled = props.disabled,
+      IconComponent = props.IconComponent,
+      inputRef = props.inputRef,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'standard' : _props$variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "disabled", "IconComponent", "inputRef", "variant"]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("select", (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, // TODO v5: merge root and select
+    classes.select, classes[variant], className, disabled && classes.disabled),
+    disabled: disabled,
+    ref: inputRef || ref
+  }, other)), props.multiple ? null : /*#__PURE__*/React.createElement(IconComponent, {
+    className: (0, _clsx.default)(classes.icon, classes["icon".concat((0, _capitalize.default)(variant))], disabled && classes.disabled)
+  }));
+});
+"development" !== "production" ? NativeSelectInput.propTypes = {
+  /**
+   * The option elements to populate the select with.
+   * Can be some `<option>` elements.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * The CSS class name of the select element.
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * If `true`, the select will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * The icon that displays the arrow.
+   */
+  IconComponent: _propTypes.default.elementType.isRequired,
+
+  /**
+   * Use that prop to pass a ref to the native select element.
+   * @deprecated
+   */
+  inputRef: _utils.refType,
+
+  /**
+   * @ignore
+   */
+  multiple: _propTypes.default.bool,
+
+  /**
+   * Name attribute of the `select` or hidden `input` element.
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * Callback function fired when a menu item is selected.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (string).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * The input value.
+   */
+  value: _propTypes.default.any,
+
+  /**
+   * The variant to use.
+   */
+  variant: _propTypes.default.oneOf(['standard', 'outlined', 'filled'])
+} : void 0;
+var _default = NativeSelectInput;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js"}],"../node_modules/@material-ui/core/esm/NativeSelect/NativeSelect.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _NativeSelectInput = _interopRequireDefault(require("./NativeSelectInput"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _formControlState = _interopRequireDefault(require("../FormControl/formControlState"));
+
+var _useFormControl = _interopRequireDefault(require("../FormControl/useFormControl"));
+
+var _ArrowDropDown = _interopRequireDefault(require("../internal/svg-icons/ArrowDropDown"));
+
+var _Input = _interopRequireDefault(require("../Input"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the select component `root` class. */
+    root: {},
+
+    /* Styles applied to the select component `select` class. */
+    select: {
+      '-moz-appearance': 'none',
+      // Reset
+      '-webkit-appearance': 'none',
+      // Reset
+      // When interacting quickly, the text can end up selected.
+      // Native select can't be selected either.
+      userSelect: 'none',
+      borderRadius: 0,
+      // Reset
+      minWidth: 16,
+      // So it doesn't collapse.
+      cursor: 'pointer',
+      '&:focus': {
+        // Show that it's not an text input
+        backgroundColor: theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.05)',
+        borderRadius: 0 // Reset Chrome style
+
+      },
+      // Remove IE 11 arrow
+      '&::-ms-expand': {
+        display: 'none'
+      },
+      '&$disabled': {
+        cursor: 'default'
+      },
+      '&[multiple]': {
+        height: 'auto'
+      },
+      '&:not([multiple]) option, &:not([multiple]) optgroup': {
+        backgroundColor: theme.palette.background.paper
+      },
+      '&&': {
+        paddingRight: 24
+      }
+    },
+
+    /* Styles applied to the select component if `variant="filled"`. */
+    filled: {
+      '&&': {
+        paddingRight: 32
+      }
+    },
+
+    /* Styles applied to the select component if `variant="outlined"`. */
+    outlined: {
+      borderRadius: theme.shape.borderRadius,
+      '&&': {
+        paddingRight: 32
+      }
+    },
+
+    /* Styles applied to the select component `selectMenu` class. */
+    selectMenu: {
+      height: 'auto',
+      // Reset
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden'
+    },
+
+    /* Pseudo-class applied to the select component `disabled` class. */
+    disabled: {},
+
+    /* Styles applied to the icon component. */
+    icon: {
+      // We use a position absolute over a flexbox in order to forward the pointer events
+      // to the input and to support wrapping tags..
+      position: 'absolute',
+      right: 0,
+      top: 'calc(50% - 12px)',
+      // Center vertically
+      pointerEvents: 'none',
+      // Don't block pointer events on the select under the icon.
+      color: theme.palette.action.active,
+      '&$disabled': {
+        color: theme.palette.action.disabled
+      }
+    },
+
+    /* Styles applied to the icon component if the popup is open. */
+    iconOpen: {
+      transform: 'rotate(180deg)'
+    },
+
+    /* Styles applied to the icon component if `variant="filled"`. */
+    iconFilled: {
+      right: 7
+    },
+
+    /* Styles applied to the icon component if `variant="outlined"`. */
+    iconOutlined: {
+      right: 7
+    }
+  };
+};
+
+exports.styles = styles;
+var defaultInput = /*#__PURE__*/React.createElement(_Input.default, null);
+/**
+ * An alternative to `<Select native />` with a much smaller bundle size footprint.
+ */
+
+var NativeSelect = React.forwardRef(function NativeSelect(props, ref) {
+  var children = props.children,
+      classes = props.classes,
+      _props$IconComponent = props.IconComponent,
+      IconComponent = _props$IconComponent === void 0 ? _ArrowDropDown.default : _props$IconComponent,
+      _props$input = props.input,
+      input = _props$input === void 0 ? defaultInput : _props$input,
+      inputProps = props.inputProps,
+      variant = props.variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "IconComponent", "input", "inputProps", "variant"]);
+  var muiFormControl = (0, _useFormControl.default)();
+  var fcs = (0, _formControlState.default)({
+    props: props,
+    muiFormControl: muiFormControl,
+    states: ['variant']
+  });
+  return React.cloneElement(input, (0, _extends2.default)({
+    // Most of the logic is implemented in `NativeSelectInput`.
+    // The `Select` component is a simple API wrapper to expose something better to play with.
+    inputComponent: _NativeSelectInput.default,
+    inputProps: (0, _extends2.default)({
+      children: children,
+      classes: classes,
+      IconComponent: IconComponent,
+      variant: fcs.variant,
+      type: undefined
+    }, inputProps, {}, input ? input.props.inputProps : {}),
+    ref: ref
+  }, other));
+});
+"development" !== "production" ? NativeSelect.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * The option elements to populate the select with.
+   * Can be some `<option>` elements.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * The icon that displays the arrow.
+   */
+  IconComponent: _propTypes.default.elementType,
+
+  /**
+   * An `Input` element; does not have to be a material-ui specific `Input`.
+   */
+  input: _propTypes.default.element,
+
+  /**
+   * Attributes applied to the `select` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * Callback function fired when a menu item is selected.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (string).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * The input value. The DOM API casts this to a string.
+   */
+  value: _propTypes.default.any,
+
+  /**
+   * The variant to use.
+   */
+  variant: _propTypes.default.oneOf(['filled', 'outlined', 'standard'])
+} : void 0;
+NativeSelect.muiName = 'Select';
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiNativeSelect'
+})(NativeSelect);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","./NativeSelectInput":"../node_modules/@material-ui/core/esm/NativeSelect/NativeSelectInput.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../FormControl/formControlState":"../node_modules/@material-ui/core/esm/FormControl/formControlState.js","../FormControl/useFormControl":"../node_modules/@material-ui/core/esm/FormControl/useFormControl.js","../internal/svg-icons/ArrowDropDown":"../node_modules/@material-ui/core/esm/internal/svg-icons/ArrowDropDown.js","../Input":"../node_modules/@material-ui/core/esm/Input/index.js"}],"../node_modules/@material-ui/core/esm/Select/Select.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _styles = require("@material-ui/styles");
+
+var _SelectInput = _interopRequireDefault(require("./SelectInput"));
+
+var _formControlState = _interopRequireDefault(require("../FormControl/formControlState"));
+
+var _useFormControl = _interopRequireDefault(require("../FormControl/useFormControl"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _ArrowDropDown = _interopRequireDefault(require("../internal/svg-icons/ArrowDropDown"));
+
+var _Input = _interopRequireDefault(require("../Input"));
+
+var _NativeSelect = require("../NativeSelect/NativeSelect");
+
+var _NativeSelectInput = _interopRequireDefault(require("../NativeSelect/NativeSelectInput"));
+
+var _FilledInput = _interopRequireDefault(require("../FilledInput"));
+
+var _OutlinedInput = _interopRequireDefault(require("../OutlinedInput"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = _NativeSelect.styles;
+exports.styles = styles;
+
+var _ref = /*#__PURE__*/React.createElement(_Input.default, null);
+
+var _ref2 = /*#__PURE__*/React.createElement(_FilledInput.default, null);
+
+var Select = React.forwardRef(function Select(props, ref) {
+  var _props$autoWidth = props.autoWidth,
+      autoWidth = _props$autoWidth === void 0 ? false : _props$autoWidth,
+      children = props.children,
+      classes = props.classes,
+      _props$displayEmpty = props.displayEmpty,
+      displayEmpty = _props$displayEmpty === void 0 ? false : _props$displayEmpty,
+      _props$IconComponent = props.IconComponent,
+      IconComponent = _props$IconComponent === void 0 ? _ArrowDropDown.default : _props$IconComponent,
+      id = props.id,
+      input = props.input,
+      inputProps = props.inputProps,
+      label = props.label,
+      labelId = props.labelId,
+      _props$labelWidth = props.labelWidth,
+      labelWidth = _props$labelWidth === void 0 ? 0 : _props$labelWidth,
+      MenuProps = props.MenuProps,
+      _props$multiple = props.multiple,
+      multiple = _props$multiple === void 0 ? false : _props$multiple,
+      _props$native = props.native,
+      native = _props$native === void 0 ? false : _props$native,
+      onClose = props.onClose,
+      onOpen = props.onOpen,
+      open = props.open,
+      renderValue = props.renderValue,
+      SelectDisplayProps = props.SelectDisplayProps,
+      _props$variant = props.variant,
+      variantProps = _props$variant === void 0 ? 'standard' : _props$variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["autoWidth", "children", "classes", "displayEmpty", "IconComponent", "id", "input", "inputProps", "label", "labelId", "labelWidth", "MenuProps", "multiple", "native", "onClose", "onOpen", "open", "renderValue", "SelectDisplayProps", "variant"]);
+  var inputComponent = native ? _NativeSelectInput.default : _SelectInput.default;
+  var muiFormControl = (0, _useFormControl.default)();
+  var fcs = (0, _formControlState.default)({
+    props: props,
+    muiFormControl: muiFormControl,
+    states: ['variant']
+  });
+  var variant = fcs.variant || variantProps;
+  var InputComponent = input || {
+    standard: _ref,
+    outlined: /*#__PURE__*/React.createElement(_OutlinedInput.default, {
+      label: label,
+      labelWidth: labelWidth
+    }),
+    filled: _ref2
+  }[variant];
+  return React.cloneElement(InputComponent, (0, _extends2.default)({
+    // Most of the logic is implemented in `SelectInput`.
+    // The `Select` component is a simple API wrapper to expose something better to play with.
+    inputComponent: inputComponent,
+    inputProps: (0, _extends2.default)({
+      children: children,
+      IconComponent: IconComponent,
+      variant: variant,
+      type: undefined,
+      // We render a select. We can ignore the type provided by the `Input`.
+      multiple: multiple
+    }, native ? {
+      id: id
+    } : {
+      autoWidth: autoWidth,
+      displayEmpty: displayEmpty,
+      labelId: labelId,
+      MenuProps: MenuProps,
+      onClose: onClose,
+      onOpen: onOpen,
+      open: open,
+      renderValue: renderValue,
+      SelectDisplayProps: (0, _extends2.default)({
+        id: id
+      }, SelectDisplayProps)
+    }, {}, inputProps, {
+      classes: inputProps ? (0, _styles.mergeClasses)({
+        baseClasses: classes,
+        newClasses: inputProps.classes,
+        Component: Select
+      }) : classes
+    }, input ? input.props.inputProps : {}),
+    ref: ref
+  }, other));
+});
+"development" !== "production" ? Select.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * If `true`, the width of the popover will automatically be set according to the items inside the
+   * menu, otherwise it will be at least the width of the select input.
+   */
+  autoWidth: _propTypes.default.bool,
+
+  /**
+   * The option elements to populate the select with.
+   * Can be some `MenuItem` when `native` is false and `option` when `native` is true.
+   *
+   * ⚠️The `MenuItem` elements **must** be direct descendants when `native` is false.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * The default element value. Use when the component is not controlled.
+   */
+  defaultValue: _propTypes.default.any,
+
+  /**
+   * If `true`, a value is displayed even if no items are selected.
+   *
+   * In order to display a meaningful value, a function should be passed to the `renderValue` prop which returns the value to be displayed when no items are selected.
+   * You can only use it when the `native` prop is `false` (default).
+   */
+  displayEmpty: _propTypes.default.bool,
+
+  /**
+   * The icon that displays the arrow.
+   */
+  IconComponent: _propTypes.default.elementType,
+
+  /**
+   * @ignore
+   */
+  id: _propTypes.default.string,
+
+  /**
+   * An `Input` element; does not have to be a material-ui specific `Input`.
+   */
+  input: _propTypes.default.element,
+
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   * When `native` is `true`, the attributes are applied on the `select` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * See [OutlinedInput#label](/api/outlined-input/#props)
+   */
+  label: _propTypes.default.node,
+
+  /**
+   * The ID of an element that acts as an additional label. The Select will
+   * be labelled by the additional label and the selected value.
+   */
+  labelId: _propTypes.default.string,
+
+  /**
+   * See [OutlinedInput#label](/api/outlined-input/#props)
+   */
+  labelWidth: _propTypes.default.number,
+
+  /**
+   * Props applied to the [`Menu`](/api/menu/) element.
+   */
+  MenuProps: _propTypes.default.object,
+
+  /**
+   * If `true`, `value` must be an array and the menu will support multiple selections.
+   */
+  multiple: _propTypes.default.bool,
+
+  /**
+   * If `true`, the component will be using a native `select` element.
+   */
+  native: _propTypes.default.bool,
+
+  /**
+   * Callback function fired when a menu item is selected.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (any).
+   * @param {object} [child] The react element that was selected when `native` is `false` (default).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component requests to be closed.
+   * Use in controlled mode (see open).
+   *
+   * @param {object} event The event source of the callback.
+   */
+  onClose: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component requests to be opened.
+   * Use in controlled mode (see open).
+   *
+   * @param {object} event The event source of the callback.
+   */
+  onOpen: _propTypes.default.func,
+
+  /**
+   * Control `select` open state.
+   * You can only use it when the `native` prop is `false` (default).
+   */
+  open: _propTypes.default.bool,
+
+  /**
+   * Render the selected value.
+   * You can only use it when the `native` prop is `false` (default).
+   *
+   * @param {any} value The `value` provided to the component.
+   * @returns {ReactNode}
+   */
+  renderValue: _propTypes.default.func,
+
+  /**
+   * Props applied to the clickable div element.
+   */
+  SelectDisplayProps: _propTypes.default.object,
+
+  /**
+   * The input value. Providing an empty string will select no options.
+   * This prop is required when the `native` prop is `false` (default).
+   * Set to an empty string `''` if you don't want any of the available options to be selected.
+   *
+   * If the value is an object it must have reference equality with the option in order to be selected.
+   * If the value is not an object, the string representation must match with the string representation of the option in order to be selected.
+   */
+  value: _propTypes.default.any,
+
+  /**
+   * The variant to use.
+   */
+  variant: _propTypes.default.oneOf(['filled', 'outlined', 'standard'])
+} : void 0;
+Select.muiName = 'Select';
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiSelect'
+})(Select);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","@material-ui/styles":"../node_modules/@material-ui/styles/esm/index.js","./SelectInput":"../node_modules/@material-ui/core/esm/Select/SelectInput.js","../FormControl/formControlState":"../node_modules/@material-ui/core/esm/FormControl/formControlState.js","../FormControl/useFormControl":"../node_modules/@material-ui/core/esm/FormControl/useFormControl.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../internal/svg-icons/ArrowDropDown":"../node_modules/@material-ui/core/esm/internal/svg-icons/ArrowDropDown.js","../Input":"../node_modules/@material-ui/core/esm/Input/index.js","../NativeSelect/NativeSelect":"../node_modules/@material-ui/core/esm/NativeSelect/NativeSelect.js","../NativeSelect/NativeSelectInput":"../node_modules/@material-ui/core/esm/NativeSelect/NativeSelectInput.js","../FilledInput":"../node_modules/@material-ui/core/esm/FilledInput/index.js","../OutlinedInput":"../node_modules/@material-ui/core/esm/OutlinedInput/index.js"}],"../node_modules/@material-ui/core/esm/Select/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Select.default;
+  }
+});
+
+var _Select = _interopRequireDefault(require("./Select"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Select":"../node_modules/@material-ui/core/esm/Select/Select.js"}],"../node_modules/@material-ui/core/esm/TextField/TextField.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _Input = _interopRequireDefault(require("../Input"));
+
+var _FilledInput = _interopRequireDefault(require("../FilledInput"));
+
+var _OutlinedInput = _interopRequireDefault(require("../OutlinedInput"));
+
+var _InputLabel = _interopRequireDefault(require("../InputLabel"));
+
+var _FormControl = _interopRequireDefault(require("../FormControl"));
+
+var _FormHelperText = _interopRequireDefault(require("../FormHelperText"));
+
+var _Select = _interopRequireDefault(require("../Select"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var variantComponent = {
+  standard: _Input.default,
+  filled: _FilledInput.default,
+  outlined: _OutlinedInput.default
+};
+var styles = {
+  /* Styles applied to the root element. */
+  root: {}
+};
+/**
+ * The `TextField` is a convenience wrapper for the most common cases (80%).
+ * It cannot be all things to all people, otherwise the API would grow out of control.
+ *
+ * ## Advanced Configuration
+ *
+ * It's important to understand that the text field is a simple abstraction
+ * on top of the following components:
+ *
+ * - [FormControl](/api/form-control/)
+ * - [InputLabel](/api/input-label/)
+ * - [FilledInput](/api/filled-input/)
+ * - [OutlinedInput](/api/outlined-input/)
+ * - [Input](/api/input/)
+ * - [FormHelperText](/api/form-helper-text/)
+ *
+ * If you wish to alter the props applied to the `input` element, you can do so as follows:
+ *
+ * ```jsx
+ * const inputProps = {
+ *   step: 300,
+ * };
+ *
+ * return <TextField id="time" type="time" inputProps={inputProps} />;
+ * ```
+ *
+ * For advanced cases, please look at the source of TextField by clicking on the
+ * "Edit this page" button above. Consider either:
+ *
+ * - using the upper case props for passing values directly to the components
+ * - using the underlying components directly as shown in the demos
+ */
+
+exports.styles = styles;
+var TextField = React.forwardRef(function TextField(props, ref) {
+  var autoComplete = props.autoComplete,
+      _props$autoFocus = props.autoFocus,
+      autoFocus = _props$autoFocus === void 0 ? false : _props$autoFocus,
+      children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$color = props.color,
+      color = _props$color === void 0 ? 'primary' : _props$color,
+      defaultValue = props.defaultValue,
+      _props$disabled = props.disabled,
+      disabled = _props$disabled === void 0 ? false : _props$disabled,
+      _props$error = props.error,
+      error = _props$error === void 0 ? false : _props$error,
+      FormHelperTextProps = props.FormHelperTextProps,
+      _props$fullWidth = props.fullWidth,
+      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
+      helperText = props.helperText,
+      hiddenLabel = props.hiddenLabel,
+      id = props.id,
+      InputLabelProps = props.InputLabelProps,
+      inputProps = props.inputProps,
+      InputProps = props.InputProps,
+      inputRef = props.inputRef,
+      label = props.label,
+      _props$multiline = props.multiline,
+      multiline = _props$multiline === void 0 ? false : _props$multiline,
+      name = props.name,
+      onBlur = props.onBlur,
+      onChange = props.onChange,
+      onFocus = props.onFocus,
+      placeholder = props.placeholder,
+      _props$required = props.required,
+      required = _props$required === void 0 ? false : _props$required,
+      rows = props.rows,
+      rowsMax = props.rowsMax,
+      _props$select = props.select,
+      select = _props$select === void 0 ? false : _props$select,
+      SelectProps = props.SelectProps,
+      type = props.type,
+      value = props.value,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'standard' : _props$variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["autoComplete", "autoFocus", "children", "classes", "className", "color", "defaultValue", "disabled", "error", "FormHelperTextProps", "fullWidth", "helperText", "hiddenLabel", "id", "InputLabelProps", "inputProps", "InputProps", "inputRef", "label", "multiline", "name", "onBlur", "onChange", "onFocus", "placeholder", "required", "rows", "rowsMax", "select", "SelectProps", "type", "value", "variant"]);
+
+  if ("development" !== 'production') {
+    if (select && !children) {
+      console.error('Material-UI: `children` must be passed when using the `TextField` component with `select`.');
+    }
+  }
+
+  var InputMore = {};
+
+  if (variant === 'outlined') {
+    if (InputLabelProps && typeof InputLabelProps.shrink !== 'undefined') {
+      InputMore.notched = InputLabelProps.shrink;
+    }
+
+    if (label) {
+      InputMore.label = /*#__PURE__*/React.createElement(React.Fragment, null, label, required && "\xA0*");
+    }
+  }
+
+  if (select) {
+    // unset defaults from textbox inputs
+    if (!SelectProps || !SelectProps.native) {
+      InputMore.id = undefined;
+    }
+
+    InputMore['aria-describedby'] = undefined;
+  }
+
+  var helperTextId = helperText && id ? "".concat(id, "-helper-text") : undefined;
+  var inputLabelId = label && id ? "".concat(id, "-label") : undefined;
+  var InputComponent = variantComponent[variant];
+  var InputElement = /*#__PURE__*/React.createElement(InputComponent, (0, _extends2.default)({
+    "aria-describedby": helperTextId,
+    autoComplete: autoComplete,
+    autoFocus: autoFocus,
+    defaultValue: defaultValue,
+    fullWidth: fullWidth,
+    multiline: multiline,
+    name: name,
+    rows: rows,
+    rowsMax: rowsMax,
+    type: type,
+    value: value,
+    id: id,
+    inputRef: inputRef,
+    onBlur: onBlur,
+    onChange: onChange,
+    onFocus: onFocus,
+    placeholder: placeholder,
+    inputProps: inputProps
+  }, InputMore, InputProps));
+  return /*#__PURE__*/React.createElement(_FormControl.default, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className),
+    disabled: disabled,
+    error: error,
+    fullWidth: fullWidth,
+    hiddenLabel: hiddenLabel,
+    ref: ref,
+    required: required,
+    color: color,
+    variant: variant
+  }, other), label && /*#__PURE__*/React.createElement(_InputLabel.default, (0, _extends2.default)({
+    htmlFor: id,
+    id: inputLabelId
+  }, InputLabelProps), label), select ? /*#__PURE__*/React.createElement(_Select.default, (0, _extends2.default)({
+    "aria-describedby": helperTextId,
+    id: id,
+    labelId: inputLabelId,
+    value: value,
+    input: InputElement
+  }, SelectProps), children) : InputElement, helperText && /*#__PURE__*/React.createElement(_FormHelperText.default, (0, _extends2.default)({
+    id: helperTextId
+  }, FormHelperTextProps), helperText));
+});
+"development" !== "production" ? TextField.propTypes = {
+  /**
+   * This prop helps users to fill forms faster, especially on mobile devices.
+   * The name can be confusing, as it's more like an autofill.
+   * You can learn more about it [following the specification](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill).
+   */
+  autoComplete: _propTypes.default.string,
+
+  /**
+   * If `true`, the `input` element will be focused during the first mount.
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * @ignore
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['primary', 'secondary']),
+
+  /**
+   * The default value of the `input` element.
+   */
+  defaultValue: _propTypes.default.any,
+
+  /**
+   * If `true`, the `input` element will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the label will be displayed in an error state.
+   */
+  error: _propTypes.default.bool,
+
+  /**
+   * Props applied to the [`FormHelperText`](/api/form-helper-text/) element.
+   */
+  FormHelperTextProps: _propTypes.default.object,
+
+  /**
+   * If `true`, the input will take up the full width of its container.
+   */
+  fullWidth: _propTypes.default.bool,
+
+  /**
+   * The helper text content.
+   */
+  helperText: _propTypes.default.node,
+
+  /**
+   * @ignore
+   */
+  hiddenLabel: _propTypes.default.bool,
+
+  /**
+   * The id of the `input` element.
+   * Use this prop to make `label` and `helperText` accessible for screen readers.
+   */
+  id: _propTypes.default.string,
+
+  /**
+   * Props applied to the [`InputLabel`](/api/input-label/) element.
+   */
+  InputLabelProps: _propTypes.default.object,
+
+  /**
+   * Props applied to the Input element.
+   * It will be a [`FilledInput`](/api/filled-input/),
+   * [`OutlinedInput`](/api/outlined-input/) or [`Input`](/api/input/)
+   * component depending on the `variant` prop value.
+   */
+  InputProps: _propTypes.default.object,
+
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _utils.refType,
+
+  /**
+   * The label content.
+   */
+  label: _propTypes.default.node,
+
+  /**
+   * If `dense` or `normal`, will adjust vertical spacing of this and contained components.
+   */
+  margin: _propTypes.default.oneOf(['none', 'dense', 'normal']),
+
+  /**
+   * If `true`, a textarea element will be rendered instead of an input.
+   */
+  multiline: _propTypes.default.bool,
+
+  /**
+   * Name attribute of the `input` element.
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * @ignore
+   */
+  onBlur: _propTypes.default.func,
+
+  /**
+   * Callback fired when the value is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new value by accessing `event.target.value` (string).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  onFocus: _propTypes.default.func,
+
+  /**
+   * The short hint displayed in the input before the user enters a value.
+   */
+  placeholder: _propTypes.default.string,
+
+  /**
+   * If `true`, the label is displayed as required and the `input` element` will be required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * Number of rows to display when multiline option is set to true.
+   */
+  rows: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Maximum number of rows to display when multiline option is set to true.
+   */
+  rowsMax: _propTypes.default.oneOfType([_propTypes.default.string, _propTypes.default.number]),
+
+  /**
+   * Render a [`Select`](/api/select/) element while passing the Input element to `Select` as `input` parameter.
+   * If this option is set you must pass the options of the select as children.
+   */
+  select: _propTypes.default.bool,
+
+  /**
+   * Props applied to the [`Select`](/api/select/) element.
+   */
+  SelectProps: _propTypes.default.object,
+
+  /**
+   * The size of the text field.
+   */
+  size: _propTypes.default.oneOf(['small', 'medium']),
+
+  /**
+   * Type of the `input` element. It should be [a valid HTML5 input type](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types).
+   */
+  type: _propTypes.default.string,
+
+  /**
+   * The value of the `input` element, required for a controlled component.
+   */
+  value: _propTypes.default.any,
+
+  /**
+   * The variant to use.
+   */
+  variant: _propTypes.default.oneOf(['standard', 'outlined', 'filled'])
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTextField'
+})(TextField);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../Input":"../node_modules/@material-ui/core/esm/Input/index.js","../FilledInput":"../node_modules/@material-ui/core/esm/FilledInput/index.js","../OutlinedInput":"../node_modules/@material-ui/core/esm/OutlinedInput/index.js","../InputLabel":"../node_modules/@material-ui/core/esm/InputLabel/index.js","../FormControl":"../node_modules/@material-ui/core/esm/FormControl/index.js","../FormHelperText":"../node_modules/@material-ui/core/esm/FormHelperText/index.js","../Select":"../node_modules/@material-ui/core/esm/Select/index.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js"}],"../node_modules/@material-ui/core/esm/TextField/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _TextField.default;
+  }
+});
+
+var _TextField = _interopRequireDefault(require("./TextField"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./TextField":"../node_modules/@material-ui/core/esm/TextField/TextField.js"}],"../node_modules/@material-ui/core/esm/FormControlLabel/FormControlLabel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _FormControl = require("../FormControl");
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Typography = _interopRequireDefault(require("../Typography"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      cursor: 'pointer',
+      // For correct alignment with the text.
+      verticalAlign: 'middle',
+      WebkitTapHighlightColor: 'transparent',
+      marginLeft: -11,
+      marginRight: 16,
+      // used for row presentation of radio/checkbox
+      '&$disabled': {
+        cursor: 'default'
+      }
+    },
+
+    /* Styles applied to the root element if `labelPlacement="start"`. */
+    labelPlacementStart: {
+      flexDirection: 'row-reverse',
+      marginLeft: 16,
+      // used for row presentation of radio/checkbox
+      marginRight: -11
+    },
+
+    /* Styles applied to the root element if `labelPlacement="top"`. */
+    labelPlacementTop: {
+      flexDirection: 'column-reverse',
+      marginLeft: 16
+    },
+
+    /* Styles applied to the root element if `labelPlacement="bottom"`. */
+    labelPlacementBottom: {
+      flexDirection: 'column',
+      marginLeft: 16
+    },
+
+    /* Pseudo-class applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the label's Typography component. */
+    label: {
+      '&$disabled': {
+        color: theme.palette.text.disabled
+      }
+    }
+  };
+};
+/**
+ * Drop in replacement of the `Radio`, `Switch` and `Checkbox` component.
+ * Use this component if you want to display an extra label.
+ */
+
+
+exports.styles = styles;
+var FormControlLabel = React.forwardRef(function FormControlLabel(props, ref) {
+  var checked = props.checked,
+      classes = props.classes,
+      className = props.className,
+      control = props.control,
+      disabledProp = props.disabled,
+      inputRef = props.inputRef,
+      label = props.label,
+      _props$labelPlacement = props.labelPlacement,
+      labelPlacement = _props$labelPlacement === void 0 ? 'end' : _props$labelPlacement,
+      name = props.name,
+      onChange = props.onChange,
+      value = props.value,
+      other = (0, _objectWithoutProperties2.default)(props, ["checked", "classes", "className", "control", "disabled", "inputRef", "label", "labelPlacement", "name", "onChange", "value"]);
+  var muiFormControl = (0, _FormControl.useFormControl)();
+  var disabled = disabledProp;
+
+  if (typeof disabled === 'undefined' && typeof control.props.disabled !== 'undefined') {
+    disabled = control.props.disabled;
+  }
+
+  if (typeof disabled === 'undefined' && muiFormControl) {
+    disabled = muiFormControl.disabled;
+  }
+
+  var controlProps = {
+    disabled: disabled
+  };
+  ['checked', 'name', 'onChange', 'value', 'inputRef'].forEach(function (key) {
+    if (typeof control.props[key] === 'undefined' && typeof props[key] !== 'undefined') {
+      controlProps[key] = props[key];
+    }
+  });
+  return /*#__PURE__*/React.createElement("label", (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className, labelPlacement !== 'end' && classes["labelPlacement".concat((0, _capitalize.default)(labelPlacement))], disabled && classes.disabled),
+    ref: ref
+  }, other), React.cloneElement(control, controlProps), /*#__PURE__*/React.createElement(_Typography.default, {
+    component: "span",
+    className: (0, _clsx.default)(classes.label, disabled && classes.disabled)
+  }, label));
+});
+"development" !== "production" ? FormControlLabel.propTypes = {
+  /**
+   * If `true`, the component appears selected.
+   */
+  checked: _propTypes.default.bool,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * A control element. For instance, it can be be a `Radio`, a `Switch` or a `Checkbox`.
+   */
+  control: _propTypes.default.element,
+
+  /**
+   * If `true`, the control will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _utils.refType,
+
+  /**
+   * The text to be used in an enclosing label element.
+   */
+  label: _propTypes.default.node,
+
+  /**
+   * The position of the label.
+   */
+  labelPlacement: _propTypes.default.oneOf(['end', 'start', 'top', 'bottom']),
+
+  /*
+   * @ignore
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * Callback fired when the state is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new checked state by accessing `event.target.checked` (boolean).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * The value of the component.
+   */
+  value: _propTypes.default.any
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiFormControlLabel'
+})(FormControlLabel);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../FormControl":"../node_modules/@material-ui/core/esm/FormControl/index.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js"}],"../node_modules/@material-ui/core/esm/FormControlLabel/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _FormControlLabel.default;
+  }
+});
+
+var _FormControlLabel = _interopRequireDefault(require("./FormControlLabel"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./FormControlLabel":"../node_modules/@material-ui/core/esm/FormControlLabel/FormControlLabel.js"}],"../node_modules/@material-ui/core/esm/IconButton/IconButton.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _colorManipulator = require("../styles/colorManipulator");
+
+var _ButtonBase = _interopRequireDefault(require("../ButtonBase"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      textAlign: 'center',
+      flex: '0 0 auto',
+      fontSize: theme.typography.pxToRem(24),
+      padding: 12,
+      borderRadius: '50%',
+      overflow: 'visible',
+      // Explicitly set the default value to solve a bug on IE 11.
+      color: theme.palette.action.active,
+      transition: theme.transitions.create('background-color', {
+        duration: theme.transitions.duration.shortest
+      }),
+      '&:hover': {
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.action.active, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      },
+      '&$disabled': {
+        backgroundColor: 'transparent',
+        color: theme.palette.action.disabled
+      }
+    },
+
+    /* Styles applied to the root element if `edge="start"`. */
+    edgeStart: {
+      marginLeft: -12,
+      '$sizeSmall&': {
+        marginLeft: -3
+      }
+    },
+
+    /* Styles applied to the root element if `edge="end"`. */
+    edgeEnd: {
+      marginRight: -12,
+      '$sizeSmall&': {
+        marginRight: -3
+      }
+    },
+
+    /* Styles applied to the root element if `color="inherit"`. */
+    colorInherit: {
+      color: 'inherit'
+    },
+
+    /* Styles applied to the root element if `color="primary"`. */
+    colorPrimary: {
+      color: theme.palette.primary.main,
+      '&:hover': {
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `color="secondary"`. */
+    colorSecondary: {
+      color: theme.palette.secondary.main,
+      '&:hover': {
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+
+    /* Pseudo-class applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the root element if `size="small"`. */
+    sizeSmall: {
+      padding: 3,
+      fontSize: theme.typography.pxToRem(18)
+    },
+
+    /* Styles applied to the children container element. */
+    label: {
+      width: '100%',
+      display: 'flex',
+      alignItems: 'inherit',
+      justifyContent: 'inherit'
+    }
+  };
+};
+/**
+ * Refer to the [Icons](/components/icons/) section of the documentation
+ * regarding the available icon options.
+ */
+
+
+exports.styles = styles;
+var IconButton = React.forwardRef(function IconButton(props, ref) {
+  var _props$edge = props.edge,
+      edge = _props$edge === void 0 ? false : _props$edge,
+      children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$color = props.color,
+      color = _props$color === void 0 ? 'default' : _props$color,
+      _props$disabled = props.disabled,
+      disabled = _props$disabled === void 0 ? false : _props$disabled,
+      _props$disableFocusRi = props.disableFocusRipple,
+      disableFocusRipple = _props$disableFocusRi === void 0 ? false : _props$disableFocusRi,
+      _props$size = props.size,
+      size = _props$size === void 0 ? 'medium' : _props$size,
+      other = (0, _objectWithoutProperties2.default)(props, ["edge", "children", "classes", "className", "color", "disabled", "disableFocusRipple", "size"]);
+  return /*#__PURE__*/React.createElement(_ButtonBase.default, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className, color !== 'default' && classes["color".concat((0, _capitalize.default)(color))], disabled && classes.disabled, size === "small" && classes["size".concat((0, _capitalize.default)(size))], {
+      'start': classes.edgeStart,
+      'end': classes.edgeEnd
+    }[edge]),
+    centerRipple: true,
+    focusRipple: !disableFocusRipple,
+    disabled: disabled,
+    ref: ref
+  }, other), /*#__PURE__*/React.createElement("span", {
+    className: classes.label
+  }, children));
+});
+"development" !== "production" ? IconButton.propTypes = {
+  /**
+   * The icon element.
+   */
+  children: (0, _utils.chainPropTypes)(_propTypes.default.node, function (props) {
+    var found = React.Children.toArray(props.children).some(function (child) {
+      return React.isValidElement(child) && child.props.onClick;
+    });
+
+    if (found) {
+      return new Error(['Material-UI: you are providing an onClick event listener ' + 'to a child of a button element.', 'Firefox will never trigger the event.', 'You should move the onClick listener to the parent button element.', 'https://github.com/mui-org/material-ui/issues/13957'].join('\n'));
+    }
+
+    return null;
+  }),
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['default', 'inherit', 'primary', 'secondary']),
+
+  /**
+   * If `true`, the button will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the  keyboard focus ripple will be disabled.
+   * `disableRipple` must also be true.
+   */
+  disableFocusRipple: _propTypes.default.bool,
+
+  /**
+   * If `true`, the ripple effect will be disabled.
+   */
+  disableRipple: _propTypes.default.bool,
+
+  /**
+   * If given, uses a negative margin to counteract the padding on one
+   * side (this is often helpful for aligning the left or right
+   * side of the icon with content above or below, without ruining the border
+   * size and shape).
+   */
+  edge: _propTypes.default.oneOf(['start', 'end', false]),
+
+  /**
+   * The size of the button.
+   * `small` is equivalent to the dense button styling.
+   */
+  size: _propTypes.default.oneOf(['small', 'medium'])
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiIconButton'
+})(IconButton);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../styles/colorManipulator":"../node_modules/@material-ui/core/esm/styles/colorManipulator.js","../ButtonBase":"../node_modules/@material-ui/core/esm/ButtonBase/index.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js"}],"../node_modules/@material-ui/core/esm/IconButton/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _IconButton.default;
+  }
+});
+
+var _IconButton = _interopRequireDefault(require("./IconButton"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./IconButton":"../node_modules/@material-ui/core/esm/IconButton/IconButton.js"}],"../node_modules/@material-ui/core/esm/internal/SwitchBase.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/slicedToArray"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _useControlled3 = _interopRequireDefault(require("../utils/useControlled"));
+
+var _useFormControl = _interopRequireDefault(require("../FormControl/useFormControl"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _IconButton = _interopRequireDefault(require("../IconButton"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  root: {
+    padding: 9
+  },
+  checked: {},
+  disabled: {},
+  input: {
+    cursor: 'inherit',
+    position: 'absolute',
+    opacity: 0,
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+    margin: 0,
+    padding: 0,
+    zIndex: 1
+  }
+};
+/**
+ * @ignore - internal component.
+ */
+
+exports.styles = styles;
+var SwitchBase = React.forwardRef(function SwitchBase(props, ref) {
+  var autoFocus = props.autoFocus,
+      checkedProp = props.checked,
+      checkedIcon = props.checkedIcon,
+      classes = props.classes,
+      className = props.className,
+      defaultChecked = props.defaultChecked,
+      disabledProp = props.disabled,
+      icon = props.icon,
+      id = props.id,
+      inputProps = props.inputProps,
+      inputRef = props.inputRef,
+      name = props.name,
+      onBlur = props.onBlur,
+      onChange = props.onChange,
+      onFocus = props.onFocus,
+      readOnly = props.readOnly,
+      required = props.required,
+      tabIndex = props.tabIndex,
+      type = props.type,
+      value = props.value,
+      other = (0, _objectWithoutProperties2.default)(props, ["autoFocus", "checked", "checkedIcon", "classes", "className", "defaultChecked", "disabled", "icon", "id", "inputProps", "inputRef", "name", "onBlur", "onChange", "onFocus", "readOnly", "required", "tabIndex", "type", "value"]);
+
+  var _useControlled = (0, _useControlled3.default)({
+    controlled: checkedProp,
+    default: Boolean(defaultChecked),
+    name: 'SwitchBase'
+  }),
+      _useControlled2 = (0, _slicedToArray2.default)(_useControlled, 2),
+      checked = _useControlled2[0],
+      setCheckedState = _useControlled2[1];
+
+  var muiFormControl = (0, _useFormControl.default)();
+
+  var handleFocus = function handleFocus(event) {
+    if (onFocus) {
+      onFocus(event);
+    }
+
+    if (muiFormControl && muiFormControl.onFocus) {
+      muiFormControl.onFocus(event);
+    }
+  };
+
+  var handleBlur = function handleBlur(event) {
+    if (onBlur) {
+      onBlur(event);
+    }
+
+    if (muiFormControl && muiFormControl.onBlur) {
+      muiFormControl.onBlur(event);
+    }
+  };
+
+  var handleInputChange = function handleInputChange(event) {
+    var newChecked = event.target.checked;
+    setCheckedState(newChecked);
+
+    if (onChange) {
+      onChange(event, newChecked);
+    }
+  };
+
+  var disabled = disabledProp;
+
+  if (muiFormControl) {
+    if (typeof disabled === 'undefined') {
+      disabled = muiFormControl.disabled;
+    }
+  }
+
+  var hasLabelFor = type === 'checkbox' || type === 'radio';
+  return /*#__PURE__*/React.createElement(_IconButton.default, (0, _extends2.default)({
+    component: "span",
+    className: (0, _clsx.default)(classes.root, className, checked && classes.checked, disabled && classes.disabled),
+    disabled: disabled,
+    tabIndex: null,
+    role: undefined,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
+    ref: ref
+  }, other), /*#__PURE__*/React.createElement("input", (0, _extends2.default)({
+    autoFocus: autoFocus,
+    checked: checkedProp,
+    defaultChecked: defaultChecked,
+    className: classes.input,
+    disabled: disabled,
+    id: hasLabelFor && id,
+    name: name,
+    onChange: handleInputChange,
+    readOnly: readOnly,
+    ref: inputRef,
+    required: required,
+    tabIndex: tabIndex,
+    type: type,
+    value: value
+  }, inputProps)), checked ? checkedIcon : icon);
+}); // NB: If changed, please update Checkbox, Switch and Radio
+// so that the API documentation is updated.
+
+"development" !== "production" ? SwitchBase.propTypes = {
+  /**
+   * If `true`, the `input` element will be focused during the first mount.
+   */
+  autoFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, the component is checked.
+   */
+  checked: _propTypes.default.bool,
+
+  /**
+   * The icon to display when the component is checked.
+   */
+  checkedIcon: _propTypes.default.node.isRequired,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * @ignore
+   */
+  defaultChecked: _propTypes.default.bool,
+
+  /**
+   * If `true`, the switch will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * The icon to display when the component is unchecked.
+   */
+  icon: _propTypes.default.node.isRequired,
+
+  /**
+   * The id of the `input` element.
+   */
+  id: _propTypes.default.string,
+
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _utils.refType,
+
+  /*
+   * @ignore
+   */
+  name: _propTypes.default.string,
+
+  /**
+   * @ignore
+   */
+  onBlur: _propTypes.default.func,
+
+  /**
+   * Callback fired when the state is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new checked state by accessing `event.target.checked` (boolean).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  onFocus: _propTypes.default.func,
+
+  /**
+   * It prevents the user from changing the value of the field
+   * (not from interacting with the field).
+   */
+  readOnly: _propTypes.default.bool,
+
+  /**
+   * If `true`, the `input` element will be required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * @ignore
+   */
+  tabIndex: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.string]),
+
+  /**
+   * The input component prop `type`.
+   */
+  type: _propTypes.default.string.isRequired,
+
+  /**
+   * The value of the component.
+   */
+  value: _propTypes.default.any
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'PrivateSwitchBase'
+})(SwitchBase);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/slicedToArray":"../node_modules/@babel/runtime/helpers/esm/slicedToArray.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../utils/useControlled":"../node_modules/@material-ui/core/esm/utils/useControlled.js","../FormControl/useFormControl":"../node_modules/@material-ui/core/esm/FormControl/useFormControl.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../IconButton":"../node_modules/@material-ui/core/esm/IconButton/index.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/CheckBoxOutlineBlank.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _createSvgIcon = _interopRequireDefault(require("./createSvgIcon"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @ignore - internal component.
+ */
+var _default = (0, _createSvgIcon.default)( /*#__PURE__*/React.createElement("path", {
+  d: "M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"
+}), 'CheckBoxOutlineBlank');
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./createSvgIcon":"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/CheckBox.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _createSvgIcon = _interopRequireDefault(require("./createSvgIcon"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @ignore - internal component.
+ */
+var _default = (0, _createSvgIcon.default)( /*#__PURE__*/React.createElement("path", {
+  d: "M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+}), 'CheckBox');
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./createSvgIcon":"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/IndeterminateCheckBox.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var _createSvgIcon = _interopRequireDefault(require("./createSvgIcon"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @ignore - internal component.
+ */
+var _default = (0, _createSvgIcon.default)( /*#__PURE__*/React.createElement("path", {
+  d: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"
+}), 'IndeterminateCheckBox');
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./createSvgIcon":"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js"}],"../node_modules/@material-ui/core/esm/Checkbox/Checkbox.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _utils = require("@material-ui/utils");
+
+var _SwitchBase = _interopRequireDefault(require("../internal/SwitchBase"));
+
+var _CheckBoxOutlineBlank = _interopRequireDefault(require("../internal/svg-icons/CheckBoxOutlineBlank"));
+
+var _CheckBox = _interopRequireDefault(require("../internal/svg-icons/CheckBox"));
+
+var _colorManipulator = require("../styles/colorManipulator");
+
+var _IndeterminateCheckBox = _interopRequireDefault(require("../internal/svg-icons/IndeterminateCheckBox"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      color: theme.palette.text.secondary
+    },
+
+    /* Pseudo-class applied to the root element if `checked={true}`. */
+    checked: {},
+
+    /* Pseudo-class applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Pseudo-class applied to the root element if `indeterminate={true}`. */
+    indeterminate: {},
+
+    /* Styles applied to the root element if `color="primary"`. */
+    colorPrimary: {
+      '&$checked': {
+        color: theme.palette.primary.main,
+        '&:hover': {
+          backgroundColor: (0, _colorManipulator.fade)(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+          // Reset on touch devices, it doesn't add specificity
+          '@media (hover: none)': {
+            backgroundColor: 'transparent'
+          }
+        }
+      },
+      '&$disabled': {
+        color: theme.palette.action.disabled
+      }
+    },
+
+    /* Styles applied to the root element if `color="secondary"`. */
+    colorSecondary: {
+      '&$checked': {
+        color: theme.palette.secondary.main,
+        '&:hover': {
+          backgroundColor: (0, _colorManipulator.fade)(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+          // Reset on touch devices, it doesn't add specificity
+          '@media (hover: none)': {
+            backgroundColor: 'transparent'
+          }
+        }
+      },
+      '&$disabled': {
+        color: theme.palette.action.disabled
+      }
+    }
+  };
+};
+
+exports.styles = styles;
+var defaultCheckedIcon = /*#__PURE__*/React.createElement(_CheckBox.default, null);
+var defaultIcon = /*#__PURE__*/React.createElement(_CheckBoxOutlineBlank.default, null);
+var defaultIndeterminateIcon = /*#__PURE__*/React.createElement(_IndeterminateCheckBox.default, null);
+var Checkbox = React.forwardRef(function Checkbox(props, ref) {
+  var _props$checkedIcon = props.checkedIcon,
+      checkedIcon = _props$checkedIcon === void 0 ? defaultCheckedIcon : _props$checkedIcon,
+      classes = props.classes,
+      _props$color = props.color,
+      color = _props$color === void 0 ? 'secondary' : _props$color,
+      _props$icon = props.icon,
+      icon = _props$icon === void 0 ? defaultIcon : _props$icon,
+      _props$indeterminate = props.indeterminate,
+      indeterminate = _props$indeterminate === void 0 ? false : _props$indeterminate,
+      _props$indeterminateI = props.indeterminateIcon,
+      indeterminateIcon = _props$indeterminateI === void 0 ? defaultIndeterminateIcon : _props$indeterminateI,
+      inputProps = props.inputProps,
+      _props$size = props.size,
+      size = _props$size === void 0 ? 'medium' : _props$size,
+      other = (0, _objectWithoutProperties2.default)(props, ["checkedIcon", "classes", "color", "icon", "indeterminate", "indeterminateIcon", "inputProps", "size"]);
+  return /*#__PURE__*/React.createElement(_SwitchBase.default, (0, _extends2.default)({
+    type: "checkbox",
+    classes: {
+      root: (0, _clsx.default)(classes.root, classes["color".concat((0, _capitalize.default)(color))], indeterminate && classes.indeterminate),
+      checked: classes.checked,
+      disabled: classes.disabled
+    },
+    color: color,
+    inputProps: (0, _extends2.default)({
+      'data-indeterminate': indeterminate
+    }, inputProps),
+    icon: React.cloneElement(indeterminate ? indeterminateIcon : icon, {
+      fontSize: size === 'small' ? 'small' : 'default'
+    }),
+    checkedIcon: React.cloneElement(indeterminate ? indeterminateIcon : checkedIcon, {
+      fontSize: size === 'small' ? 'small' : 'default'
+    }),
+    ref: ref
+  }, other));
+});
+"development" !== "production" ? Checkbox.propTypes = {
+  /**
+   * If `true`, the component is checked.
+   */
+  checked: _propTypes.default.bool,
+
+  /**
+   * The icon to display when the component is checked.
+   */
+  checkedIcon: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * The color of the component. It supports those theme colors that make sense for this component.
+   */
+  color: _propTypes.default.oneOf(['primary', 'secondary', 'default']),
+
+  /**
+   * If `true`, the checkbox will be disabled.
+   */
+  disabled: _propTypes.default.bool,
+
+  /**
+   * If `true`, the ripple effect will be disabled.
+   */
+  disableRipple: _propTypes.default.bool,
+
+  /**
+   * The icon to display when the component is unchecked.
+   */
+  icon: _propTypes.default.node,
+
+  /**
+   * The id of the `input` element.
+   */
+  id: _propTypes.default.string,
+
+  /**
+   * If `true`, the component appears indeterminate.
+   * This does not set the native input element to indeterminate due
+   * to inconsistent behavior across browsers.
+   * However, we set a `data-indeterminate` attribute on the input.
+   */
+  indeterminate: _propTypes.default.bool,
+
+  /**
+   * The icon to display when the component is indeterminate.
+   */
+  indeterminateIcon: _propTypes.default.node,
+
+  /**
+   * [Attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Attributes) applied to the `input` element.
+   */
+  inputProps: _propTypes.default.object,
+
+  /**
+   * Pass a ref to the `input` element.
+   */
+  inputRef: _utils.refType,
+
+  /**
+   * Callback fired when the state is changed.
+   *
+   * @param {object} event The event source of the callback.
+   * You can pull out the new checked state by accessing `event.target.checked` (boolean).
+   */
+  onChange: _propTypes.default.func,
+
+  /**
+   * If `true`, the `input` element will be required.
+   */
+  required: _propTypes.default.bool,
+
+  /**
+   * The size of the checkbox.
+   * `small` is equivalent to the dense checkbox styling.
+   */
+  size: _propTypes.default.oneOf(['small', 'medium']),
+
+  /**
+   * The value of the component. The DOM API casts this to a string.
+   * The browser uses "on" as the default value.
+   */
+  value: _propTypes.default.any
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiCheckbox'
+})(Checkbox);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../internal/SwitchBase":"../node_modules/@material-ui/core/esm/internal/SwitchBase.js","../internal/svg-icons/CheckBoxOutlineBlank":"../node_modules/@material-ui/core/esm/internal/svg-icons/CheckBoxOutlineBlank.js","../internal/svg-icons/CheckBox":"../node_modules/@material-ui/core/esm/internal/svg-icons/CheckBox.js","../styles/colorManipulator":"../node_modules/@material-ui/core/esm/styles/colorManipulator.js","../internal/svg-icons/IndeterminateCheckBox":"../node_modules/@material-ui/core/esm/internal/svg-icons/IndeterminateCheckBox.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js"}],"../node_modules/@material-ui/core/esm/Checkbox/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Checkbox.default;
+  }
+});
+
+var _Checkbox = _interopRequireDefault(require("./Checkbox"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Checkbox":"../node_modules/@material-ui/core/esm/Checkbox/Checkbox.js"}],"../node_modules/@material-ui/core/esm/Box/Box.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styleFunction = void 0;
+
+var _system = require("@material-ui/system");
+
+var _styled = _interopRequireDefault(require("../styles/styled"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styleFunction = (0, _system.css)((0, _system.compose)(_system.borders, _system.display, _system.flexbox, _system.grid, _system.positions, _system.palette, _system.shadows, _system.sizing, _system.spacing, _system.typography));
+/**
+ * @ignore - do not document.
+ */
+
+exports.styleFunction = styleFunction;
+var Box = (0, _styled.default)('div')(styleFunction, {
+  name: 'MuiBox'
+});
+var _default = Box;
+exports.default = _default;
+},{"@material-ui/system":"../node_modules/@material-ui/system/esm/index.js","../styles/styled":"../node_modules/@material-ui/core/esm/styles/styled.js"}],"../node_modules/@material-ui/core/esm/Box/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Box.default;
+  }
+});
+Object.defineProperty(exports, "styleFunction", {
+  enumerable: true,
+  get: function () {
+    return _Box.styleFunction;
+  }
+});
+
+var _Box = _interopRequireWildcard(require("./Box"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+},{"./Box":"../node_modules/@material-ui/core/esm/Box/Box.js"}],"../node_modules/@material-ui/icons/LockOutlined.js":[function(require,module,exports) {
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _createSvgIcon = _interopRequireDefault(require("./utils/createSvgIcon"));
+
+var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
+  d: "M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6zm9 14H6V10h12v10zm-6-3c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"
+}), 'LockOutlined');
+
+exports.default = _default;
+},{"@babel/runtime/helpers/interopRequireDefault":"../node_modules/@babel/runtime/helpers/interopRequireDefault.js","react":"../node_modules/react/index.js","./utils/createSvgIcon":"../node_modules/@material-ui/icons/utils/createSvgIcon.js"}],"App/pages/SignIn.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = SignIn;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _Avatar = _interopRequireDefault(require("@material-ui/core/Avatar"));
+
+var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
+
+var _CssBaseline = _interopRequireDefault(require("@material-ui/core/CssBaseline"));
+
+var _TextField = _interopRequireDefault(require("@material-ui/core/TextField"));
+
+var _FormControlLabel = _interopRequireDefault(require("@material-ui/core/FormControlLabel"));
+
+var _Checkbox = _interopRequireDefault(require("@material-ui/core/Checkbox"));
+
+var _Link = _interopRequireDefault(require("@material-ui/core/Link"));
+
+var _Grid = _interopRequireDefault(require("@material-ui/core/Grid"));
+
+var _Box = _interopRequireDefault(require("@material-ui/core/Box"));
+
+var _LockOutlined = _interopRequireDefault(require("@material-ui/icons/LockOutlined"));
+
+var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
+
+var _styles = require("@material-ui/core/styles");
+
+var _Container = _interopRequireDefault(require("@material-ui/core/Container"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Copyright() {
+  return _react.default.createElement(_Typography.default, {
+    variant: "body2",
+    color: "textSecondary",
+    align: "center"
+  }, 'Copyright © ', _react.default.createElement(_Link.default, {
+    color: "inherit",
+    href: "https://material-ui.com/"
+  }, "Your Website"), ' ', new Date().getFullYear(), '.');
+}
+
+const useStyles = (0, _styles.makeStyles)(theme => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: '100%',
+    // Fix IE 11 issue.
+    marginTop: theme.spacing(1)
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2)
+  }
+}));
+
+function SignIn() {
+  const classes = useStyles();
+  return _react.default.createElement(_Container.default, {
+    component: "main",
+    maxWidth: "xs"
+  }, _react.default.createElement(_CssBaseline.default, null), _react.default.createElement("div", {
+    className: classes.paper
+  }, _react.default.createElement(_Avatar.default, {
+    className: classes.avatar
+  }, _react.default.createElement(_LockOutlined.default, null)), _react.default.createElement(_Typography.default, {
+    component: "h1",
+    variant: "h5"
+  }, "Sign in"), _react.default.createElement("form", {
+    className: classes.form,
+    noValidate: true
+  }, _react.default.createElement(_TextField.default, {
+    variant: "outlined",
+    margin: "normal",
+    required: true,
+    fullWidth: true,
+    id: "email",
+    label: "Email Address",
+    name: "email",
+    autoComplete: "email",
+    autoFocus: true
+  }), _react.default.createElement(_TextField.default, {
+    variant: "outlined",
+    margin: "normal",
+    required: true,
+    fullWidth: true,
+    name: "password",
+    label: "Password",
+    type: "password",
+    id: "password",
+    autoComplete: "current-password"
+  }), _react.default.createElement(_FormControlLabel.default, {
+    control: _react.default.createElement(_Checkbox.default, {
+      value: "remember",
+      color: "primary"
+    }),
+    label: "Remember me"
+  }), _react.default.createElement(_Button.default, {
+    type: "submit",
+    fullWidth: true,
+    variant: "contained",
+    color: "primary",
+    className: classes.submit
+  }, "Sign In"), _react.default.createElement(_Grid.default, {
+    container: true
+  }, _react.default.createElement(_Grid.default, {
+    item: true,
+    xs: true
+  }, _react.default.createElement(_Link.default, {
+    href: "#",
+    variant: "body2"
+  }, "Forgot password?")), _react.default.createElement(_Grid.default, {
+    item: true
+  }, _react.default.createElement(_Link.default, {
+    href: "#",
+    variant: "body2"
+  }, "Don't have an account? Sign Up"))))), _react.default.createElement(_Box.default, {
+    mt: 8
+  }, _react.default.createElement(Copyright, null)));
+}
+},{"react":"../node_modules/react/index.js","@material-ui/core/Avatar":"../node_modules/@material-ui/core/esm/Avatar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/TextField":"../node_modules/@material-ui/core/esm/TextField/index.js","@material-ui/core/FormControlLabel":"../node_modules/@material-ui/core/esm/FormControlLabel/index.js","@material-ui/core/Checkbox":"../node_modules/@material-ui/core/esm/Checkbox/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Box":"../node_modules/@material-ui/core/esm/Box/index.js","@material-ui/icons/LockOutlined":"../node_modules/@material-ui/icons/LockOutlined.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js"}],"App/pages/SignUp.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = SignUp;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _Avatar = _interopRequireDefault(require("@material-ui/core/Avatar"));
+
+var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
+
+var _CssBaseline = _interopRequireDefault(require("@material-ui/core/CssBaseline"));
+
+var _TextField = _interopRequireDefault(require("@material-ui/core/TextField"));
+
+var _FormControlLabel = _interopRequireDefault(require("@material-ui/core/FormControlLabel"));
+
+var _Checkbox = _interopRequireDefault(require("@material-ui/core/Checkbox"));
+
+var _Link = _interopRequireDefault(require("@material-ui/core/Link"));
+
+var _Grid = _interopRequireDefault(require("@material-ui/core/Grid"));
+
+var _Box = _interopRequireDefault(require("@material-ui/core/Box"));
+
+var _LockOutlined = _interopRequireDefault(require("@material-ui/icons/LockOutlined"));
+
+var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
+
+var _styles = require("@material-ui/core/styles");
+
+var _Container = _interopRequireDefault(require("@material-ui/core/Container"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Copyright() {
+  return _react.default.createElement(_Typography.default, {
+    variant: "body2",
+    color: "textSecondary",
+    align: "center"
+  }, 'Copyright © ', _react.default.createElement(_Link.default, {
+    color: "inherit",
+    href: "https://material-ui.com/"
+  }, "Your Website"), ' ', new Date().getFullYear(), '.');
+}
+
+const useStyles = (0, _styles.makeStyles)(theme => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main
+  },
+  form: {
+    width: '100%',
+    // Fix IE 11 issue.
+    marginTop: theme.spacing(3)
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2)
+  }
+}));
+
+function SignUp() {
+  const classes = useStyles();
+  return _react.default.createElement(_Container.default, {
+    component: "main",
+    maxWidth: "xs"
+  }, _react.default.createElement(_CssBaseline.default, null), _react.default.createElement("div", {
+    className: classes.paper
+  }, _react.default.createElement(_Avatar.default, {
+    className: classes.avatar
+  }, _react.default.createElement(_LockOutlined.default, null)), _react.default.createElement(_Typography.default, {
+    component: "h1",
+    variant: "h5"
+  }, "Sign up"), _react.default.createElement("form", {
+    className: classes.form,
+    noValidate: true
+  }, _react.default.createElement(_Grid.default, {
+    container: true,
+    spacing: 2
+  }, _react.default.createElement(_Grid.default, {
+    item: true,
+    xs: 12
+  }, _react.default.createElement(_TextField.default, {
+    variant: "outlined",
+    required: true,
+    fullWidth: true,
+    id: "email",
+    label: "Email Address",
+    name: "email",
+    autoComplete: "email"
+  })), _react.default.createElement(_Grid.default, {
+    item: true,
+    xs: 12
+  }, _react.default.createElement(_TextField.default, {
+    variant: "outlined",
+    required: true,
+    fullWidth: true,
+    name: "password",
+    label: "Password",
+    type: "password",
+    id: "password",
+    autoComplete: "current-password"
+  }))), _react.default.createElement(_Button.default, {
+    type: "submit",
+    fullWidth: true,
+    variant: "contained",
+    color: "primary",
+    className: classes.submit
+  }, "Sign Up"), _react.default.createElement(_Grid.default, {
+    container: true,
+    justify: "flex-end"
+  }, _react.default.createElement(_Grid.default, {
+    item: true
+  }, _react.default.createElement(_Link.default, {
+    href: "#",
+    variant: "body2"
+  }, "Already have an account? Sign in"))))), _react.default.createElement(_Box.default, {
+    mt: 5
+  }, _react.default.createElement(Copyright, null)));
+}
+},{"react":"../node_modules/react/index.js","@material-ui/core/Avatar":"../node_modules/@material-ui/core/esm/Avatar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/TextField":"../node_modules/@material-ui/core/esm/TextField/index.js","@material-ui/core/FormControlLabel":"../node_modules/@material-ui/core/esm/FormControlLabel/index.js","@material-ui/core/Checkbox":"../node_modules/@material-ui/core/esm/Checkbox/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Box":"../node_modules/@material-ui/core/esm/Box/index.js","@material-ui/icons/LockOutlined":"../node_modules/@material-ui/icons/LockOutlined.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js"}],"App/components/Nav.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51585,6 +61440,12 @@ var _Portfolio = _interopRequireDefault(require("./pages/Portfolio"));
 
 var _RestaurantList = _interopRequireDefault(require("./pages/RestaurantList"));
 
+var _RestaurantPage = _interopRequireDefault(require("./pages/RestaurantPage"));
+
+var _SignIn = _interopRequireDefault(require("./pages/SignIn"));
+
+var _SignUp = _interopRequireDefault(require("./pages/SignUp"));
+
 var _Nav = _interopRequireDefault(require("./components/Nav"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -51595,7 +61456,7 @@ class Main extends _react.default.Component {
   render() {
     return _react.default.createElement("div", {
       className: "wrapper"
-    }, _react.default.createElement(_Nav.default, null), _react.default.createElement(_reactRouterDom.Route, {
+    }, _react.default.createElement(_Nav.default, null), _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
       exact: true,
       path: "/",
       component: _Home.default
@@ -51609,15 +61470,24 @@ class Main extends _react.default.Component {
       path: "/portfolio",
       component: _Portfolio.default
     }), _react.default.createElement(_reactRouterDom.Route, {
+      path: "/signup",
+      component: _SignUp.default
+    }), _react.default.createElement(_reactRouterDom.Route, {
+      path: "/signin",
+      component: _SignIn.default
+    }), _react.default.createElement(_reactRouterDom.Route, {
       path: "/restaurantlist",
       component: _RestaurantList.default
-    }));
+    }), _react.default.createElement(_reactRouterDom.Route, {
+      path: "/:id",
+      component: _RestaurantPage.default
+    })));
   }
 
 }
 
 exports.default = Main;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/About":"App/pages/About.js","./pages/Contact":"App/pages/Contact.js","./pages/Home":"App/pages/Home.js","./pages/Portfolio":"App/pages/Portfolio.js","./pages/RestaurantList":"App/pages/RestaurantList.js","./components/Nav":"App/components/Nav.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/About":"App/pages/About.js","./pages/Contact":"App/pages/Contact.js","./pages/Home":"App/pages/Home.js","./pages/Portfolio":"App/pages/Portfolio.js","./pages/RestaurantList":"App/pages/RestaurantList.js","./pages/RestaurantPage":"App/pages/RestaurantPage.js","./pages/SignIn":"App/pages/SignIn.js","./pages/SignUp":"App/pages/SignUp.js","./components/Nav":"App/components/Nav.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));

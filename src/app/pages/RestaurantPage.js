@@ -10,20 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 
-import RestaurantCard from './../components/RestaurantCard'
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import FoodCard from './../components/FoodCard';
 
 const styles = (theme) => ({
     icon: {
@@ -57,9 +44,9 @@ const styles = (theme) => ({
     },
 });
 
-const cards = [1, 2, 3, 4];
+const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-class RestaurantList extends React.Component {
+class RestaurantPage extends React.Component {
     constructor(props) {
         super(props);
 
@@ -72,21 +59,11 @@ class RestaurantList extends React.Component {
         const { classes } = this.props;
         return (
             <React.Fragment>
-            <CssBaseline />
-            {/* <AppBar position="relative">
-                <Toolbar>
-                <CameraIcon />
-                <Typography variant="h6" color="inherit" noWrap>
-                    Album layout
-                </Typography>
-                </Toolbar>
-            </AppBar> */}
-            <main>
                 {/* Hero unit */}
                 <div className={classes.heroContent}>
                 <Container maxWidth="sm">
                     <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                        Our Restaurants
+                        PAGE
                     </Typography>
                     {/* <Typography variant="h5" align="center" color="textSecondary" paragraph>
 
@@ -110,45 +87,18 @@ class RestaurantList extends React.Component {
                 <Container className={classes.cardGrid} maxWidth="md">
                 {/* End hero unit */}
                 <Grid container spacing={4}>
-                    <Grid item key={"kfc"} xs={12} sm={6} md={4}>
-                        <RestaurantCard
-                            imageUrl="https://source.unsplash.com/HYpXP6Zk1dw/640x428"
-                            restaurantUrl="/kfc"
-                            title="KFC"
-                            description="Fast Food"
+                    {cards.map((card) => (
+                    <Grid item key={card} xs={12} sm={6} md={4}>
+                        <FoodCard
+                            imageUrl="https://source.unsplash.com/JorKKx5rvA0/640x426"
+                            title="McSpicy Value Meal"
+                            description=""
                         >
-                        </RestaurantCard>
+                        </FoodCard>
                     </Grid>
-                    <Grid item key={"mcdonalds"} xs={12} sm={6} md={4}>
-                        <RestaurantCard
-                            imageUrl="https://source.unsplash.com/wqyanQ8ibTE/640x480"
-                            restaurantUrl="/mcdonalds"
-                            title="McDonalds"
-                            description="Fast Food"
-                        >
-                        </RestaurantCard>
-                    </Grid>
-                    <Grid item key={"domino-pizza"} xs={12} sm={6} md={4}>
-                        <RestaurantCard
-                            imageUrl="https://source.unsplash.com/SU1LFoeEUkk/640x423"
-                            restaurantUrl="/domino-pizza"
-                            title="Domino Pizza"
-                            description="Pizza"
-                        >
-                        </RestaurantCard>
-                    </Grid>
-                    <Grid item key={"pizza-hut"} xs={12} sm={6} md={4}>
-                        <RestaurantCard
-                            imageUrl="https://source.unsplash.com/SU1LFoeEUkk/640x423"
-                            restaurantUrl="/pizza-hut"
-                            title="Pizza Hut"
-                            description="Pizza"
-                        >
-                        </RestaurantCard>
-                    </Grid>
+                    ))}
                 </Grid>
                 </Container>
-            </main>
             {/* Footer */}
             <footer className={classes.footer}>
                 <Typography variant="h6" align="center" gutterBottom>
@@ -157,7 +107,6 @@ class RestaurantList extends React.Component {
                 <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
                 Something here to give the footer a purpose!
                 </Typography>
-                <Copyright />
             </footer>
             {/* End footer */}
             </React.Fragment>
@@ -165,4 +114,4 @@ class RestaurantList extends React.Component {
     }
 }
 
-export default withStyles(styles)(RestaurantList);
+export default withStyles(styles)(RestaurantPage);
