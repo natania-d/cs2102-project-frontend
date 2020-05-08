@@ -51284,13 +51284,18 @@ function RestaurantCard(props) {
   let history = (0, _reactRouterDom.useHistory)();
 
   function handleClick() {
-    history.push(props.restaurantUrl);
+    history.push({
+      pathname: props.restaurantUrl,
+      state: {
+        props
+      }
+    });
   }
 
   return _react.default.createElement(_Card.default, {
     className: classes.card,
     onClick: handleClick
-  }, _react.default.createElement(_CardMedia.default, {
+  }, props.imageUrl && _react.default.createElement(_CardMedia.default, {
     className: classes.cardMedia,
     image: props.imageUrl
   }), _react.default.createElement(_CardContent.default, {
@@ -51299,7 +51304,7 @@ function RestaurantCard(props) {
     gutterBottom: true,
     variant: "h5",
     component: "h2"
-  }, props.title), _react.default.createElement(_Typography.default, null, props.description)));
+  }, props.title), props.description && _react.default.createElement(_Typography.default, null, props.description)));
 } // export default class RestaurantCard extends React.Component {
 //     constructor(props) {
 //         super(props)
@@ -51337,7 +51342,24 @@ function RestaurantCard(props) {
 //         );
 //     }
 // }
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"App/pages/RestaurantList.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"App/constants/constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.encodeGetParams = encodeGetParams;
+exports.TEST = exports.SERVER_URL = void 0;
+const SERVER_URL = 'http://localhost:9999/api';
+exports.SERVER_URL = SERVER_URL;
+const TEST = true;
+exports.TEST = TEST;
+
+function encodeGetParams(p) {
+  const parameters = Object.entries(p).map(kv => kv.map(encodeURIComponent).join("=")).join("&");
+  return parameters;
+}
+},{}],"App/pages/RestaurantList.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51368,6 +51390,8 @@ var _Container = _interopRequireDefault(require("@material-ui/core/Container"));
 var _Link = _interopRequireDefault(require("@material-ui/core/Link"));
 
 var _RestaurantCard = _interopRequireDefault(require("./../components/RestaurantCard"));
+
+var _constants = require("./../constants/constants");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51420,13 +51444,40 @@ const cards = [1, 2, 3, 4];
 class RestaurantList extends _react.default.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      restaurants: []
+    };
+  }
+
+  componentDidMount() {
+    const {
+      restaurants
+    } = this.state;
+    const req = new Request(`${_constants.SERVER_URL}/restaurants/all`, {
+      method: 'GET' // headers: {
+      //     'Content-Type': 'application/json',
+      // },
+
+    });
+    fetch(req).then(response => response.json()).then(data => {
+      console.log(data);
+      this.setState({
+        restaurants: data.result
+      });
+    }).catch(error => {
+      console.log("error");
+    }); // if (TEST) {
+    //   window.location.assign('/restaurantlist')
+    // }
   }
 
   render() {
     const {
       classes
     } = this.props;
+    const {
+      restaurants
+    } = this.state;
     return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_CssBaseline.default, null), _react.default.createElement("main", null, _react.default.createElement("div", {
       className: classes.heroContent
     }, _react.default.createElement(_Container.default, {
@@ -51443,51 +51494,22 @@ class RestaurantList extends _react.default.Component {
     }, _react.default.createElement(_Grid.default, {
       container: true,
       spacing: 4
-    }, _react.default.createElement(_Grid.default, {
-      item: true,
-      key: "kfc",
-      xs: 12,
-      sm: 6,
-      md: 4
-    }, _react.default.createElement(_RestaurantCard.default, {
-      imageUrl: "https://source.unsplash.com/HYpXP6Zk1dw/640x428",
-      restaurantUrl: "/kfc",
-      title: "KFC",
-      description: "Fast Food"
-    })), _react.default.createElement(_Grid.default, {
-      item: true,
-      key: "mcdonalds",
-      xs: 12,
-      sm: 6,
-      md: 4
-    }, _react.default.createElement(_RestaurantCard.default, {
-      imageUrl: "https://source.unsplash.com/wqyanQ8ibTE/640x480",
-      restaurantUrl: "/mcdonalds",
-      title: "McDonalds",
-      description: "Fast Food"
-    })), _react.default.createElement(_Grid.default, {
-      item: true,
-      key: "domino-pizza",
-      xs: 12,
-      sm: 6,
-      md: 4
-    }, _react.default.createElement(_RestaurantCard.default, {
-      imageUrl: "https://source.unsplash.com/SU1LFoeEUkk/640x423",
-      restaurantUrl: "/domino-pizza",
-      title: "Domino Pizza",
-      description: "Pizza"
-    })), _react.default.createElement(_Grid.default, {
-      item: true,
-      key: "pizza-hut",
-      xs: 12,
-      sm: 6,
-      md: 4
-    }, _react.default.createElement(_RestaurantCard.default, {
-      imageUrl: "https://source.unsplash.com/SU1LFoeEUkk/640x423",
-      restaurantUrl: "/pizza-hut",
-      title: "Pizza Hut",
-      description: "Pizza"
-    }))))), _react.default.createElement("footer", {
+    }, restaurants.map(restaurant => {
+      return _react.default.createElement(_Grid.default, {
+        item: true,
+        key: restaurant.rid,
+        xs: 12,
+        sm: 6,
+        md: 4
+      }, _react.default.createElement(_RestaurantCard.default, {
+        imageUrl: "https://source.unsplash.com/HYpXP6Zk1dw/640x428",
+        restaurantUrl: "/" + restaurant.rname,
+        title: restaurant.rname,
+        location: restaurant.location,
+        minOrderPrice: restaurant.minimumOrderPrice,
+        rid: restaurant.rid
+      }));
+    })))), _react.default.createElement("footer", {
       className: classes.footer
     }, _react.default.createElement(_Typography.default, {
       variant: "h6",
@@ -51506,7 +51528,2439 @@ class RestaurantList extends _react.default.Component {
 var _default = (0, _styles.withStyles)(styles)(RestaurantList);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","./../components/RestaurantCard":"App/components/RestaurantCard.js"}],"App/components/FoodCard.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","./../components/RestaurantCard":"App/components/RestaurantCard.js","./../constants/constants":"App/constants/constants.js"}],"../node_modules/@material-ui/core/esm/utils/ownerDocument.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ownerDocument;
+
+function ownerDocument(node) {
+  return node && node.ownerDocument || document;
+}
+},{}],"../node_modules/@material-ui/core/esm/Portal/Portal.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _utils = require("@material-ui/utils");
+
+var _setRef = _interopRequireDefault(require("../utils/setRef"));
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function getContainer(container) {
+  container = typeof container === 'function' ? container() : container; // #StrictMode ready
+
+  return ReactDOM.findDOMNode(container);
+}
+
+var useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+/**
+ * Portals provide a first-class way to render children into a DOM node
+ * that exists outside the DOM hierarchy of the parent component.
+ */
+
+var Portal = React.forwardRef(function Portal(props, ref) {
+  var children = props.children,
+      container = props.container,
+      _props$disablePortal = props.disablePortal,
+      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
+      onRendered = props.onRendered;
+
+  var _React$useState = React.useState(null),
+      mountNode = _React$useState[0],
+      setMountNode = _React$useState[1];
+
+  var handleRef = (0, _useForkRef.default)(React.isValidElement(children) ? children.ref : null, ref);
+  useEnhancedEffect(function () {
+    if (!disablePortal) {
+      setMountNode(getContainer(container) || document.body);
+    }
+  }, [container, disablePortal]);
+  useEnhancedEffect(function () {
+    if (mountNode && !disablePortal) {
+      (0, _setRef.default)(ref, mountNode);
+      return function () {
+        (0, _setRef.default)(ref, null);
+      };
+    }
+
+    return undefined;
+  }, [ref, mountNode, disablePortal]);
+  useEnhancedEffect(function () {
+    if (onRendered && (mountNode || disablePortal)) {
+      onRendered();
+    }
+  }, [onRendered, mountNode, disablePortal]);
+
+  if (disablePortal) {
+    if (React.isValidElement(children)) {
+      return React.cloneElement(children, {
+        ref: handleRef
+      });
+    }
+
+    return children;
+  }
+
+  return mountNode ? ReactDOM.createPortal(children, mountNode) : mountNode;
+});
+"development" !== "production" ? Portal.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * The children to render into the `container`.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * A node, component instance, or function that returns either.
+   * The `container` will have the portal children appended to it.
+   * By default, it uses the body of the top-level document object,
+   * so it's simply `document.body` most of the time.
+   */
+  container: _propTypes.default.oneOfType([_propTypes.default.func, _propTypes.default.instanceOf(React.Component), _propTypes.default.instanceOf(typeof Element === 'undefined' ? Object : Element)]),
+
+  /**
+   * Disable the portal behavior.
+   * The children stay within it's parent DOM hierarchy.
+   */
+  disablePortal: _propTypes.default.bool,
+
+  /**
+   * Callback fired once the children has been mounted into the `container`.
+   *
+   * This prop will be deprecated and removed in v5, the ref can be used instead.
+   */
+  onRendered: _propTypes.default.func
+} : void 0;
+
+if ("development" !== 'production') {
+  // eslint-disable-next-line
+  Portal['propTypes' + ''] = (0, _utils.exactProp)(Portal.propTypes);
+}
+
+var _default = Portal;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../utils/setRef":"../node_modules/@material-ui/core/esm/utils/setRef.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/Portal/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Portal.default;
+  }
+});
+
+var _Portal = _interopRequireDefault(require("./Portal"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Portal":"../node_modules/@material-ui/core/esm/Portal/Portal.js"}],"../node_modules/@material-ui/core/esm/utils/createChainedFunction.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createChainedFunction;
+
+/**
+ * Safe chained function
+ *
+ * Will only create a new function if needed,
+ * otherwise will pass back existing functions or null.
+ *
+ * @param {function} functions to chain
+ * @returns {function|null}
+ */
+function createChainedFunction() {
+  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  return funcs.reduce(function (acc, func) {
+    if (func == null) {
+      return acc;
+    }
+
+    if ("development" !== 'production') {
+      if (typeof func !== 'function') {
+        console.error('Material-UI: invalid Argument Type, must only provide functions, undefined, or null.');
+      }
+    }
+
+    return function chainedFunction() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      acc.apply(this, args);
+      func.apply(this, args);
+    };
+  }, function () {});
+}
+},{}],"../node_modules/@material-ui/core/esm/utils/getScrollbarSize.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getScrollbarSize;
+
+// A change of the browser zoom change the scrollbar size.
+// Credit https://github.com/twbs/bootstrap/blob/3ffe3a5d82f6f561b82ff78d82b32a7d14aed558/js/src/modal.js#L512-L519
+function getScrollbarSize() {
+  var scrollDiv = document.createElement('div');
+  scrollDiv.style.width = '99px';
+  scrollDiv.style.height = '99px';
+  scrollDiv.style.position = 'absolute';
+  scrollDiv.style.top = '-9999px';
+  scrollDiv.style.overflow = 'scroll';
+  document.body.appendChild(scrollDiv);
+  var scrollbarSize = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+  document.body.removeChild(scrollDiv);
+  return scrollbarSize;
+}
+},{}],"../node_modules/@material-ui/core/esm/utils/ownerWindow.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ownerWindow;
+
+var _ownerDocument = _interopRequireDefault(require("./ownerDocument"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ownerWindow(node) {
+  var doc = (0, _ownerDocument.default)(node);
+  return doc.defaultView || window;
+}
+},{"./ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js"}],"../node_modules/@material-ui/core/esm/Modal/ModalManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ariaHidden = ariaHidden;
+exports.default = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/createClass"));
+
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/toConsumableArray"));
+
+var _getScrollbarSize = _interopRequireDefault(require("../utils/getScrollbarSize"));
+
+var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
+
+var _ownerWindow = _interopRequireDefault(require("../utils/ownerWindow"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Is a vertical scrollbar displayed?
+function isOverflowing(container) {
+  var doc = (0, _ownerDocument.default)(container);
+
+  if (doc.body === container) {
+    return (0, _ownerWindow.default)(doc).innerWidth > doc.documentElement.clientWidth;
+  }
+
+  return container.scrollHeight > container.clientHeight;
+}
+
+function ariaHidden(node, show) {
+  if (show) {
+    node.setAttribute('aria-hidden', 'true');
+  } else {
+    node.removeAttribute('aria-hidden');
+  }
+}
+
+function getPaddingRight(node) {
+  return parseInt(window.getComputedStyle(node)['padding-right'], 10) || 0;
+}
+
+function ariaHiddenSiblings(container, mountNode, currentNode) {
+  var nodesToExclude = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+  var show = arguments.length > 4 ? arguments[4] : undefined;
+  var blacklist = [mountNode, currentNode].concat((0, _toConsumableArray2.default)(nodesToExclude));
+  var blacklistTagNames = ['TEMPLATE', 'SCRIPT', 'STYLE'];
+  [].forEach.call(container.children, function (node) {
+    if (node.nodeType === 1 && blacklist.indexOf(node) === -1 && blacklistTagNames.indexOf(node.tagName) === -1) {
+      ariaHidden(node, show);
+    }
+  });
+}
+
+function findIndexOf(containerInfo, callback) {
+  var idx = -1;
+  containerInfo.some(function (item, index) {
+    if (callback(item)) {
+      idx = index;
+      return true;
+    }
+
+    return false;
+  });
+  return idx;
+}
+
+function handleContainer(containerInfo, props) {
+  var restoreStyle = [];
+  var restorePaddings = [];
+  var container = containerInfo.container;
+  var fixedNodes;
+
+  if (!props.disableScrollLock) {
+    if (isOverflowing(container)) {
+      // Compute the size before applying overflow hidden to avoid any scroll jumps.
+      var scrollbarSize = (0, _getScrollbarSize.default)();
+      restoreStyle.push({
+        value: container.style.paddingRight,
+        key: 'padding-right',
+        el: container
+      }); // Use computed style, here to get the real padding to add our scrollbar width.
+
+      container.style['padding-right'] = "".concat(getPaddingRight(container) + scrollbarSize, "px"); // .mui-fixed is a global helper.
+
+      fixedNodes = (0, _ownerDocument.default)(container).querySelectorAll('.mui-fixed');
+      [].forEach.call(fixedNodes, function (node) {
+        restorePaddings.push(node.style.paddingRight);
+        node.style.paddingRight = "".concat(getPaddingRight(node) + scrollbarSize, "px");
+      });
+    } // Improve Gatsby support
+    // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
+
+
+    var parent = container.parentElement;
+    var scrollContainer = parent.nodeName === 'HTML' && window.getComputedStyle(parent)['overflow-y'] === 'scroll' ? parent : container; // Block the scroll even if no scrollbar is visible to account for mobile keyboard
+    // screensize shrink.
+
+    restoreStyle.push({
+      value: scrollContainer.style.overflow,
+      key: 'overflow',
+      el: scrollContainer
+    });
+    scrollContainer.style.overflow = 'hidden';
+  }
+
+  var restore = function restore() {
+    if (fixedNodes) {
+      [].forEach.call(fixedNodes, function (node, i) {
+        if (restorePaddings[i]) {
+          node.style.paddingRight = restorePaddings[i];
+        } else {
+          node.style.removeProperty('padding-right');
+        }
+      });
+    }
+
+    restoreStyle.forEach(function (_ref) {
+      var value = _ref.value,
+          el = _ref.el,
+          key = _ref.key;
+
+      if (value) {
+        el.style.setProperty(key, value);
+      } else {
+        el.style.removeProperty(key);
+      }
+    });
+  };
+
+  return restore;
+}
+
+function getHiddenSiblings(container) {
+  var hiddenSiblings = [];
+  [].forEach.call(container.children, function (node) {
+    if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') {
+      hiddenSiblings.push(node);
+    }
+  });
+  return hiddenSiblings;
+}
+/**
+ * @ignore - do not document.
+ *
+ * Proper state management for containers and the modals in those containers.
+ * Simplified, but inspired by react-overlay's ModalManager class.
+ * Used by the Modal to ensure proper styling of containers.
+ */
+
+
+var ModalManager = /*#__PURE__*/function () {
+  function ModalManager() {
+    (0, _classCallCheck2.default)(this, ModalManager); // this.modals[modalIndex] = modal
+
+    this.modals = []; // this.containers[containerIndex] = {
+    //   modals: [],
+    //   container,
+    //   restore: null,
+    // }
+
+    this.containers = [];
+  }
+
+  (0, _createClass2.default)(ModalManager, [{
+    key: "add",
+    value: function add(modal, container) {
+      var modalIndex = this.modals.indexOf(modal);
+
+      if (modalIndex !== -1) {
+        return modalIndex;
+      }
+
+      modalIndex = this.modals.length;
+      this.modals.push(modal); // If the modal we are adding is already in the DOM.
+
+      if (modal.modalRef) {
+        ariaHidden(modal.modalRef, false);
+      }
+
+      var hiddenSiblingNodes = getHiddenSiblings(container);
+      ariaHiddenSiblings(container, modal.mountNode, modal.modalRef, hiddenSiblingNodes, true);
+      var containerIndex = findIndexOf(this.containers, function (item) {
+        return item.container === container;
+      });
+
+      if (containerIndex !== -1) {
+        this.containers[containerIndex].modals.push(modal);
+        return modalIndex;
+      }
+
+      this.containers.push({
+        modals: [modal],
+        container: container,
+        restore: null,
+        hiddenSiblingNodes: hiddenSiblingNodes
+      });
+      return modalIndex;
+    }
+  }, {
+    key: "mount",
+    value: function mount(modal, props) {
+      var containerIndex = findIndexOf(this.containers, function (item) {
+        return item.modals.indexOf(modal) !== -1;
+      });
+      var containerInfo = this.containers[containerIndex];
+
+      if (!containerInfo.restore) {
+        containerInfo.restore = handleContainer(containerInfo, props);
+      }
+    }
+  }, {
+    key: "remove",
+    value: function remove(modal) {
+      var modalIndex = this.modals.indexOf(modal);
+
+      if (modalIndex === -1) {
+        return modalIndex;
+      }
+
+      var containerIndex = findIndexOf(this.containers, function (item) {
+        return item.modals.indexOf(modal) !== -1;
+      });
+      var containerInfo = this.containers[containerIndex];
+      containerInfo.modals.splice(containerInfo.modals.indexOf(modal), 1);
+      this.modals.splice(modalIndex, 1); // If that was the last modal in a container, clean up the container.
+
+      if (containerInfo.modals.length === 0) {
+        // The modal might be closed before it had the chance to be mounted in the DOM.
+        if (containerInfo.restore) {
+          containerInfo.restore();
+        }
+
+        if (modal.modalRef) {
+          // In case the modal wasn't in the DOM yet.
+          ariaHidden(modal.modalRef, true);
+        }
+
+        ariaHiddenSiblings(containerInfo.container, modal.mountNode, modal.modalRef, containerInfo.hiddenSiblingNodes, false);
+        this.containers.splice(containerIndex, 1);
+      } else {
+        // Otherwise make sure the next top modal is visible to a screen reader.
+        var nextTop = containerInfo.modals[containerInfo.modals.length - 1]; // as soon as a modal is adding its modalRef is undefined. it can't set
+        // aria-hidden because the dom element doesn't exist either
+        // when modal was unmounted before modalRef gets null
+
+        if (nextTop.modalRef) {
+          ariaHidden(nextTop.modalRef, false);
+        }
+      }
+
+      return modalIndex;
+    }
+  }, {
+    key: "isTopModal",
+    value: function isTopModal(modal) {
+      return this.modals.length > 0 && this.modals[this.modals.length - 1] === modal;
+    }
+  }]);
+  return ModalManager;
+}();
+
+exports.default = ModalManager;
+},{"@babel/runtime/helpers/esm/classCallCheck":"../node_modules/@babel/runtime/helpers/esm/classCallCheck.js","@babel/runtime/helpers/esm/createClass":"../node_modules/@babel/runtime/helpers/esm/createClass.js","@babel/runtime/helpers/esm/toConsumableArray":"../node_modules/@babel/runtime/helpers/esm/toConsumableArray.js","../utils/getScrollbarSize":"../node_modules/@material-ui/core/esm/utils/getScrollbarSize.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../utils/ownerWindow":"../node_modules/@material-ui/core/esm/utils/ownerWindow.js"}],"../node_modules/@material-ui/core/esm/Modal/TrapFocus.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/* eslint-disable consistent-return, jsx-a11y/no-noninteractive-tabindex */
+
+/**
+ * @ignore - internal component.
+ */
+function TrapFocus(props) {
+  var children = props.children,
+      _props$disableAutoFoc = props.disableAutoFocus,
+      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
+      _props$disableEnforce = props.disableEnforceFocus,
+      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
+      _props$disableRestore = props.disableRestoreFocus,
+      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
+      getDoc = props.getDoc,
+      isEnabled = props.isEnabled,
+      open = props.open;
+  var ignoreNextEnforceFocus = React.useRef();
+  var sentinelStart = React.useRef(null);
+  var sentinelEnd = React.useRef(null);
+  var nodeToRestore = React.useRef();
+  var rootRef = React.useRef(null); // can be removed once we drop support for non ref forwarding class components
+
+  var handleOwnRef = React.useCallback(function (instance) {
+    // #StrictMode ready
+    rootRef.current = ReactDOM.findDOMNode(instance);
+  }, []);
+  var handleRef = (0, _useForkRef.default)(children.ref, handleOwnRef); // ⚠️ You may rely on React.useMemo as a performance optimization, not as a semantic guarantee.
+  // https://reactjs.org/docs/hooks-reference.html#usememo
+
+  React.useMemo(function () {
+    if (!open || typeof window === 'undefined') {
+      return;
+    }
+
+    nodeToRestore.current = getDoc().activeElement;
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  React.useEffect(function () {
+    if (!open) {
+      return;
+    }
+
+    var doc = (0, _ownerDocument.default)(rootRef.current); // We might render an empty child.
+
+    if (!disableAutoFocus && rootRef.current && !rootRef.current.contains(doc.activeElement)) {
+      if (!rootRef.current.hasAttribute('tabIndex')) {
+        if ("development" !== 'production') {
+          console.error(['Material-UI: the modal content node does not accept focus.', 'For the benefit of assistive technologies, ' + 'the tabIndex of the node is being set to "-1".'].join('\n'));
+        }
+
+        rootRef.current.setAttribute('tabIndex', -1);
+      }
+
+      rootRef.current.focus();
+    }
+
+    var contain = function contain() {
+      if (disableEnforceFocus || !isEnabled() || ignoreNextEnforceFocus.current) {
+        ignoreNextEnforceFocus.current = false;
+        return;
+      }
+
+      if (rootRef.current && !rootRef.current.contains(doc.activeElement)) {
+        rootRef.current.focus();
+      }
+    };
+
+    var loopFocus = function loopFocus(event) {
+      // 9 = Tab
+      if (disableEnforceFocus || !isEnabled() || event.keyCode !== 9) {
+        return;
+      } // Make sure the next tab starts from the right place.
+
+
+      if (doc.activeElement === rootRef.current) {
+        // We need to ignore the next contain as
+        // it will try to move the focus back to the rootRef element.
+        ignoreNextEnforceFocus.current = true;
+
+        if (event.shiftKey) {
+          sentinelEnd.current.focus();
+        } else {
+          sentinelStart.current.focus();
+        }
+      }
+    };
+
+    doc.addEventListener('focus', contain, true);
+    doc.addEventListener('keydown', loopFocus, true); // With Edge, Safari and Firefox, no focus related events are fired when the focused area stops being a focused area
+    // e.g. https://bugzilla.mozilla.org/show_bug.cgi?id=559561.
+    //
+    // The whatwg spec defines how the browser should behave but does not explicitly mention any events:
+    // https://html.spec.whatwg.org/multipage/interaction.html#focus-fixup-rule.
+
+    var interval = setInterval(function () {
+      contain();
+    }, 50);
+    return function () {
+      clearInterval(interval);
+      doc.removeEventListener('focus', contain, true);
+      doc.removeEventListener('keydown', loopFocus, true); // restoreLastFocus()
+
+      if (!disableRestoreFocus) {
+        // In IE 11 it is possible for document.activeElement to be null resulting
+        // in nodeToRestore.current being null.
+        // Not all elements in IE 11 have a focus method.
+        // Once IE 11 support is dropped the focus() call can be unconditional.
+        if (nodeToRestore.current && nodeToRestore.current.focus) {
+          nodeToRestore.current.focus();
+        }
+
+        nodeToRestore.current = null;
+      }
+    };
+  }, [disableAutoFocus, disableEnforceFocus, disableRestoreFocus, isEnabled, open]);
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    tabIndex: 0,
+    ref: sentinelStart,
+    "data-test": "sentinelStart"
+  }), React.cloneElement(children, {
+    ref: handleRef
+  }), /*#__PURE__*/React.createElement("div", {
+    tabIndex: 0,
+    ref: sentinelEnd,
+    "data-test": "sentinelEnd"
+  }));
+}
+
+"development" !== "production" ? TrapFocus.propTypes = {
+  /**
+   * A single child content element.
+   */
+  children: _propTypes.default.element.isRequired,
+
+  /**
+   * If `true`, the modal will not automatically shift focus to itself when it opens, and
+   * replace it to the last focused element when it closes.
+   * This also works correctly with any modal children that have the `disableAutoFocus` prop.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableAutoFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, the modal will not prevent focus from leaving the modal while open.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableEnforceFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, the modal will not restore focus to previously focused element once
+   * modal is hidden.
+   */
+  disableRestoreFocus: _propTypes.default.bool,
+
+  /**
+   * Return the document to consider.
+   * We use it to implement the restore focus between different browser documents.
+   */
+  getDoc: _propTypes.default.func.isRequired,
+
+  /**
+   * Do we still want to enforce the focus?
+   * This prop helps nesting TrapFocus elements.
+   */
+  isEnabled: _propTypes.default.func.isRequired,
+
+  /**
+   * If `true`, the modal is open.
+   */
+  open: _propTypes.default.bool.isRequired
+} : void 0;
+/*
+
+In the future, we should be able to replace TrapFocus with:
+https://github.com/facebook/react/blob/master/packages/react-events/docs/FocusScope.md
+
+```jsx
+import FocusScope from 'react-dom/FocusScope';
+
+function TrapFocus(props) {
+  const {
+    children
+    disableAutoFocus = false,
+    disableEnforceFocus = false,
+    disableRestoreFocus = false,
+    open,
+  } = props;
+
+  if (!open) {
+    return children;
+  }
+
+  return (
+    <FocusScope
+      autoFocus={!disableAutoFocus}
+      contain={!disableEnforceFocus}
+      restoreFocus={!disableRestoreFocus}
+    >
+      {children}
+    </FocusScope>
+  );
+}
+```
+
+*/
+
+var _default = TrapFocus;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/Modal/SimpleBackdrop.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    zIndex: -1,
+    position: 'fixed',
+    right: 0,
+    bottom: 0,
+    top: 0,
+    left: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    WebkitTapHighlightColor: 'transparent'
+  },
+
+  /* Styles applied to the root element if `invisible={true}`. */
+  invisible: {
+    backgroundColor: 'transparent'
+  }
+};
+/**
+ * @ignore - internal component.
+ */
+
+exports.styles = styles;
+var SimpleBackdrop = React.forwardRef(function SimpleBackdrop(props, ref) {
+  var _props$invisible = props.invisible,
+      invisible = _props$invisible === void 0 ? false : _props$invisible,
+      open = props.open,
+      other = (0, _objectWithoutProperties2.default)(props, ["invisible", "open"]);
+  return open ? /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
+    "aria-hidden": true,
+    ref: ref
+  }, other, {
+    style: (0, _extends2.default)({}, styles.root, {}, invisible ? styles.invisible : {}, {}, other.style)
+  })) : null;
+});
+"development" !== "production" ? SimpleBackdrop.propTypes = {
+  /**
+   * If `true`, the backdrop is invisible.
+   * It can be used when rendering a popover or a custom select component.
+   */
+  invisible: _propTypes.default.bool,
+
+  /**
+   * If `true`, the backdrop is open.
+   */
+  open: _propTypes.default.bool.isRequired
+} : void 0;
+var _default = SimpleBackdrop;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"../node_modules/@material-ui/core/esm/Modal/Modal.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var ReactDOM = _interopRequireWildcard(require("react-dom"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _styles = require("@material-ui/styles");
+
+var _utils = require("@material-ui/utils");
+
+var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
+
+var _Portal = _interopRequireDefault(require("../Portal"));
+
+var _createChainedFunction = _interopRequireDefault(require("../utils/createChainedFunction"));
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+var _useEventCallback = _interopRequireDefault(require("../utils/useEventCallback"));
+
+var _zIndex = _interopRequireDefault(require("../styles/zIndex"));
+
+var _ModalManager = _interopRequireWildcard(require("./ModalManager"));
+
+var _TrapFocus = _interopRequireDefault(require("./TrapFocus"));
+
+var _SimpleBackdrop = _interopRequireDefault(require("./SimpleBackdrop"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getContainer(container) {
+  container = typeof container === 'function' ? container() : container;
+  return ReactDOM.findDOMNode(container);
+}
+
+function getHasTransition(props) {
+  return props.children ? props.children.props.hasOwnProperty('in') : false;
+} // A modal manager used to track and manage the state of open Modals.
+// Modals don't open on the server so this won't conflict with concurrent requests.
+
+
+var defaultManager = new _ModalManager.default();
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'fixed',
+      zIndex: theme.zIndex.modal,
+      right: 0,
+      bottom: 0,
+      top: 0,
+      left: 0
+    },
+
+    /* Styles applied to the root element if the `Modal` has exited. */
+    hidden: {
+      visibility: 'hidden'
+    }
+  };
+};
+/**
+ * Modal is a lower-level construct that is leveraged by the following components:
+ *
+ * - [Dialog](/api/dialog/)
+ * - [Drawer](/api/drawer/)
+ * - [Menu](/api/menu/)
+ * - [Popover](/api/popover/)
+ *
+ * If you are creating a modal dialog, you probably want to use the [Dialog](/api/dialog/) component
+ * rather than directly using Modal.
+ *
+ * This component shares many concepts with [react-overlays](https://react-bootstrap.github.io/react-overlays/#modals).
+ */
+
+
+exports.styles = styles;
+var Modal = React.forwardRef(function Modal(inProps, ref) {
+  var theme = (0, _styles.useTheme)();
+  var props = (0, _styles.getThemeProps)({
+    name: 'MuiModal',
+    props: (0, _extends2.default)({}, inProps),
+    theme: theme
+  });
+  var _props$BackdropCompon = props.BackdropComponent,
+      BackdropComponent = _props$BackdropCompon === void 0 ? _SimpleBackdrop.default : _props$BackdropCompon,
+      BackdropProps = props.BackdropProps,
+      children = props.children,
+      _props$closeAfterTran = props.closeAfterTransition,
+      closeAfterTransition = _props$closeAfterTran === void 0 ? false : _props$closeAfterTran,
+      container = props.container,
+      _props$disableAutoFoc = props.disableAutoFocus,
+      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
+      _props$disableBackdro = props.disableBackdropClick,
+      disableBackdropClick = _props$disableBackdro === void 0 ? false : _props$disableBackdro,
+      _props$disableEnforce = props.disableEnforceFocus,
+      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
+      _props$disableEscapeK = props.disableEscapeKeyDown,
+      disableEscapeKeyDown = _props$disableEscapeK === void 0 ? false : _props$disableEscapeK,
+      _props$disablePortal = props.disablePortal,
+      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
+      _props$disableRestore = props.disableRestoreFocus,
+      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
+      _props$disableScrollL = props.disableScrollLock,
+      disableScrollLock = _props$disableScrollL === void 0 ? false : _props$disableScrollL,
+      _props$hideBackdrop = props.hideBackdrop,
+      hideBackdrop = _props$hideBackdrop === void 0 ? false : _props$hideBackdrop,
+      _props$keepMounted = props.keepMounted,
+      keepMounted = _props$keepMounted === void 0 ? false : _props$keepMounted,
+      _props$manager = props.manager,
+      manager = _props$manager === void 0 ? defaultManager : _props$manager,
+      onBackdropClick = props.onBackdropClick,
+      onClose = props.onClose,
+      onEscapeKeyDown = props.onEscapeKeyDown,
+      onRendered = props.onRendered,
+      open = props.open,
+      other = (0, _objectWithoutProperties2.default)(props, ["BackdropComponent", "BackdropProps", "children", "closeAfterTransition", "container", "disableAutoFocus", "disableBackdropClick", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onEscapeKeyDown", "onRendered", "open"]);
+
+  var _React$useState = React.useState(true),
+      exited = _React$useState[0],
+      setExited = _React$useState[1];
+
+  var modal = React.useRef({});
+  var mountNodeRef = React.useRef(null);
+  var modalRef = React.useRef(null);
+  var handleRef = (0, _useForkRef.default)(modalRef, ref);
+  var hasTransition = getHasTransition(props);
+
+  var getDoc = function getDoc() {
+    return (0, _ownerDocument.default)(mountNodeRef.current);
+  };
+
+  var getModal = function getModal() {
+    modal.current.modalRef = modalRef.current;
+    modal.current.mountNode = mountNodeRef.current;
+    return modal.current;
+  };
+
+  var handleMounted = function handleMounted() {
+    manager.mount(getModal(), {
+      disableScrollLock: disableScrollLock
+    }); // Fix a bug on Chrome where the scroll isn't initially 0.
+
+    modalRef.current.scrollTop = 0;
+  };
+
+  var handleOpen = (0, _useEventCallback.default)(function () {
+    var resolvedContainer = getContainer(container) || getDoc().body;
+    manager.add(getModal(), resolvedContainer); // The element was already mounted.
+
+    if (modalRef.current) {
+      handleMounted();
+    }
+  });
+  var isTopModal = React.useCallback(function () {
+    return manager.isTopModal(getModal());
+  }, [manager]);
+  var handlePortalRef = (0, _useEventCallback.default)(function (node) {
+    mountNodeRef.current = node;
+
+    if (!node) {
+      return;
+    }
+
+    if (onRendered) {
+      onRendered();
+    }
+
+    if (open && isTopModal()) {
+      handleMounted();
+    } else {
+      (0, _ModalManager.ariaHidden)(modalRef.current, true);
+    }
+  });
+  var handleClose = React.useCallback(function () {
+    manager.remove(getModal());
+  }, [manager]);
+  React.useEffect(function () {
+    return function () {
+      handleClose();
+    };
+  }, [handleClose]);
+  React.useEffect(function () {
+    if (open) {
+      handleOpen();
+    } else if (!hasTransition || !closeAfterTransition) {
+      handleClose();
+    }
+  }, [open, handleClose, hasTransition, closeAfterTransition, handleOpen]);
+
+  if (!keepMounted && !open && (!hasTransition || exited)) {
+    return null;
+  }
+
+  var handleEnter = function handleEnter() {
+    setExited(false);
+  };
+
+  var handleExited = function handleExited() {
+    setExited(true);
+
+    if (closeAfterTransition) {
+      handleClose();
+    }
+  };
+
+  var handleBackdropClick = function handleBackdropClick(event) {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
+    if (onBackdropClick) {
+      onBackdropClick(event);
+    }
+
+    if (!disableBackdropClick && onClose) {
+      onClose(event, 'backdropClick');
+    }
+  };
+
+  var handleKeyDown = function handleKeyDown(event) {
+    // The handler doesn't take event.defaultPrevented into account:
+    //
+    // event.preventDefault() is meant to stop default behaviours like
+    // clicking a checkbox to check it, hitting a button to submit a form,
+    // and hitting left arrow to move the cursor in a text input etc.
+    // Only special HTML elements have these default behaviors.
+    if (event.key !== 'Escape' || !isTopModal()) {
+      return;
+    } // Swallow the event, in case someone is listening for the escape key on the body.
+
+
+    event.stopPropagation();
+
+    if (onEscapeKeyDown) {
+      onEscapeKeyDown(event);
+    }
+
+    if (!disableEscapeKeyDown && onClose) {
+      onClose(event, 'escapeKeyDown');
+    }
+  };
+
+  var inlineStyle = styles(theme || {
+    zIndex: _zIndex.default
+  });
+  var childProps = {};
+
+  if (children.props.tabIndex === undefined) {
+    childProps.tabIndex = children.props.tabIndex || '-1';
+  } // It's a Transition like component
+
+
+  if (hasTransition) {
+    childProps.onEnter = (0, _createChainedFunction.default)(handleEnter, children.props.onEnter);
+    childProps.onExited = (0, _createChainedFunction.default)(handleExited, children.props.onExited);
+  }
+
+  return /*#__PURE__*/React.createElement(_Portal.default, {
+    ref: handlePortalRef,
+    container: container,
+    disablePortal: disablePortal
+  }, /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
+    ref: handleRef,
+    onKeyDown: handleKeyDown,
+    role: "presentation"
+  }, other, {
+    style: (0, _extends2.default)({}, inlineStyle.root, {}, !open && exited ? inlineStyle.hidden : {}, {}, other.style)
+  }), hideBackdrop ? null : /*#__PURE__*/React.createElement(BackdropComponent, (0, _extends2.default)({
+    open: open,
+    onClick: handleBackdropClick
+  }, BackdropProps)), /*#__PURE__*/React.createElement(_TrapFocus.default, {
+    disableEnforceFocus: disableEnforceFocus,
+    disableAutoFocus: disableAutoFocus,
+    disableRestoreFocus: disableRestoreFocus,
+    getDoc: getDoc,
+    isEnabled: isTopModal,
+    open: open
+  }, React.cloneElement(children, childProps))));
+});
+"development" !== "production" ? Modal.propTypes = {
+  /**
+   * A backdrop component. This prop enables custom backdrop rendering.
+   */
+  BackdropComponent: _propTypes.default.elementType,
+
+  /**
+   * Props applied to the [`Backdrop`](/api/backdrop/) element.
+   */
+  BackdropProps: _propTypes.default.object,
+
+  /**
+   * A single child content element.
+   */
+  children: _utils.elementAcceptingRef.isRequired,
+
+  /**
+   * When set to true the Modal waits until a nested Transition is completed before closing.
+   */
+  closeAfterTransition: _propTypes.default.bool,
+
+  /**
+   * A node, component instance, or function that returns either.
+   * The `container` will have the portal children appended to it.
+   */
+  container: _propTypes.default.oneOfType([_propTypes.default.object, _propTypes.default.func]),
+
+  /**
+   * If `true`, the modal will not automatically shift focus to itself when it opens, and
+   * replace it to the last focused element when it closes.
+   * This also works correctly with any modal children that have the `disableAutoFocus` prop.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableAutoFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, clicking the backdrop will not fire any callback.
+   */
+  disableBackdropClick: _propTypes.default.bool,
+
+  /**
+   * If `true`, the modal will not prevent focus from leaving the modal while open.
+   *
+   * Generally this should never be set to `true` as it makes the modal less
+   * accessible to assistive technologies, like screen readers.
+   */
+  disableEnforceFocus: _propTypes.default.bool,
+
+  /**
+   * If `true`, hitting escape will not fire any callback.
+   */
+  disableEscapeKeyDown: _propTypes.default.bool,
+
+  /**
+   * Disable the portal behavior.
+   * The children stay within it's parent DOM hierarchy.
+   */
+  disablePortal: _propTypes.default.bool,
+
+  /**
+   * If `true`, the modal will not restore focus to previously focused element once
+   * modal is hidden.
+   */
+  disableRestoreFocus: _propTypes.default.bool,
+
+  /**
+   * Disable the scroll lock behavior.
+   */
+  disableScrollLock: _propTypes.default.bool,
+
+  /**
+   * If `true`, the backdrop is not rendered.
+   */
+  hideBackdrop: _propTypes.default.bool,
+
+  /**
+   * Always keep the children in the DOM.
+   * This prop can be useful in SEO situation or
+   * when you want to maximize the responsiveness of the Modal.
+   */
+  keepMounted: _propTypes.default.bool,
+
+  /**
+   * @ignore
+   */
+  manager: _propTypes.default.object,
+
+  /**
+   * Callback fired when the backdrop is clicked.
+   */
+  onBackdropClick: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component requests to be closed.
+   * The `reason` parameter can optionally be used to control the response to `onClose`.
+   *
+   * @param {object} event The event source of the callback.
+   * @param {string} reason Can be: `"escapeKeyDown"`, `"backdropClick"`.
+   */
+  onClose: _propTypes.default.func,
+
+  /**
+   * Callback fired when the escape key is pressed,
+   * `disableEscapeKeyDown` is false and the modal is in focus.
+   */
+  onEscapeKeyDown: _propTypes.default.func,
+
+  /**
+   * Callback fired once the children has been mounted into the `container`.
+   * It signals that the `open={true}` prop took effect.
+   *
+   * This prop will be deprecated and removed in v5, the ref can be used instead.
+   */
+  onRendered: _propTypes.default.func,
+
+  /**
+   * If `true`, the modal is open.
+   */
+  open: _propTypes.default.bool.isRequired
+} : void 0;
+var _default = Modal;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","@material-ui/styles":"../node_modules/@material-ui/styles/esm/index.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../Portal":"../node_modules/@material-ui/core/esm/Portal/index.js","../utils/createChainedFunction":"../node_modules/@material-ui/core/esm/utils/createChainedFunction.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js","../utils/useEventCallback":"../node_modules/@material-ui/core/esm/utils/useEventCallback.js","../styles/zIndex":"../node_modules/@material-ui/core/esm/styles/zIndex.js","./ModalManager":"../node_modules/@material-ui/core/esm/Modal/ModalManager.js","./TrapFocus":"../node_modules/@material-ui/core/esm/Modal/TrapFocus.js","./SimpleBackdrop":"../node_modules/@material-ui/core/esm/Modal/SimpleBackdrop.js"}],"../node_modules/@material-ui/core/esm/Modal/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Modal.default;
+  }
+});
+Object.defineProperty(exports, "ModalManager", {
+  enumerable: true,
+  get: function () {
+    return _ModalManager.default;
+  }
+});
+
+var _Modal = _interopRequireDefault(require("./Modal"));
+
+var _ModalManager = _interopRequireDefault(require("./ModalManager"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Modal":"../node_modules/@material-ui/core/esm/Modal/Modal.js","./ModalManager":"../node_modules/@material-ui/core/esm/Modal/ModalManager.js"}],"../node_modules/@material-ui/core/esm/transitions/utils.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getTransitionProps = getTransitionProps;
+exports.reflow = void 0;
+
+var reflow = function reflow(node) {
+  return node.scrollTop;
+};
+
+exports.reflow = reflow;
+
+function getTransitionProps(props, options) {
+  var timeout = props.timeout,
+      _props$style = props.style,
+      style = _props$style === void 0 ? {} : _props$style;
+  return {
+    duration: style.transitionDuration || typeof timeout === 'number' ? timeout : timeout[options.mode] || 0,
+    delay: style.transitionDelay
+  };
+}
+},{}],"../node_modules/@material-ui/core/esm/Fade/Fade.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _reactTransitionGroup = require("react-transition-group");
+
+var _transitions = require("../styles/transitions");
+
+var _useTheme = _interopRequireDefault(require("../styles/useTheme"));
+
+var _utils = require("../transitions/utils");
+
+var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  entering: {
+    opacity: 1
+  },
+  entered: {
+    opacity: 1
+  }
+};
+var defaultTimeout = {
+  enter: _transitions.duration.enteringScreen,
+  exit: _transitions.duration.leavingScreen
+};
+/**
+ * The Fade transition is used by the [Modal](/components/modal/) component.
+ * It uses [react-transition-group](https://github.com/reactjs/react-transition-group) internally.
+ */
+
+var Fade = React.forwardRef(function Fade(props, ref) {
+  var children = props.children,
+      inProp = props.in,
+      onEnter = props.onEnter,
+      onExit = props.onExit,
+      style = props.style,
+      _props$timeout = props.timeout,
+      timeout = _props$timeout === void 0 ? defaultTimeout : _props$timeout,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "in", "onEnter", "onExit", "style", "timeout"]);
+  var theme = (0, _useTheme.default)();
+  var handleRef = (0, _useForkRef.default)(children.ref, ref);
+
+  var handleEnter = function handleEnter(node, isAppearing) {
+    (0, _utils.reflow)(node); // So the animation always start from the start.
+
+    var transitionProps = (0, _utils.getTransitionProps)({
+      style: style,
+      timeout: timeout
+    }, {
+      mode: 'enter'
+    });
+    node.style.webkitTransition = theme.transitions.create('opacity', transitionProps);
+    node.style.transition = theme.transitions.create('opacity', transitionProps);
+
+    if (onEnter) {
+      onEnter(node, isAppearing);
+    }
+  };
+
+  var handleExit = function handleExit(node) {
+    var transitionProps = (0, _utils.getTransitionProps)({
+      style: style,
+      timeout: timeout
+    }, {
+      mode: 'exit'
+    });
+    node.style.webkitTransition = theme.transitions.create('opacity', transitionProps);
+    node.style.transition = theme.transitions.create('opacity', transitionProps);
+
+    if (onExit) {
+      onExit(node);
+    }
+  };
+
+  return /*#__PURE__*/React.createElement(_reactTransitionGroup.Transition, (0, _extends2.default)({
+    appear: true,
+    in: inProp,
+    onEnter: handleEnter,
+    onExit: handleExit,
+    timeout: timeout
+  }, other), function (state, childProps) {
+    return React.cloneElement(children, (0, _extends2.default)({
+      style: (0, _extends2.default)({
+        opacity: 0,
+        visibility: state === 'exited' && !inProp ? 'hidden' : undefined
+      }, styles[state], {}, style, {}, children.props.style),
+      ref: handleRef
+    }, childProps));
+  });
+});
+"development" !== "production" ? Fade.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * A single child content element.
+   */
+  children: _propTypes.default.element,
+
+  /**
+   * If `true`, the component will transition in.
+   */
+  in: _propTypes.default.bool,
+
+  /**
+   * @ignore
+   */
+  onEnter: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  onExit: _propTypes.default.func,
+
+  /**
+   * @ignore
+   */
+  style: _propTypes.default.object,
+
+  /**
+   * The duration for the transition, in milliseconds.
+   * You may specify a single timeout for all transitions, or individually with an object.
+   */
+  timeout: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.shape({
+    appear: _propTypes.default.number,
+    enter: _propTypes.default.number,
+    exit: _propTypes.default.number
+  })])
+} : void 0;
+var _default = Fade;
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-transition-group":"../node_modules/react-transition-group/esm/index.js","../styles/transitions":"../node_modules/@material-ui/core/esm/styles/transitions.js","../styles/useTheme":"../node_modules/@material-ui/core/esm/styles/useTheme.js","../transitions/utils":"../node_modules/@material-ui/core/esm/transitions/utils.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/Fade/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Fade.default;
+  }
+});
+
+var _Fade = _interopRequireDefault(require("./Fade"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Fade":"../node_modules/@material-ui/core/esm/Fade/Fade.js"}],"../node_modules/@material-ui/core/esm/Backdrop/Backdrop.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Fade = _interopRequireDefault(require("../Fade"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    // Improve scrollable dialog support.
+    zIndex: -1,
+    position: 'fixed',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 0,
+    bottom: 0,
+    top: 0,
+    left: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    WebkitTapHighlightColor: 'transparent'
+  },
+
+  /* Styles applied to the root element if `invisible={true}`. */
+  invisible: {
+    backgroundColor: 'transparent'
+  }
+};
+exports.styles = styles;
+var Backdrop = React.forwardRef(function Backdrop(props, ref) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$invisible = props.invisible,
+      invisible = _props$invisible === void 0 ? false : _props$invisible,
+      open = props.open,
+      transitionDuration = props.transitionDuration,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "invisible", "open", "transitionDuration"]);
+  return /*#__PURE__*/React.createElement(_Fade.default, (0, _extends2.default)({
+    in: open,
+    timeout: transitionDuration
+  }, other), /*#__PURE__*/React.createElement("div", {
+    className: (0, _clsx.default)(classes.root, className, invisible && classes.invisible),
+    "aria-hidden": true,
+    ref: ref
+  }, children));
+});
+"development" !== "production" ? Backdrop.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * The content of the component.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * If `true`, the backdrop is invisible.
+   * It can be used when rendering a popover or a custom select component.
+   */
+  invisible: _propTypes.default.bool,
+
+  /**
+   * If `true`, the backdrop is open.
+   */
+  open: _propTypes.default.bool.isRequired,
+
+  /**
+   * The duration for the transition, in milliseconds.
+   * You may specify a single timeout for all transitions, or individually with an object.
+   */
+  transitionDuration: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.shape({
+    appear: _propTypes.default.number,
+    enter: _propTypes.default.number,
+    exit: _propTypes.default.number
+  })])
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiBackdrop'
+})(Backdrop);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../Fade":"../node_modules/@material-ui/core/esm/Fade/index.js"}],"../node_modules/@material-ui/core/esm/Backdrop/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Backdrop.default;
+  }
+});
+
+var _Backdrop = _interopRequireDefault(require("./Backdrop"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Backdrop":"../node_modules/@material-ui/core/esm/Backdrop/Backdrop.js"}],"../node_modules/@material-ui/core/esm/Dialog/Dialog.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/defineProperty"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+var _Modal = _interopRequireDefault(require("../Modal"));
+
+var _Backdrop = _interopRequireDefault(require("../Backdrop"));
+
+var _Fade = _interopRequireDefault(require("../Fade"));
+
+var _transitions = require("../styles/transitions");
+
+var _Paper = _interopRequireDefault(require("../Paper"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      '@media print': {
+        // Use !important to override the Modal inline-style.
+        position: 'absolute !important'
+      }
+    },
+
+    /* Styles applied to the container element if `scroll="paper"`. */
+    scrollPaper: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+
+    /* Styles applied to the container element if `scroll="body"`. */
+    scrollBody: {
+      overflowY: 'auto',
+      overflowX: 'hidden',
+      textAlign: 'center',
+      '&:after': {
+        content: '""',
+        display: 'inline-block',
+        verticalAlign: 'middle',
+        height: '100%',
+        width: '0'
+      }
+    },
+
+    /* Styles applied to the container element. */
+    container: {
+      height: '100%',
+      '@media print': {
+        height: 'auto'
+      },
+      // We disable the focus ring for mouse, touch and keyboard users.
+      outline: 0
+    },
+
+    /* Styles applied to the `Paper` component. */
+    paper: {
+      margin: 32,
+      position: 'relative',
+      overflowY: 'auto',
+      // Fix IE 11 issue, to remove at some point.
+      '@media print': {
+        overflowY: 'visible',
+        boxShadow: 'none'
+      }
+    },
+
+    /* Styles applied to the `Paper` component if `scroll="paper"`. */
+    paperScrollPaper: {
+      display: 'flex',
+      flexDirection: 'column',
+      maxHeight: 'calc(100% - 64px)'
+    },
+
+    /* Styles applied to the `Paper` component if `scroll="body"`. */
+    paperScrollBody: {
+      display: 'inline-block',
+      verticalAlign: 'middle',
+      textAlign: 'left' // 'initial' doesn't work on IE 11
+
+    },
+
+    /* Styles applied to the `Paper` component if `maxWidth=false`. */
+    paperWidthFalse: {
+      maxWidth: 'calc(100% - 64px)'
+    },
+
+    /* Styles applied to the `Paper` component if `maxWidth="xs"`. */
+    paperWidthXs: {
+      maxWidth: Math.max(theme.breakpoints.values.xs, 444),
+      '&$paperScrollBody': (0, _defineProperty2.default)({}, theme.breakpoints.down(Math.max(theme.breakpoints.values.xs, 444) + 32 * 2), {
+        maxWidth: 'calc(100% - 64px)'
+      })
+    },
+
+    /* Styles applied to the `Paper` component if `maxWidth="sm"`. */
+    paperWidthSm: {
+      maxWidth: theme.breakpoints.values.sm,
+      '&$paperScrollBody': (0, _defineProperty2.default)({}, theme.breakpoints.down(theme.breakpoints.values.sm + 32 * 2), {
+        maxWidth: 'calc(100% - 64px)'
+      })
+    },
+
+    /* Styles applied to the `Paper` component if `maxWidth="md"`. */
+    paperWidthMd: {
+      maxWidth: theme.breakpoints.values.md,
+      '&$paperScrollBody': (0, _defineProperty2.default)({}, theme.breakpoints.down(theme.breakpoints.values.md + 32 * 2), {
+        maxWidth: 'calc(100% - 64px)'
+      })
+    },
+
+    /* Styles applied to the `Paper` component if `maxWidth="lg"`. */
+    paperWidthLg: {
+      maxWidth: theme.breakpoints.values.lg,
+      '&$paperScrollBody': (0, _defineProperty2.default)({}, theme.breakpoints.down(theme.breakpoints.values.lg + 32 * 2), {
+        maxWidth: 'calc(100% - 64px)'
+      })
+    },
+
+    /* Styles applied to the `Paper` component if `maxWidth="xl"`. */
+    paperWidthXl: {
+      maxWidth: theme.breakpoints.values.xl,
+      '&$paperScrollBody': (0, _defineProperty2.default)({}, theme.breakpoints.down(theme.breakpoints.values.xl + 32 * 2), {
+        maxWidth: 'calc(100% - 64px)'
+      })
+    },
+
+    /* Styles applied to the `Paper` component if `fullWidth={true}`. */
+    paperFullWidth: {
+      width: 'calc(100% - 64px)'
+    },
+
+    /* Styles applied to the `Paper` component if `fullScreen={true}`. */
+    paperFullScreen: {
+      margin: 0,
+      width: '100%',
+      maxWidth: '100%',
+      height: '100%',
+      maxHeight: 'none',
+      borderRadius: 0,
+      '&$paperScrollBody': {
+        margin: 0,
+        maxWidth: '100%'
+      }
+    }
+  };
+};
+
+exports.styles = styles;
+var defaultTransitionDuration = {
+  enter: _transitions.duration.enteringScreen,
+  exit: _transitions.duration.leavingScreen
+};
+/**
+ * Dialogs are overlaid modal paper based components with a backdrop.
+ */
+
+var Dialog = React.forwardRef(function Dialog(props, ref) {
+  var BackdropProps = props.BackdropProps,
+      children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$disableBackdro = props.disableBackdropClick,
+      disableBackdropClick = _props$disableBackdro === void 0 ? false : _props$disableBackdro,
+      _props$disableEscapeK = props.disableEscapeKeyDown,
+      disableEscapeKeyDown = _props$disableEscapeK === void 0 ? false : _props$disableEscapeK,
+      _props$fullScreen = props.fullScreen,
+      fullScreen = _props$fullScreen === void 0 ? false : _props$fullScreen,
+      _props$fullWidth = props.fullWidth,
+      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
+      _props$maxWidth = props.maxWidth,
+      maxWidth = _props$maxWidth === void 0 ? 'sm' : _props$maxWidth,
+      onBackdropClick = props.onBackdropClick,
+      onClose = props.onClose,
+      onEnter = props.onEnter,
+      onEntered = props.onEntered,
+      onEntering = props.onEntering,
+      onEscapeKeyDown = props.onEscapeKeyDown,
+      onExit = props.onExit,
+      onExited = props.onExited,
+      onExiting = props.onExiting,
+      open = props.open,
+      _props$PaperComponent = props.PaperComponent,
+      PaperComponent = _props$PaperComponent === void 0 ? _Paper.default : _props$PaperComponent,
+      _props$PaperProps = props.PaperProps,
+      PaperProps = _props$PaperProps === void 0 ? {} : _props$PaperProps,
+      _props$scroll = props.scroll,
+      scroll = _props$scroll === void 0 ? 'paper' : _props$scroll,
+      _props$TransitionComp = props.TransitionComponent,
+      TransitionComponent = _props$TransitionComp === void 0 ? _Fade.default : _props$TransitionComp,
+      _props$transitionDura = props.transitionDuration,
+      transitionDuration = _props$transitionDura === void 0 ? defaultTransitionDuration : _props$transitionDura,
+      TransitionProps = props.TransitionProps,
+      ariaDescribedby = props['aria-describedby'],
+      ariaLabelledby = props['aria-labelledby'],
+      other = (0, _objectWithoutProperties2.default)(props, ["BackdropProps", "children", "classes", "className", "disableBackdropClick", "disableEscapeKeyDown", "fullScreen", "fullWidth", "maxWidth", "onBackdropClick", "onClose", "onEnter", "onEntered", "onEntering", "onEscapeKeyDown", "onExit", "onExited", "onExiting", "open", "PaperComponent", "PaperProps", "scroll", "TransitionComponent", "transitionDuration", "TransitionProps", "aria-describedby", "aria-labelledby"]);
+  var mouseDownTarget = React.useRef();
+
+  var handleMouseDown = function handleMouseDown(event) {
+    mouseDownTarget.current = event.target;
+  };
+
+  var handleBackdropClick = function handleBackdropClick(event) {
+    // Ignore the events not coming from the "backdrop"
+    // We don't want to close the dialog when clicking the dialog content.
+    if (event.target !== event.currentTarget) {
+      return;
+    } // Make sure the event starts and ends on the same DOM element.
+
+
+    if (event.target !== mouseDownTarget.current) {
+      return;
+    }
+
+    mouseDownTarget.current = null;
+
+    if (onBackdropClick) {
+      onBackdropClick(event);
+    }
+
+    if (!disableBackdropClick && onClose) {
+      onClose(event, 'backdropClick');
+    }
+  };
+
+  return /*#__PURE__*/React.createElement(_Modal.default, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className),
+    BackdropComponent: _Backdrop.default,
+    BackdropProps: (0, _extends2.default)({
+      transitionDuration: transitionDuration
+    }, BackdropProps),
+    closeAfterTransition: true,
+    disableBackdropClick: disableBackdropClick,
+    disableEscapeKeyDown: disableEscapeKeyDown,
+    onEscapeKeyDown: onEscapeKeyDown,
+    onClose: onClose,
+    open: open,
+    ref: ref
+  }, other), /*#__PURE__*/React.createElement(TransitionComponent, (0, _extends2.default)({
+    appear: true,
+    in: open,
+    timeout: transitionDuration,
+    onEnter: onEnter,
+    onEntering: onEntering,
+    onEntered: onEntered,
+    onExit: onExit,
+    onExiting: onExiting,
+    onExited: onExited,
+    role: "none presentation"
+  }, TransitionProps), /*#__PURE__*/React.createElement("div", {
+    className: (0, _clsx.default)(classes.container, classes["scroll".concat((0, _capitalize.default)(scroll))]),
+    onClick: handleBackdropClick,
+    onMouseDown: handleMouseDown
+  }, /*#__PURE__*/React.createElement(PaperComponent, (0, _extends2.default)({
+    elevation: 24,
+    role: "dialog",
+    "aria-describedby": ariaDescribedby,
+    "aria-labelledby": ariaLabelledby
+  }, PaperProps, {
+    className: (0, _clsx.default)(classes.paper, classes["paperScroll".concat((0, _capitalize.default)(scroll))], classes["paperWidth".concat((0, _capitalize.default)(String(maxWidth)))], PaperProps.className, fullScreen && classes.paperFullScreen, fullWidth && classes.paperFullWidth)
+  }), children))));
+});
+"development" !== "production" ? Dialog.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * The id(s) of the element(s) that describe the dialog.
+   */
+  'aria-describedby': _propTypes.default.string,
+
+  /**
+   * The id(s) of the element(s) that label the dialog.
+   */
+  'aria-labelledby': _propTypes.default.string,
+
+  /**
+   * @ignore
+   */
+  BackdropProps: _propTypes.default.object,
+
+  /**
+   * Dialog children, usually the included sub-components.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * If `true`, clicking the backdrop will not fire the `onClose` callback.
+   */
+  disableBackdropClick: _propTypes.default.bool,
+
+  /**
+   * If `true`, hitting escape will not fire the `onClose` callback.
+   */
+  disableEscapeKeyDown: _propTypes.default.bool,
+
+  /**
+   * If `true`, the dialog will be full-screen
+   */
+  fullScreen: _propTypes.default.bool,
+
+  /**
+   * If `true`, the dialog stretches to `maxWidth`.
+   *
+   * Notice that the dialog width grow is limited by the default margin.
+   */
+  fullWidth: _propTypes.default.bool,
+
+  /**
+   * Determine the max-width of the dialog.
+   * The dialog width grows with the size of the screen.
+   * Set to `false` to disable `maxWidth`.
+   */
+  maxWidth: _propTypes.default.oneOf(['lg', 'md', 'sm', 'xl', 'xs', false]),
+
+  /**
+   * Callback fired when the backdrop is clicked.
+   */
+  onBackdropClick: _propTypes.default.func,
+
+  /**
+   * Callback fired when the component requests to be closed.
+   *
+   * @param {object} event The event source of the callback.
+   * @param {string} reason Can be: `"escapeKeyDown"`, `"backdropClick"`.
+   */
+  onClose: _propTypes.default.func,
+
+  /**
+   * Callback fired before the dialog enters.
+   */
+  onEnter: _propTypes.default.func,
+
+  /**
+   * Callback fired when the dialog has entered.
+   */
+  onEntered: _propTypes.default.func,
+
+  /**
+   * Callback fired when the dialog is entering.
+   */
+  onEntering: _propTypes.default.func,
+
+  /**
+   * Callback fired when the escape key is pressed,
+   * `disableKeyboard` is false and the modal is in focus.
+   */
+  onEscapeKeyDown: _propTypes.default.func,
+
+  /**
+   * Callback fired before the dialog exits.
+   */
+  onExit: _propTypes.default.func,
+
+  /**
+   * Callback fired when the dialog has exited.
+   */
+  onExited: _propTypes.default.func,
+
+  /**
+   * Callback fired when the dialog is exiting.
+   */
+  onExiting: _propTypes.default.func,
+
+  /**
+   * If `true`, the Dialog is open.
+   */
+  open: _propTypes.default.bool.isRequired,
+
+  /**
+   * The component used to render the body of the dialog.
+   */
+  PaperComponent: _propTypes.default.elementType,
+
+  /**
+   * Props applied to the [`Paper`](/api/paper/) element.
+   */
+  PaperProps: _propTypes.default.object,
+
+  /**
+   * Determine the container for scrolling the dialog.
+   */
+  scroll: _propTypes.default.oneOf(['body', 'paper']),
+
+  /**
+   * The component used for the transition.
+   * [Follow this guide](/components/transitions/#transitioncomponent-prop) to learn more about the requirements for this component.
+   */
+  TransitionComponent: _propTypes.default.elementType,
+
+  /**
+   * The duration for the transition, in milliseconds.
+   * You may specify a single timeout for all transitions, or individually with an object.
+   */
+  transitionDuration: _propTypes.default.oneOfType([_propTypes.default.number, _propTypes.default.shape({
+    appear: _propTypes.default.number,
+    enter: _propTypes.default.number,
+    exit: _propTypes.default.number
+  })]),
+
+  /**
+   * Props applied to the [`Transition`](http://reactcommunity.org/react-transition-group/transition#Transition-props) element.
+   */
+  TransitionProps: _propTypes.default.object
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiDialog'
+})(Dialog);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/defineProperty":"../node_modules/@babel/runtime/helpers/esm/defineProperty.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js","../Modal":"../node_modules/@material-ui/core/esm/Modal/index.js","../Backdrop":"../node_modules/@material-ui/core/esm/Backdrop/index.js","../Fade":"../node_modules/@material-ui/core/esm/Fade/index.js","../styles/transitions":"../node_modules/@material-ui/core/esm/styles/transitions.js","../Paper":"../node_modules/@material-ui/core/esm/Paper/index.js"}],"../node_modules/@material-ui/core/esm/Dialog/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Dialog.default;
+  }
+});
+
+var _Dialog = _interopRequireDefault(require("./Dialog"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Dialog":"../node_modules/@material-ui/core/esm/Dialog/Dialog.js"}],"../node_modules/@material-ui/core/esm/DialogActions/DialogActions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: 8,
+    justifyContent: 'flex-end',
+    flex: '0 0 auto'
+  },
+
+  /* Styles applied to the root element if `disableSpacing={false}`. */
+  spacing: {
+    '& > :not(:first-child)': {
+      marginLeft: 8
+    }
+  }
+};
+exports.styles = styles;
+var DialogActions = React.forwardRef(function DialogActions(props, ref) {
+  var _props$disableSpacing = props.disableSpacing,
+      disableSpacing = _props$disableSpacing === void 0 ? false : _props$disableSpacing,
+      classes = props.classes,
+      className = props.className,
+      other = (0, _objectWithoutProperties2.default)(props, ["disableSpacing", "classes", "className"]);
+  return /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className, !disableSpacing && classes.spacing),
+    ref: ref
+  }, other));
+});
+"development" !== "production" ? DialogActions.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * The content of the component.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * If `true`, the actions do not have additional margin.
+   */
+  disableSpacing: _propTypes.default.bool
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiDialogActions'
+})(DialogActions);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js"}],"../node_modules/@material-ui/core/esm/DialogActions/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _DialogActions.default;
+  }
+});
+
+var _DialogActions = _interopRequireDefault(require("./DialogActions"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./DialogActions":"../node_modules/@material-ui/core/esm/DialogActions/DialogActions.js"}],"../node_modules/@material-ui/core/esm/DialogContent/DialogContent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      flex: '1 1 auto',
+      WebkitOverflowScrolling: 'touch',
+      // Add iOS momentum scrolling.
+      overflowY: 'auto',
+      padding: '8px 24px',
+      '&:first-child': {
+        // dialog without title
+        paddingTop: 20
+      }
+    },
+
+    /* Styles applied to the root element if `dividers={true}`. */
+    dividers: {
+      padding: '16px 24px',
+      borderTop: "1px solid ".concat(theme.palette.divider),
+      borderBottom: "1px solid ".concat(theme.palette.divider)
+    }
+  };
+};
+
+exports.styles = styles;
+var DialogContent = React.forwardRef(function DialogContent(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      _props$dividers = props.dividers,
+      dividers = _props$dividers === void 0 ? false : _props$dividers,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "dividers"]);
+  return /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className, dividers && classes.dividers),
+    ref: ref
+  }, other));
+});
+"development" !== "production" ? DialogContent.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * The content of the component.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * Display the top and bottom dividers.
+   */
+  dividers: _propTypes.default.bool
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiDialogContent'
+})(DialogContent);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js"}],"../node_modules/@material-ui/core/esm/DialogContent/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _DialogContent.default;
+  }
+});
+
+var _DialogContent = _interopRequireDefault(require("./DialogContent"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./DialogContent":"../node_modules/@material-ui/core/esm/DialogContent/DialogContent.js"}],"../node_modules/@material-ui/core/esm/DialogContentText/DialogContentText.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Typography = _interopRequireDefault(require("../Typography"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    marginBottom: 12
+  }
+};
+exports.styles = styles;
+var DialogContentText = React.forwardRef(function DialogContentText(props, ref) {
+  return /*#__PURE__*/React.createElement(_Typography.default, (0, _extends2.default)({
+    component: "p",
+    variant: "body1",
+    color: "textSecondary",
+    ref: ref
+  }, props));
+});
+"development" !== "production" ? DialogContentText.propTypes = {
+  /**
+   * The content of the component.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiDialogContentText'
+})(DialogContentText);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../Typography":"../node_modules/@material-ui/core/esm/Typography/index.js"}],"../node_modules/@material-ui/core/esm/DialogContentText/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _DialogContentText.default;
+  }
+});
+
+var _DialogContentText = _interopRequireDefault(require("./DialogContentText"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./DialogContentText":"../node_modules/@material-ui/core/esm/DialogContentText/DialogContentText.js"}],"../node_modules/@material-ui/core/esm/DialogTitle/DialogTitle.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Typography = _interopRequireDefault(require("../Typography"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    margin: 0,
+    padding: '16px 24px',
+    flex: '0 0 auto'
+  }
+};
+exports.styles = styles;
+var DialogTitle = React.forwardRef(function DialogTitle(props, ref) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$disableTypogra = props.disableTypography,
+      disableTypography = _props$disableTypogra === void 0 ? false : _props$disableTypogra,
+      other = (0, _objectWithoutProperties2.default)(props, ["children", "classes", "className", "disableTypography"]);
+  return /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className),
+    ref: ref
+  }, other), disableTypography ? children : /*#__PURE__*/React.createElement(_Typography.default, {
+    component: "h2",
+    variant: "h6"
+  }, children));
+});
+"development" !== "production" ? DialogTitle.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * The content of the component.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * If `true`, the children won't be wrapped by a typography component.
+   * For instance, this can be useful to render an h4 instead of the default h2.
+   */
+  disableTypography: _propTypes.default.bool
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiDialogTitle'
+})(DialogTitle);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../Typography":"../node_modules/@material-ui/core/esm/Typography/index.js"}],"../node_modules/@material-ui/core/esm/DialogTitle/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _DialogTitle.default;
+  }
+});
+
+var _DialogTitle = _interopRequireDefault(require("./DialogTitle"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/DialogTitle.js"}],"App/components/FoodCard.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51527,6 +53981,16 @@ var _CardActions = _interopRequireDefault(require("@material-ui/core/CardActions
 var _CardContent = _interopRequireDefault(require("@material-ui/core/CardContent"));
 
 var _CardMedia = _interopRequireDefault(require("@material-ui/core/CardMedia"));
+
+var _Dialog = _interopRequireDefault(require("@material-ui/core/Dialog"));
+
+var _DialogActions = _interopRequireDefault(require("@material-ui/core/DialogActions"));
+
+var _DialogContent = _interopRequireDefault(require("@material-ui/core/DialogContent"));
+
+var _DialogContentText = _interopRequireDefault(require("@material-ui/core/DialogContentText"));
+
+var _DialogTitle = _interopRequireDefault(require("@material-ui/core/DialogTitle"));
 
 var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
 
@@ -51552,11 +54016,25 @@ const useStyles = (0, _styles.makeStyles)(theme => ({
 function RestaurantCard(props) {
   const classes = useStyles();
 
-  function handleClick() {}
+  const [open, setOpen] = _react.default.useState(false);
+
+  function handleClick() {
+    alert("This item has been added to your order");
+  }
+
+  const handleClickOpen = () => {
+    props.addFoodItem({
+      id: props.fid
+    });
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return _react.default.createElement(_Card.default, {
-    className: classes.card,
-    onClick: handleClick
+    className: classes.card
   }, _react.default.createElement(_CardMedia.default, {
     className: classes.cardMedia,
     image: props.imageUrl
@@ -51566,12 +54044,906 @@ function RestaurantCard(props) {
     gutterBottom: true,
     variant: "h5",
     component: "h2"
-  }, props.title), _react.default.createElement(_Typography.default, null, props.description)), _react.default.createElement(_CardActions.default, null, _react.default.createElement(_Button.default, {
+  }, props.title), props.description && _react.default.createElement(_Typography.default, null, props.description)), _react.default.createElement(_CardActions.default, null, _react.default.createElement(_Button.default, {
     size: "small",
-    color: "primary"
-  }, "Add")));
+    color: "primary",
+    onClick: handleClickOpen
+  }, "Add")), _react.default.createElement(_Dialog.default, {
+    open: open,
+    onClose: handleClose,
+    "aria-labelledby": "alert-dialog-title",
+    "aria-describedby": "alert-dialog-description"
+  }, _react.default.createElement(_DialogTitle.default, {
+    id: "alert-dialog-title"
+  }, "This food item has been added to your order."), _react.default.createElement(_DialogActions.default, null, _react.default.createElement(_Button.default, {
+    onClick: handleClose,
+    color: "primary",
+    autoFocus: true
+  }, "GOT IT!"))));
 }
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"App/pages/RestaurantPage.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Dialog":"../node_modules/@material-ui/core/esm/Dialog/index.js","@material-ui/core/DialogActions":"../node_modules/@material-ui/core/esm/DialogActions/index.js","@material-ui/core/DialogContent":"../node_modules/@material-ui/core/esm/DialogContent/index.js","@material-ui/core/DialogContentText":"../node_modules/@material-ui/core/esm/DialogContentText/index.js","@material-ui/core/DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"../node_modules/@material-ui/core/esm/Table/TableContext.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @ignore - internal component.
+ */
+var TableContext = React.createContext();
+
+if ("development" !== 'production') {
+  TableContext.displayName = 'TableContext';
+}
+
+var _default = TableContext;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"../node_modules/@material-ui/core/esm/Table/Table.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _TableContext = _interopRequireDefault(require("./TableContext"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      display: 'table',
+      width: '100%',
+      borderCollapse: 'collapse',
+      borderSpacing: 0,
+      '& caption': (0, _extends2.default)({}, theme.typography.body2, {
+        padding: theme.spacing(2),
+        color: theme.palette.text.secondary,
+        textAlign: 'left',
+        captionSide: 'bottom'
+      })
+    },
+
+    /* Styles applied to the root element if `stickyHeader={true}`. */
+    stickyHeader: {
+      borderCollapse: 'separate'
+    }
+  };
+};
+
+exports.styles = styles;
+var Table = React.forwardRef(function Table(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'table' : _props$component,
+      _props$padding = props.padding,
+      padding = _props$padding === void 0 ? 'default' : _props$padding,
+      _props$size = props.size,
+      size = _props$size === void 0 ? 'medium' : _props$size,
+      _props$stickyHeader = props.stickyHeader,
+      stickyHeader = _props$stickyHeader === void 0 ? false : _props$stickyHeader,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "component", "padding", "size", "stickyHeader"]);
+  var table = React.useMemo(function () {
+    return {
+      padding: padding,
+      size: size,
+      stickyHeader: stickyHeader
+    };
+  }, [padding, size, stickyHeader]);
+  return /*#__PURE__*/React.createElement(_TableContext.default.Provider, {
+    value: table
+  }, /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    ref: ref,
+    className: (0, _clsx.default)(classes.root, className, stickyHeader && classes.stickyHeader)
+  }, other)));
+});
+"development" !== "production" ? Table.propTypes = {
+  /**
+   * The content of the table, normally `TableHead` and `TableBody`.
+   */
+  children: _propTypes.default.node.isRequired,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType,
+
+  /**
+   * Allows TableCells to inherit padding of the Table.
+   */
+  padding: _propTypes.default.oneOf(['default', 'checkbox', 'none']),
+
+  /**
+   * Allows TableCells to inherit size of the Table.
+   */
+  size: _propTypes.default.oneOf(['small', 'medium']),
+
+  /**
+   * Set the header sticky.
+   *
+   * ⚠️ It doesn't work with IE 11.
+   */
+  stickyHeader: _propTypes.default.bool
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTable'
+})(Table);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","./TableContext":"../node_modules/@material-ui/core/esm/Table/TableContext.js"}],"../node_modules/@material-ui/core/esm/Table/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _Table.default;
+  }
+});
+
+var _Table = _interopRequireDefault(require("./Table"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./Table":"../node_modules/@material-ui/core/esm/Table/Table.js"}],"../node_modules/@material-ui/core/esm/Table/Tablelvl2Context.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var React = _interopRequireWildcard(require("react"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+/**
+ * @ignore - internal component.
+ */
+var Tablelvl2Context = React.createContext();
+
+if ("development" !== 'production') {
+  Tablelvl2Context.displayName = 'Tablelvl2Context';
+}
+
+var _default = Tablelvl2Context;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js"}],"../node_modules/@material-ui/core/esm/TableBody/TableBody.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Tablelvl2Context = _interopRequireDefault(require("../Table/Tablelvl2Context"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    display: 'table-row-group'
+  }
+};
+exports.styles = styles;
+var tablelvl2 = {
+  variant: 'body'
+};
+var TableBody = React.forwardRef(function TableBody(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'tbody' : _props$component,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "component"]);
+  return /*#__PURE__*/React.createElement(_Tablelvl2Context.default.Provider, {
+    value: tablelvl2
+  }, /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className),
+    ref: ref
+  }, other)));
+});
+"development" !== "production" ? TableBody.propTypes = {
+  /**
+   * The content of the component, normally `TableRow`.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTableBody'
+})(TableBody);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../Table/Tablelvl2Context":"../node_modules/@material-ui/core/esm/Table/Tablelvl2Context.js"}],"../node_modules/@material-ui/core/esm/TableBody/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _TableBody.default;
+  }
+});
+
+var _TableBody = _interopRequireDefault(require("./TableBody"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./TableBody":"../node_modules/@material-ui/core/esm/TableBody/TableBody.js"}],"../node_modules/@material-ui/core/esm/TableCell/TableCell.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _capitalize = _interopRequireDefault(require("../utils/capitalize"));
+
+var _colorManipulator = require("../styles/colorManipulator");
+
+var _TableContext = _interopRequireDefault(require("../Table/TableContext"));
+
+var _Tablelvl2Context = _interopRequireDefault(require("../Table/Tablelvl2Context"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: (0, _extends2.default)({}, theme.typography.body2, {
+      display: 'table-cell',
+      verticalAlign: 'inherit',
+      // Workaround for a rendering bug with spanned columns in Chrome 62.0.
+      // Removes the alpha (sets it to 1), and lightens or darkens the theme color.
+      borderBottom: "1px solid\n    ".concat(theme.palette.type === 'light' ? (0, _colorManipulator.lighten)((0, _colorManipulator.fade)(theme.palette.divider, 1), 0.88) : (0, _colorManipulator.darken)((0, _colorManipulator.fade)(theme.palette.divider, 1), 0.68)),
+      textAlign: 'left',
+      padding: 16
+    }),
+
+    /* Styles applied to the root element if `variant="head"` or `context.table.head`. */
+    head: {
+      color: theme.palette.text.primary,
+      lineHeight: theme.typography.pxToRem(24),
+      fontWeight: theme.typography.fontWeightMedium
+    },
+
+    /* Styles applied to the root element if `variant="body"` or `context.table.body`. */
+    body: {
+      color: theme.palette.text.primary
+    },
+
+    /* Styles applied to the root element if `variant="footer"` or `context.table.footer`. */
+    footer: {
+      color: theme.palette.text.secondary,
+      lineHeight: theme.typography.pxToRem(21),
+      fontSize: theme.typography.pxToRem(12)
+    },
+
+    /* Styles applied to the root element if `size="small"`. */
+    sizeSmall: {
+      padding: '6px 24px 6px 16px',
+      '&:last-child': {
+        paddingRight: 16
+      },
+      '&$paddingCheckbox': {
+        width: 24,
+        // prevent the checkbox column from growing
+        padding: '0px 12px 0 16px',
+        '&:last-child': {
+          paddingLeft: 12,
+          paddingRight: 16
+        },
+        '& > *': {
+          padding: 0
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `padding="checkbox"`. */
+    paddingCheckbox: {
+      width: 48,
+      // prevent the checkbox column from growing
+      padding: '0 0 0 4px',
+      '&:last-child': {
+        paddingLeft: 0,
+        paddingRight: 4
+      }
+    },
+
+    /* Styles applied to the root element if `padding="none"`. */
+    paddingNone: {
+      padding: 0,
+      '&:last-child': {
+        padding: 0
+      }
+    },
+
+    /* Styles applied to the root element if `align="left"`. */
+    alignLeft: {
+      textAlign: 'left'
+    },
+
+    /* Styles applied to the root element if `align="center"`. */
+    alignCenter: {
+      textAlign: 'center'
+    },
+
+    /* Styles applied to the root element if `align="right"`. */
+    alignRight: {
+      textAlign: 'right',
+      flexDirection: 'row-reverse'
+    },
+
+    /* Styles applied to the root element if `align="justify"`. */
+    alignJustify: {
+      textAlign: 'justify'
+    },
+
+    /* Styles applied to the root element if `context.table.stickyHeader={true}`. */
+    stickyHeader: {
+      position: 'sticky',
+      top: 0,
+      left: 0,
+      zIndex: 2,
+      backgroundColor: theme.palette.background.default
+    }
+  };
+};
+/**
+ * The component renders a `<th>` element when the parent context is a header
+ * or otherwise a `<td>` element.
+ */
+
+
+exports.styles = styles;
+var TableCell = React.forwardRef(function TableCell(props, ref) {
+  var _props$align = props.align,
+      align = _props$align === void 0 ? 'inherit' : _props$align,
+      classes = props.classes,
+      className = props.className,
+      component = props.component,
+      paddingProp = props.padding,
+      scopeProp = props.scope,
+      sizeProp = props.size,
+      sortDirection = props.sortDirection,
+      variantProp = props.variant,
+      other = (0, _objectWithoutProperties2.default)(props, ["align", "classes", "className", "component", "padding", "scope", "size", "sortDirection", "variant"]);
+  var table = React.useContext(_TableContext.default);
+  var tablelvl2 = React.useContext(_Tablelvl2Context.default);
+  var Component;
+
+  if (component) {
+    Component = component;
+  } else {
+    Component = tablelvl2 && tablelvl2.variant === 'head' ? 'th' : 'td';
+  }
+
+  var scope = scopeProp;
+
+  if (!scope && tablelvl2 && tablelvl2.variant === 'head') {
+    scope = 'col';
+  }
+
+  var padding = paddingProp || (table && table.padding ? table.padding : 'default');
+  var size = sizeProp || (table && table.size ? table.size : 'medium');
+  var variant = variantProp || tablelvl2 && tablelvl2.variant;
+  var ariaSort = null;
+
+  if (sortDirection) {
+    ariaSort = sortDirection === 'asc' ? 'ascending' : 'descending';
+  }
+
+  return /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    ref: ref,
+    className: (0, _clsx.default)(classes.root, classes[variant], className, align !== 'inherit' && classes["align".concat((0, _capitalize.default)(align))], padding !== 'default' && classes["padding".concat((0, _capitalize.default)(padding))], size !== 'medium' && classes["size".concat((0, _capitalize.default)(size))], variant === 'head' && table && table.stickyHeader && classes.stickyHeader),
+    "aria-sort": ariaSort,
+    scope: scope
+  }, other));
+});
+"development" !== "production" ? TableCell.propTypes = {
+  // ----------------------------- Warning --------------------------------
+  // | These PropTypes are generated from the TypeScript type definitions |
+  // |     To update them edit the d.ts file and run "yarn proptypes"     |
+  // ----------------------------------------------------------------------
+
+  /**
+   * Set the text-align on the table cell content.
+   *
+   * Monetary or generally number fields **should be right aligned** as that allows
+   * you to add them up quickly in your head without having to worry about decimals.
+   */
+  align: _propTypes.default.oneOf(['center', 'inherit', 'justify', 'left', 'right']),
+
+  /**
+   * The table cell contents.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType,
+
+  /**
+   * Sets the padding applied to the cell.
+   * By default, the Table parent component set the value (`default`).
+   */
+  padding: _propTypes.default.oneOf(['checkbox', 'default', 'none']),
+
+  /**
+   * Set scope attribute.
+   */
+  scope: _propTypes.default.string,
+
+  /**
+   * Specify the size of the cell.
+   * By default, the Table parent component set the value (`medium`).
+   */
+  size: _propTypes.default.oneOf(['medium', 'small']),
+
+  /**
+   * Set aria-sort direction.
+   */
+  sortDirection: _propTypes.default.oneOf(['asc', 'desc', false]),
+
+  /**
+   * Specify the cell type.
+   * By default, the TableHead, TableBody or TableFooter parent component set the value.
+   */
+  variant: _propTypes.default.oneOf(['body', 'footer', 'head'])
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTableCell'
+})(TableCell);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../utils/capitalize":"../node_modules/@material-ui/core/esm/utils/capitalize.js","../styles/colorManipulator":"../node_modules/@material-ui/core/esm/styles/colorManipulator.js","../Table/TableContext":"../node_modules/@material-ui/core/esm/Table/TableContext.js","../Table/Tablelvl2Context":"../node_modules/@material-ui/core/esm/Table/Tablelvl2Context.js"}],"../node_modules/@material-ui/core/esm/TableCell/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _TableCell.default;
+  }
+});
+
+var _TableCell = _interopRequireDefault(require("./TableCell"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./TableCell":"../node_modules/@material-ui/core/esm/TableCell/TableCell.js"}],"../node_modules/@material-ui/core/esm/TableHead/TableHead.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Tablelvl2Context = _interopRequireDefault(require("../Table/Tablelvl2Context"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    display: 'table-header-group'
+  }
+};
+exports.styles = styles;
+var tablelvl2 = {
+  variant: 'head'
+};
+var TableHead = React.forwardRef(function TableHead(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'thead' : _props$component,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "component"]);
+  return /*#__PURE__*/React.createElement(_Tablelvl2Context.default.Provider, {
+    value: tablelvl2
+  }, /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    className: (0, _clsx.default)(classes.root, className),
+    ref: ref
+  }, other)));
+});
+"development" !== "production" ? TableHead.propTypes = {
+  /**
+   * The content of the component, normally `TableRow`.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTableHead'
+})(TableHead);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../Table/Tablelvl2Context":"../node_modules/@material-ui/core/esm/Table/Tablelvl2Context.js"}],"../node_modules/@material-ui/core/esm/TableHead/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _TableHead.default;
+  }
+});
+
+var _TableHead = _interopRequireDefault(require("./TableHead"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./TableHead":"../node_modules/@material-ui/core/esm/TableHead/TableHead.js"}],"../node_modules/@material-ui/core/esm/TableRow/TableRow.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.styles = void 0;
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
+
+var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
+
+var React = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _clsx = _interopRequireDefault(require("clsx"));
+
+var _withStyles = _interopRequireDefault(require("../styles/withStyles"));
+
+var _Tablelvl2Context = _interopRequireDefault(require("../Table/Tablelvl2Context"));
+
+var _colorManipulator = require("../styles/colorManipulator");
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      color: 'inherit',
+      display: 'table-row',
+      verticalAlign: 'middle',
+      // We disable the focus ring for mouse, touch and keyboard users.
+      outline: 0,
+      '&$hover:hover': {
+        backgroundColor: theme.palette.action.hover
+      },
+      '&$selected, &$selected:hover': {
+        backgroundColor: (0, _colorManipulator.fade)(theme.palette.secondary.main, theme.palette.action.selectedOpacity)
+      }
+    },
+
+    /* Pseudo-class applied to the root element if `selected={true}`. */
+    selected: {},
+
+    /* Pseudo-class applied to the root element if `hover={true}`. */
+    hover: {},
+
+    /* Styles applied to the root element if table variant="head". */
+    head: {},
+
+    /* Styles applied to the root element if table variant="footer". */
+    footer: {}
+  };
+};
+/**
+ * Will automatically set dynamic row height
+ * based on the material table element parent (head, body, etc).
+ */
+
+
+exports.styles = styles;
+var TableRow = React.forwardRef(function TableRow(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'tr' : _props$component,
+      _props$hover = props.hover,
+      hover = _props$hover === void 0 ? false : _props$hover,
+      _props$selected = props.selected,
+      selected = _props$selected === void 0 ? false : _props$selected,
+      other = (0, _objectWithoutProperties2.default)(props, ["classes", "className", "component", "hover", "selected"]);
+  var tablelvl2 = React.useContext(_Tablelvl2Context.default);
+  return /*#__PURE__*/React.createElement(Component, (0, _extends2.default)({
+    ref: ref,
+    className: (0, _clsx.default)(classes.root, className, tablelvl2 && {
+      'head': classes.head,
+      'footer': classes.footer
+    }[tablelvl2.variant], hover && classes.hover, selected && classes.selected)
+  }, other));
+});
+"development" !== "production" ? TableRow.propTypes = {
+  /**
+   * Should be valid <tr> children such as `TableCell`.
+   */
+  children: _propTypes.default.node,
+
+  /**
+   * Override or extend the styles applied to the component.
+   * See [CSS API](#css) below for more details.
+   */
+  classes: _propTypes.default.object.isRequired,
+
+  /**
+   * @ignore
+   */
+  className: _propTypes.default.string,
+
+  /**
+   * The component used for the root node.
+   * Either a string to use a DOM element or a component.
+   */
+  component: _propTypes.default.elementType,
+
+  /**
+   * If `true`, the table row will shade on hover.
+   */
+  hover: _propTypes.default.bool,
+
+  /**
+   * If `true`, the table row will have the selected shading.
+   */
+  selected: _propTypes.default.bool
+} : void 0;
+
+var _default = (0, _withStyles.default)(styles, {
+  name: 'MuiTableRow'
+})(TableRow);
+
+exports.default = _default;
+},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","clsx":"../node_modules/clsx/dist/clsx.m.js","../styles/withStyles":"../node_modules/@material-ui/core/esm/styles/withStyles.js","../Table/Tablelvl2Context":"../node_modules/@material-ui/core/esm/Table/Tablelvl2Context.js","../styles/colorManipulator":"../node_modules/@material-ui/core/esm/styles/colorManipulator.js"}],"../node_modules/@material-ui/core/esm/TableRow/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "default", {
+  enumerable: true,
+  get: function () {
+    return _TableRow.default;
+  }
+});
+
+var _TableRow = _interopRequireDefault(require("./TableRow"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./TableRow":"../node_modules/@material-ui/core/esm/TableRow/TableRow.js"}],"App/pages/Cart.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Cart;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _Link = _interopRequireDefault(require("@material-ui/core/Link"));
+
+var _styles = require("@material-ui/core/styles");
+
+var _Table = _interopRequireDefault(require("@material-ui/core/Table"));
+
+var _TableBody = _interopRequireDefault(require("@material-ui/core/TableBody"));
+
+var _TableCell = _interopRequireDefault(require("@material-ui/core/TableCell"));
+
+var _TableHead = _interopRequireDefault(require("@material-ui/core/TableHead"));
+
+var _TableRow = _interopRequireDefault(require("@material-ui/core/TableRow"));
+
+var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
+
+var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Generate Order Data
+function createData(id, date, name, shipTo, paymentMethod, amount) {
+  return {
+    id,
+    date,
+    name,
+    shipTo,
+    paymentMethod,
+    amount
+  };
+}
+
+const rows = [createData(0, '16 Mar, 2019', 'Elvis Presley', 'Tupelo, MS', 'VISA ⠀•••• 3719', 312.44), createData(1, '16 Mar, 2019', 'Paul McCartney', 'London, UK', 'VISA ⠀•••• 2574', 866.99), createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81), createData(3, '16 Mar, 2019', 'Michael Jackson', 'Gary, IN', 'AMEX ⠀•••• 2000', 654.39), createData(4, '15 Mar, 2019', 'Bruce Springsteen', 'Long Branch, NJ', 'VISA ⠀•••• 5919', 212.79)];
+
+function preventDefault(event) {
+  event.preventDefault();
+}
+
+const useStyles = (0, _styles.makeStyles)(theme => ({
+  seeMore: {
+    marginTop: theme.spacing(3)
+  },
+  fragment: {// marginTop: '80px'
+  }
+}));
+
+function Cart() {
+  const classes = useStyles();
+
+  function deleteItem() {}
+
+  function addItem() {}
+
+  function minusItem() {}
+
+  return _react.default.createElement("div", {
+    className: classes.fragment
+  }, _react.default.createElement(_Typography.default, {
+    component: "h2",
+    variant: "h6",
+    color: "primary",
+    gutterBottom: true
+  }, "Cart"), _react.default.createElement(_Table.default, {
+    size: "small"
+  }, _react.default.createElement(_TableHead.default, null, _react.default.createElement(_TableRow.default, null, _react.default.createElement(_TableCell.default, null, "Food Item"), _react.default.createElement(_TableCell.default, {
+    align: "right"
+  }, "Price"), _react.default.createElement(_TableCell.default, null, "Amount"), _react.default.createElement(_TableCell.default, null), _react.default.createElement(_TableCell.default, null))), _react.default.createElement(_TableBody.default, null, rows.map(row => _react.default.createElement(_TableRow.default, {
+    key: row.id
+  }, _react.default.createElement(_TableCell.default, null, row.shipTo), _react.default.createElement(_TableCell.default, null, row.paymentMethod), _react.default.createElement(_TableCell.default, null, row.amount), _react.default.createElement(_TableCell.default, null, _react.default.createElement(_Button.default, {
+    color: "primary"
+  }, "+1"), _react.default.createElement(_Button.default, {
+    color: "primary"
+  }, "-1")), _react.default.createElement(_TableCell.default, null, _react.default.createElement(_Button.default, {
+    color: "primary"
+  }, "Delete")))))));
+}
+},{"react":"../node_modules/react/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Table":"../node_modules/@material-ui/core/esm/Table/index.js","@material-ui/core/TableBody":"../node_modules/@material-ui/core/esm/TableBody/index.js","@material-ui/core/TableCell":"../node_modules/@material-ui/core/esm/TableCell/index.js","@material-ui/core/TableHead":"../node_modules/@material-ui/core/esm/TableHead/index.js","@material-ui/core/TableRow":"../node_modules/@material-ui/core/esm/TableRow/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js"}],"App/pages/RestaurantPage.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51601,7 +54973,21 @@ var _Container = _interopRequireDefault(require("@material-ui/core/Container"));
 
 var _Link = _interopRequireDefault(require("@material-ui/core/Link"));
 
+var _Dialog = _interopRequireDefault(require("@material-ui/core/Dialog"));
+
+var _DialogActions = _interopRequireDefault(require("@material-ui/core/DialogActions"));
+
+var _DialogContent = _interopRequireDefault(require("@material-ui/core/DialogContent"));
+
+var _DialogContentText = _interopRequireDefault(require("@material-ui/core/DialogContentText"));
+
+var _DialogTitle = _interopRequireDefault(require("@material-ui/core/DialogTitle"));
+
 var _FoodCard = _interopRequireDefault(require("./../components/FoodCard"));
+
+var _constants = require("./../constants/constants");
+
+var _Cart = _interopRequireDefault(require("./../pages/Cart"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51636,20 +55022,94 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6)
   }
-});
+}); // const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 class RestaurantPage extends _react.default.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    const restaurantProps = props.history.location.state.props;
+    this.state = {
+      restaurantProps: restaurantProps,
+      foodItems: [],
+      ordered: [],
+      cartOpen: false
+    };
+  }
+
+  componentDidMount() {
+    const {
+      restaurantProps
+    } = this.state;
+    const req = new Request(`${_constants.SERVER_URL}/restaurants/${restaurantProps.rid}/menu`, {
+      method: 'GET'
+    });
+    fetch(req).then(response => response.json()).then(data => {
+      console.log(data);
+      this.setState({
+        foodItems: data.result
+      });
+    }).catch(error => {
+      console.log("error");
+    });
+  }
+
+  addFoodItem(item) {
+    const {
+      ordered
+    } = this.state;
+    let newArray;
+    let change = false;
+
+    for (let i = 0; i < ordered.length; i++) {
+      if (ordered[i].foodID === item.id) {
+        const existingItem = ordered[i];
+        existingItem.quantity++;
+        ordered.splice(i, 1);
+        ordered.push(existingItem);
+        newArray = ordered;
+        change = true;
+      }
+    }
+
+    if (!change) {
+      console.log('here');
+      const newItem = {
+        foodID: item.id,
+        quantity: 1
+      };
+      ordered.push(newItem);
+      newArray = ordered;
+    }
+
+    console.log(newArray);
+    this.setState({
+      ordered: newArray
+    });
+  }
+
+  openCart() {
+    this.setState({
+      cartOpen: true
+    });
+  }
+
+  handleClose() {
+    this.setState({
+      cartOpen: false
+    });
   }
 
   render() {
     const {
       classes
     } = this.props;
+    const {
+      foodItems,
+      ordered,
+      cartOpen
+    } = this.state;
+    console.log(this.state.ordered);
     return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
       className: classes.heroContent
     }, _react.default.createElement(_Container.default, {
@@ -51660,34 +55120,34 @@ class RestaurantPage extends _react.default.Component {
       align: "center",
       color: "textPrimary",
       gutterBottom: true
-    }, "PAGE"))), _react.default.createElement(_Container.default, {
+    }, this.state.restaurantProps.title), _react.default.createElement(_Button.default, {
+      variant: "contained",
+      color: "primary",
+      onClick: this.openCart.bind(this)
+    }, "Cart"))), _react.default.createElement(_Container.default, {
       className: classes.cardGrid,
       maxWidth: "md"
     }, _react.default.createElement(_Grid.default, {
       container: true,
       spacing: 4
-    }, cards.map(card => _react.default.createElement(_Grid.default, {
+    }, foodItems.map(item => _react.default.createElement(_Grid.default, {
       item: true,
-      key: card,
+      key: item.foodID,
       xs: 12,
       sm: 6,
       md: 4
     }, _react.default.createElement(_FoodCard.default, {
       imageUrl: "https://source.unsplash.com/JorKKx5rvA0/640x426",
-      title: "McSpicy Value Meal",
-      description: ""
-    }))))), _react.default.createElement("footer", {
-      className: classes.footer
-    }, _react.default.createElement(_Typography.default, {
-      variant: "h6",
-      align: "center",
-      gutterBottom: true
-    }, "Footer"), _react.default.createElement(_Typography.default, {
-      variant: "subtitle1",
-      align: "center",
-      color: "textSecondary",
-      component: "p"
-    }, "Something here to give the footer a purpose!")));
+      title: item.fname,
+      fid: item.foodID,
+      description: "",
+      addFoodItem: this.addFoodItem.bind(this)
+    }))))), _react.default.createElement(_Dialog.default, {
+      onClose: this.handleClose.bind(this),
+      open: cartOpen
+    }, _react.default.createElement(_Cart.default, {
+      ordered: ordered
+    })));
   }
 
 }
@@ -51695,7 +55155,7 @@ class RestaurantPage extends _react.default.Component {
 var _default = (0, _styles.withStyles)(styles)(RestaurantPage);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","./../components/FoodCard":"App/components/FoodCard.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Dialog":"../node_modules/@material-ui/core/esm/Dialog/index.js","@material-ui/core/DialogActions":"../node_modules/@material-ui/core/esm/DialogActions/index.js","@material-ui/core/DialogContent":"../node_modules/@material-ui/core/esm/DialogContent/index.js","@material-ui/core/DialogContentText":"../node_modules/@material-ui/core/esm/DialogContentText/index.js","@material-ui/core/DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/index.js","./../components/FoodCard":"App/components/FoodCard.js","./../constants/constants":"App/constants/constants.js","./../pages/Cart":"App/pages/Cart.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -55310,1280 +58770,7 @@ Object.defineProperty(exports, "default", {
 var _FormHelperText = _interopRequireDefault(require("./FormHelperText"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./FormHelperText":"../node_modules/@material-ui/core/esm/FormHelperText/FormHelperText.js"}],"../node_modules/@material-ui/core/esm/utils/ownerDocument.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = ownerDocument;
-
-function ownerDocument(node) {
-  return node && node.ownerDocument || document;
-}
-},{}],"../node_modules/@material-ui/core/esm/utils/ownerWindow.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = ownerWindow;
-
-var _ownerDocument = _interopRequireDefault(require("./ownerDocument"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function ownerWindow(node) {
-  var doc = (0, _ownerDocument.default)(node);
-  return doc.defaultView || window;
-}
-},{"./ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js"}],"../node_modules/@material-ui/core/esm/utils/createChainedFunction.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = createChainedFunction;
-
-/**
- * Safe chained function
- *
- * Will only create a new function if needed,
- * otherwise will pass back existing functions or null.
- *
- * @param {function} functions to chain
- * @returns {function|null}
- */
-function createChainedFunction() {
-  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
-    funcs[_key] = arguments[_key];
-  }
-
-  return funcs.reduce(function (acc, func) {
-    if (func == null) {
-      return acc;
-    }
-
-    if ("development" !== 'production') {
-      if (typeof func !== 'function') {
-        console.error('Material-UI: invalid Argument Type, must only provide functions, undefined, or null.');
-      }
-    }
-
-    return function chainedFunction() {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-
-      acc.apply(this, args);
-      func.apply(this, args);
-    };
-  }, function () {});
-}
-},{}],"../node_modules/@material-ui/core/esm/Portal/Portal.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var React = _interopRequireWildcard(require("react"));
-
-var ReactDOM = _interopRequireWildcard(require("react-dom"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _utils = require("@material-ui/utils");
-
-var _setRef = _interopRequireDefault(require("../utils/setRef"));
-
-var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function getContainer(container) {
-  container = typeof container === 'function' ? container() : container; // #StrictMode ready
-
-  return ReactDOM.findDOMNode(container);
-}
-
-var useEnhancedEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
-/**
- * Portals provide a first-class way to render children into a DOM node
- * that exists outside the DOM hierarchy of the parent component.
- */
-
-var Portal = React.forwardRef(function Portal(props, ref) {
-  var children = props.children,
-      container = props.container,
-      _props$disablePortal = props.disablePortal,
-      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
-      onRendered = props.onRendered;
-
-  var _React$useState = React.useState(null),
-      mountNode = _React$useState[0],
-      setMountNode = _React$useState[1];
-
-  var handleRef = (0, _useForkRef.default)(React.isValidElement(children) ? children.ref : null, ref);
-  useEnhancedEffect(function () {
-    if (!disablePortal) {
-      setMountNode(getContainer(container) || document.body);
-    }
-  }, [container, disablePortal]);
-  useEnhancedEffect(function () {
-    if (mountNode && !disablePortal) {
-      (0, _setRef.default)(ref, mountNode);
-      return function () {
-        (0, _setRef.default)(ref, null);
-      };
-    }
-
-    return undefined;
-  }, [ref, mountNode, disablePortal]);
-  useEnhancedEffect(function () {
-    if (onRendered && (mountNode || disablePortal)) {
-      onRendered();
-    }
-  }, [onRendered, mountNode, disablePortal]);
-
-  if (disablePortal) {
-    if (React.isValidElement(children)) {
-      return React.cloneElement(children, {
-        ref: handleRef
-      });
-    }
-
-    return children;
-  }
-
-  return mountNode ? ReactDOM.createPortal(children, mountNode) : mountNode;
-});
-"development" !== "production" ? Portal.propTypes = {
-  // ----------------------------- Warning --------------------------------
-  // | These PropTypes are generated from the TypeScript type definitions |
-  // |     To update them edit the d.ts file and run "yarn proptypes"     |
-  // ----------------------------------------------------------------------
-
-  /**
-   * The children to render into the `container`.
-   */
-  children: _propTypes.default.node,
-
-  /**
-   * A node, component instance, or function that returns either.
-   * The `container` will have the portal children appended to it.
-   * By default, it uses the body of the top-level document object,
-   * so it's simply `document.body` most of the time.
-   */
-  container: _propTypes.default.oneOfType([_propTypes.default.func, _propTypes.default.instanceOf(React.Component), _propTypes.default.instanceOf(typeof Element === 'undefined' ? Object : Element)]),
-
-  /**
-   * Disable the portal behavior.
-   * The children stay within it's parent DOM hierarchy.
-   */
-  disablePortal: _propTypes.default.bool,
-
-  /**
-   * Callback fired once the children has been mounted into the `container`.
-   *
-   * This prop will be deprecated and removed in v5, the ref can be used instead.
-   */
-  onRendered: _propTypes.default.func
-} : void 0;
-
-if ("development" !== 'production') {
-  // eslint-disable-next-line
-  Portal['propTypes' + ''] = (0, _utils.exactProp)(Portal.propTypes);
-}
-
-var _default = Portal;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../utils/setRef":"../node_modules/@material-ui/core/esm/utils/setRef.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/Portal/index.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "default", {
-  enumerable: true,
-  get: function () {
-    return _Portal.default;
-  }
-});
-
-var _Portal = _interopRequireDefault(require("./Portal"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./Portal":"../node_modules/@material-ui/core/esm/Portal/Portal.js"}],"../node_modules/@material-ui/core/esm/utils/getScrollbarSize.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = getScrollbarSize;
-
-// A change of the browser zoom change the scrollbar size.
-// Credit https://github.com/twbs/bootstrap/blob/3ffe3a5d82f6f561b82ff78d82b32a7d14aed558/js/src/modal.js#L512-L519
-function getScrollbarSize() {
-  var scrollDiv = document.createElement('div');
-  scrollDiv.style.width = '99px';
-  scrollDiv.style.height = '99px';
-  scrollDiv.style.position = 'absolute';
-  scrollDiv.style.top = '-9999px';
-  scrollDiv.style.overflow = 'scroll';
-  document.body.appendChild(scrollDiv);
-  var scrollbarSize = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-  document.body.removeChild(scrollDiv);
-  return scrollbarSize;
-}
-},{}],"../node_modules/@material-ui/core/esm/Modal/ModalManager.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ariaHidden = ariaHidden;
-exports.default = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/createClass"));
-
-var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/toConsumableArray"));
-
-var _getScrollbarSize = _interopRequireDefault(require("../utils/getScrollbarSize"));
-
-var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
-
-var _ownerWindow = _interopRequireDefault(require("../utils/ownerWindow"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Is a vertical scrollbar displayed?
-function isOverflowing(container) {
-  var doc = (0, _ownerDocument.default)(container);
-
-  if (doc.body === container) {
-    return (0, _ownerWindow.default)(doc).innerWidth > doc.documentElement.clientWidth;
-  }
-
-  return container.scrollHeight > container.clientHeight;
-}
-
-function ariaHidden(node, show) {
-  if (show) {
-    node.setAttribute('aria-hidden', 'true');
-  } else {
-    node.removeAttribute('aria-hidden');
-  }
-}
-
-function getPaddingRight(node) {
-  return parseInt(window.getComputedStyle(node)['padding-right'], 10) || 0;
-}
-
-function ariaHiddenSiblings(container, mountNode, currentNode) {
-  var nodesToExclude = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-  var show = arguments.length > 4 ? arguments[4] : undefined;
-  var blacklist = [mountNode, currentNode].concat((0, _toConsumableArray2.default)(nodesToExclude));
-  var blacklistTagNames = ['TEMPLATE', 'SCRIPT', 'STYLE'];
-  [].forEach.call(container.children, function (node) {
-    if (node.nodeType === 1 && blacklist.indexOf(node) === -1 && blacklistTagNames.indexOf(node.tagName) === -1) {
-      ariaHidden(node, show);
-    }
-  });
-}
-
-function findIndexOf(containerInfo, callback) {
-  var idx = -1;
-  containerInfo.some(function (item, index) {
-    if (callback(item)) {
-      idx = index;
-      return true;
-    }
-
-    return false;
-  });
-  return idx;
-}
-
-function handleContainer(containerInfo, props) {
-  var restoreStyle = [];
-  var restorePaddings = [];
-  var container = containerInfo.container;
-  var fixedNodes;
-
-  if (!props.disableScrollLock) {
-    if (isOverflowing(container)) {
-      // Compute the size before applying overflow hidden to avoid any scroll jumps.
-      var scrollbarSize = (0, _getScrollbarSize.default)();
-      restoreStyle.push({
-        value: container.style.paddingRight,
-        key: 'padding-right',
-        el: container
-      }); // Use computed style, here to get the real padding to add our scrollbar width.
-
-      container.style['padding-right'] = "".concat(getPaddingRight(container) + scrollbarSize, "px"); // .mui-fixed is a global helper.
-
-      fixedNodes = (0, _ownerDocument.default)(container).querySelectorAll('.mui-fixed');
-      [].forEach.call(fixedNodes, function (node) {
-        restorePaddings.push(node.style.paddingRight);
-        node.style.paddingRight = "".concat(getPaddingRight(node) + scrollbarSize, "px");
-      });
-    } // Improve Gatsby support
-    // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
-
-
-    var parent = container.parentElement;
-    var scrollContainer = parent.nodeName === 'HTML' && window.getComputedStyle(parent)['overflow-y'] === 'scroll' ? parent : container; // Block the scroll even if no scrollbar is visible to account for mobile keyboard
-    // screensize shrink.
-
-    restoreStyle.push({
-      value: scrollContainer.style.overflow,
-      key: 'overflow',
-      el: scrollContainer
-    });
-    scrollContainer.style.overflow = 'hidden';
-  }
-
-  var restore = function restore() {
-    if (fixedNodes) {
-      [].forEach.call(fixedNodes, function (node, i) {
-        if (restorePaddings[i]) {
-          node.style.paddingRight = restorePaddings[i];
-        } else {
-          node.style.removeProperty('padding-right');
-        }
-      });
-    }
-
-    restoreStyle.forEach(function (_ref) {
-      var value = _ref.value,
-          el = _ref.el,
-          key = _ref.key;
-
-      if (value) {
-        el.style.setProperty(key, value);
-      } else {
-        el.style.removeProperty(key);
-      }
-    });
-  };
-
-  return restore;
-}
-
-function getHiddenSiblings(container) {
-  var hiddenSiblings = [];
-  [].forEach.call(container.children, function (node) {
-    if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') {
-      hiddenSiblings.push(node);
-    }
-  });
-  return hiddenSiblings;
-}
-/**
- * @ignore - do not document.
- *
- * Proper state management for containers and the modals in those containers.
- * Simplified, but inspired by react-overlay's ModalManager class.
- * Used by the Modal to ensure proper styling of containers.
- */
-
-
-var ModalManager = /*#__PURE__*/function () {
-  function ModalManager() {
-    (0, _classCallCheck2.default)(this, ModalManager); // this.modals[modalIndex] = modal
-
-    this.modals = []; // this.containers[containerIndex] = {
-    //   modals: [],
-    //   container,
-    //   restore: null,
-    // }
-
-    this.containers = [];
-  }
-
-  (0, _createClass2.default)(ModalManager, [{
-    key: "add",
-    value: function add(modal, container) {
-      var modalIndex = this.modals.indexOf(modal);
-
-      if (modalIndex !== -1) {
-        return modalIndex;
-      }
-
-      modalIndex = this.modals.length;
-      this.modals.push(modal); // If the modal we are adding is already in the DOM.
-
-      if (modal.modalRef) {
-        ariaHidden(modal.modalRef, false);
-      }
-
-      var hiddenSiblingNodes = getHiddenSiblings(container);
-      ariaHiddenSiblings(container, modal.mountNode, modal.modalRef, hiddenSiblingNodes, true);
-      var containerIndex = findIndexOf(this.containers, function (item) {
-        return item.container === container;
-      });
-
-      if (containerIndex !== -1) {
-        this.containers[containerIndex].modals.push(modal);
-        return modalIndex;
-      }
-
-      this.containers.push({
-        modals: [modal],
-        container: container,
-        restore: null,
-        hiddenSiblingNodes: hiddenSiblingNodes
-      });
-      return modalIndex;
-    }
-  }, {
-    key: "mount",
-    value: function mount(modal, props) {
-      var containerIndex = findIndexOf(this.containers, function (item) {
-        return item.modals.indexOf(modal) !== -1;
-      });
-      var containerInfo = this.containers[containerIndex];
-
-      if (!containerInfo.restore) {
-        containerInfo.restore = handleContainer(containerInfo, props);
-      }
-    }
-  }, {
-    key: "remove",
-    value: function remove(modal) {
-      var modalIndex = this.modals.indexOf(modal);
-
-      if (modalIndex === -1) {
-        return modalIndex;
-      }
-
-      var containerIndex = findIndexOf(this.containers, function (item) {
-        return item.modals.indexOf(modal) !== -1;
-      });
-      var containerInfo = this.containers[containerIndex];
-      containerInfo.modals.splice(containerInfo.modals.indexOf(modal), 1);
-      this.modals.splice(modalIndex, 1); // If that was the last modal in a container, clean up the container.
-
-      if (containerInfo.modals.length === 0) {
-        // The modal might be closed before it had the chance to be mounted in the DOM.
-        if (containerInfo.restore) {
-          containerInfo.restore();
-        }
-
-        if (modal.modalRef) {
-          // In case the modal wasn't in the DOM yet.
-          ariaHidden(modal.modalRef, true);
-        }
-
-        ariaHiddenSiblings(containerInfo.container, modal.mountNode, modal.modalRef, containerInfo.hiddenSiblingNodes, false);
-        this.containers.splice(containerIndex, 1);
-      } else {
-        // Otherwise make sure the next top modal is visible to a screen reader.
-        var nextTop = containerInfo.modals[containerInfo.modals.length - 1]; // as soon as a modal is adding its modalRef is undefined. it can't set
-        // aria-hidden because the dom element doesn't exist either
-        // when modal was unmounted before modalRef gets null
-
-        if (nextTop.modalRef) {
-          ariaHidden(nextTop.modalRef, false);
-        }
-      }
-
-      return modalIndex;
-    }
-  }, {
-    key: "isTopModal",
-    value: function isTopModal(modal) {
-      return this.modals.length > 0 && this.modals[this.modals.length - 1] === modal;
-    }
-  }]);
-  return ModalManager;
-}();
-
-exports.default = ModalManager;
-},{"@babel/runtime/helpers/esm/classCallCheck":"../node_modules/@babel/runtime/helpers/esm/classCallCheck.js","@babel/runtime/helpers/esm/createClass":"../node_modules/@babel/runtime/helpers/esm/createClass.js","@babel/runtime/helpers/esm/toConsumableArray":"../node_modules/@babel/runtime/helpers/esm/toConsumableArray.js","../utils/getScrollbarSize":"../node_modules/@material-ui/core/esm/utils/getScrollbarSize.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../utils/ownerWindow":"../node_modules/@material-ui/core/esm/utils/ownerWindow.js"}],"../node_modules/@material-ui/core/esm/Modal/TrapFocus.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var React = _interopRequireWildcard(require("react"));
-
-var ReactDOM = _interopRequireWildcard(require("react-dom"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
-
-var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-/* eslint-disable consistent-return, jsx-a11y/no-noninteractive-tabindex */
-
-/**
- * @ignore - internal component.
- */
-function TrapFocus(props) {
-  var children = props.children,
-      _props$disableAutoFoc = props.disableAutoFocus,
-      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
-      _props$disableEnforce = props.disableEnforceFocus,
-      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
-      _props$disableRestore = props.disableRestoreFocus,
-      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
-      getDoc = props.getDoc,
-      isEnabled = props.isEnabled,
-      open = props.open;
-  var ignoreNextEnforceFocus = React.useRef();
-  var sentinelStart = React.useRef(null);
-  var sentinelEnd = React.useRef(null);
-  var nodeToRestore = React.useRef();
-  var rootRef = React.useRef(null); // can be removed once we drop support for non ref forwarding class components
-
-  var handleOwnRef = React.useCallback(function (instance) {
-    // #StrictMode ready
-    rootRef.current = ReactDOM.findDOMNode(instance);
-  }, []);
-  var handleRef = (0, _useForkRef.default)(children.ref, handleOwnRef); // ⚠️ You may rely on React.useMemo as a performance optimization, not as a semantic guarantee.
-  // https://reactjs.org/docs/hooks-reference.html#usememo
-
-  React.useMemo(function () {
-    if (!open || typeof window === 'undefined') {
-      return;
-    }
-
-    nodeToRestore.current = getDoc().activeElement;
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  React.useEffect(function () {
-    if (!open) {
-      return;
-    }
-
-    var doc = (0, _ownerDocument.default)(rootRef.current); // We might render an empty child.
-
-    if (!disableAutoFocus && rootRef.current && !rootRef.current.contains(doc.activeElement)) {
-      if (!rootRef.current.hasAttribute('tabIndex')) {
-        if ("development" !== 'production') {
-          console.error(['Material-UI: the modal content node does not accept focus.', 'For the benefit of assistive technologies, ' + 'the tabIndex of the node is being set to "-1".'].join('\n'));
-        }
-
-        rootRef.current.setAttribute('tabIndex', -1);
-      }
-
-      rootRef.current.focus();
-    }
-
-    var contain = function contain() {
-      if (disableEnforceFocus || !isEnabled() || ignoreNextEnforceFocus.current) {
-        ignoreNextEnforceFocus.current = false;
-        return;
-      }
-
-      if (rootRef.current && !rootRef.current.contains(doc.activeElement)) {
-        rootRef.current.focus();
-      }
-    };
-
-    var loopFocus = function loopFocus(event) {
-      // 9 = Tab
-      if (disableEnforceFocus || !isEnabled() || event.keyCode !== 9) {
-        return;
-      } // Make sure the next tab starts from the right place.
-
-
-      if (doc.activeElement === rootRef.current) {
-        // We need to ignore the next contain as
-        // it will try to move the focus back to the rootRef element.
-        ignoreNextEnforceFocus.current = true;
-
-        if (event.shiftKey) {
-          sentinelEnd.current.focus();
-        } else {
-          sentinelStart.current.focus();
-        }
-      }
-    };
-
-    doc.addEventListener('focus', contain, true);
-    doc.addEventListener('keydown', loopFocus, true); // With Edge, Safari and Firefox, no focus related events are fired when the focused area stops being a focused area
-    // e.g. https://bugzilla.mozilla.org/show_bug.cgi?id=559561.
-    //
-    // The whatwg spec defines how the browser should behave but does not explicitly mention any events:
-    // https://html.spec.whatwg.org/multipage/interaction.html#focus-fixup-rule.
-
-    var interval = setInterval(function () {
-      contain();
-    }, 50);
-    return function () {
-      clearInterval(interval);
-      doc.removeEventListener('focus', contain, true);
-      doc.removeEventListener('keydown', loopFocus, true); // restoreLastFocus()
-
-      if (!disableRestoreFocus) {
-        // In IE 11 it is possible for document.activeElement to be null resulting
-        // in nodeToRestore.current being null.
-        // Not all elements in IE 11 have a focus method.
-        // Once IE 11 support is dropped the focus() call can be unconditional.
-        if (nodeToRestore.current && nodeToRestore.current.focus) {
-          nodeToRestore.current.focus();
-        }
-
-        nodeToRestore.current = null;
-      }
-    };
-  }, [disableAutoFocus, disableEnforceFocus, disableRestoreFocus, isEnabled, open]);
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-    tabIndex: 0,
-    ref: sentinelStart,
-    "data-test": "sentinelStart"
-  }), React.cloneElement(children, {
-    ref: handleRef
-  }), /*#__PURE__*/React.createElement("div", {
-    tabIndex: 0,
-    ref: sentinelEnd,
-    "data-test": "sentinelEnd"
-  }));
-}
-
-"development" !== "production" ? TrapFocus.propTypes = {
-  /**
-   * A single child content element.
-   */
-  children: _propTypes.default.element.isRequired,
-
-  /**
-   * If `true`, the modal will not automatically shift focus to itself when it opens, and
-   * replace it to the last focused element when it closes.
-   * This also works correctly with any modal children that have the `disableAutoFocus` prop.
-   *
-   * Generally this should never be set to `true` as it makes the modal less
-   * accessible to assistive technologies, like screen readers.
-   */
-  disableAutoFocus: _propTypes.default.bool,
-
-  /**
-   * If `true`, the modal will not prevent focus from leaving the modal while open.
-   *
-   * Generally this should never be set to `true` as it makes the modal less
-   * accessible to assistive technologies, like screen readers.
-   */
-  disableEnforceFocus: _propTypes.default.bool,
-
-  /**
-   * If `true`, the modal will not restore focus to previously focused element once
-   * modal is hidden.
-   */
-  disableRestoreFocus: _propTypes.default.bool,
-
-  /**
-   * Return the document to consider.
-   * We use it to implement the restore focus between different browser documents.
-   */
-  getDoc: _propTypes.default.func.isRequired,
-
-  /**
-   * Do we still want to enforce the focus?
-   * This prop helps nesting TrapFocus elements.
-   */
-  isEnabled: _propTypes.default.func.isRequired,
-
-  /**
-   * If `true`, the modal is open.
-   */
-  open: _propTypes.default.bool.isRequired
-} : void 0;
-/*
-
-In the future, we should be able to replace TrapFocus with:
-https://github.com/facebook/react/blob/master/packages/react-events/docs/FocusScope.md
-
-```jsx
-import FocusScope from 'react-dom/FocusScope';
-
-function TrapFocus(props) {
-  const {
-    children
-    disableAutoFocus = false,
-    disableEnforceFocus = false,
-    disableRestoreFocus = false,
-    open,
-  } = props;
-
-  if (!open) {
-    return children;
-  }
-
-  return (
-    <FocusScope
-      autoFocus={!disableAutoFocus}
-      contain={!disableEnforceFocus}
-      restoreFocus={!disableRestoreFocus}
-    >
-      {children}
-    </FocusScope>
-  );
-}
-```
-
-*/
-
-var _default = TrapFocus;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js"}],"../node_modules/@material-ui/core/esm/Modal/SimpleBackdrop.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = exports.styles = void 0;
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
-
-var React = _interopRequireWildcard(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var styles = {
-  /* Styles applied to the root element. */
-  root: {
-    zIndex: -1,
-    position: 'fixed',
-    right: 0,
-    bottom: 0,
-    top: 0,
-    left: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    WebkitTapHighlightColor: 'transparent'
-  },
-
-  /* Styles applied to the root element if `invisible={true}`. */
-  invisible: {
-    backgroundColor: 'transparent'
-  }
-};
-/**
- * @ignore - internal component.
- */
-
-exports.styles = styles;
-var SimpleBackdrop = React.forwardRef(function SimpleBackdrop(props, ref) {
-  var _props$invisible = props.invisible,
-      invisible = _props$invisible === void 0 ? false : _props$invisible,
-      open = props.open,
-      other = (0, _objectWithoutProperties2.default)(props, ["invisible", "open"]);
-  return open ? /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
-    "aria-hidden": true,
-    ref: ref
-  }, other, {
-    style: (0, _extends2.default)({}, styles.root, {}, invisible ? styles.invisible : {}, {}, other.style)
-  })) : null;
-});
-"development" !== "production" ? SimpleBackdrop.propTypes = {
-  /**
-   * If `true`, the backdrop is invisible.
-   * It can be used when rendering a popover or a custom select component.
-   */
-  invisible: _propTypes.default.bool,
-
-  /**
-   * If `true`, the backdrop is open.
-   */
-  open: _propTypes.default.bool.isRequired
-} : void 0;
-var _default = SimpleBackdrop;
-exports.default = _default;
-},{"@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"../node_modules/@material-ui/core/esm/Modal/Modal.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = exports.styles = void 0;
-
-var _objectWithoutProperties2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/objectWithoutProperties"));
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime/helpers/esm/extends"));
-
-var React = _interopRequireWildcard(require("react"));
-
-var ReactDOM = _interopRequireWildcard(require("react-dom"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-var _styles = require("@material-ui/styles");
-
-var _utils = require("@material-ui/utils");
-
-var _ownerDocument = _interopRequireDefault(require("../utils/ownerDocument"));
-
-var _Portal = _interopRequireDefault(require("../Portal"));
-
-var _createChainedFunction = _interopRequireDefault(require("../utils/createChainedFunction"));
-
-var _useForkRef = _interopRequireDefault(require("../utils/useForkRef"));
-
-var _useEventCallback = _interopRequireDefault(require("../utils/useEventCallback"));
-
-var _zIndex = _interopRequireDefault(require("../styles/zIndex"));
-
-var _ModalManager = _interopRequireWildcard(require("./ModalManager"));
-
-var _TrapFocus = _interopRequireDefault(require("./TrapFocus"));
-
-var _SimpleBackdrop = _interopRequireDefault(require("./SimpleBackdrop"));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function getContainer(container) {
-  container = typeof container === 'function' ? container() : container;
-  return ReactDOM.findDOMNode(container);
-}
-
-function getHasTransition(props) {
-  return props.children ? props.children.props.hasOwnProperty('in') : false;
-} // A modal manager used to track and manage the state of open Modals.
-// Modals don't open on the server so this won't conflict with concurrent requests.
-
-
-var defaultManager = new _ModalManager.default();
-
-var styles = function styles(theme) {
-  return {
-    /* Styles applied to the root element. */
-    root: {
-      position: 'fixed',
-      zIndex: theme.zIndex.modal,
-      right: 0,
-      bottom: 0,
-      top: 0,
-      left: 0
-    },
-
-    /* Styles applied to the root element if the `Modal` has exited. */
-    hidden: {
-      visibility: 'hidden'
-    }
-  };
-};
-/**
- * Modal is a lower-level construct that is leveraged by the following components:
- *
- * - [Dialog](/api/dialog/)
- * - [Drawer](/api/drawer/)
- * - [Menu](/api/menu/)
- * - [Popover](/api/popover/)
- *
- * If you are creating a modal dialog, you probably want to use the [Dialog](/api/dialog/) component
- * rather than directly using Modal.
- *
- * This component shares many concepts with [react-overlays](https://react-bootstrap.github.io/react-overlays/#modals).
- */
-
-
-exports.styles = styles;
-var Modal = React.forwardRef(function Modal(inProps, ref) {
-  var theme = (0, _styles.useTheme)();
-  var props = (0, _styles.getThemeProps)({
-    name: 'MuiModal',
-    props: (0, _extends2.default)({}, inProps),
-    theme: theme
-  });
-  var _props$BackdropCompon = props.BackdropComponent,
-      BackdropComponent = _props$BackdropCompon === void 0 ? _SimpleBackdrop.default : _props$BackdropCompon,
-      BackdropProps = props.BackdropProps,
-      children = props.children,
-      _props$closeAfterTran = props.closeAfterTransition,
-      closeAfterTransition = _props$closeAfterTran === void 0 ? false : _props$closeAfterTran,
-      container = props.container,
-      _props$disableAutoFoc = props.disableAutoFocus,
-      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
-      _props$disableBackdro = props.disableBackdropClick,
-      disableBackdropClick = _props$disableBackdro === void 0 ? false : _props$disableBackdro,
-      _props$disableEnforce = props.disableEnforceFocus,
-      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
-      _props$disableEscapeK = props.disableEscapeKeyDown,
-      disableEscapeKeyDown = _props$disableEscapeK === void 0 ? false : _props$disableEscapeK,
-      _props$disablePortal = props.disablePortal,
-      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
-      _props$disableRestore = props.disableRestoreFocus,
-      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
-      _props$disableScrollL = props.disableScrollLock,
-      disableScrollLock = _props$disableScrollL === void 0 ? false : _props$disableScrollL,
-      _props$hideBackdrop = props.hideBackdrop,
-      hideBackdrop = _props$hideBackdrop === void 0 ? false : _props$hideBackdrop,
-      _props$keepMounted = props.keepMounted,
-      keepMounted = _props$keepMounted === void 0 ? false : _props$keepMounted,
-      _props$manager = props.manager,
-      manager = _props$manager === void 0 ? defaultManager : _props$manager,
-      onBackdropClick = props.onBackdropClick,
-      onClose = props.onClose,
-      onEscapeKeyDown = props.onEscapeKeyDown,
-      onRendered = props.onRendered,
-      open = props.open,
-      other = (0, _objectWithoutProperties2.default)(props, ["BackdropComponent", "BackdropProps", "children", "closeAfterTransition", "container", "disableAutoFocus", "disableBackdropClick", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onEscapeKeyDown", "onRendered", "open"]);
-
-  var _React$useState = React.useState(true),
-      exited = _React$useState[0],
-      setExited = _React$useState[1];
-
-  var modal = React.useRef({});
-  var mountNodeRef = React.useRef(null);
-  var modalRef = React.useRef(null);
-  var handleRef = (0, _useForkRef.default)(modalRef, ref);
-  var hasTransition = getHasTransition(props);
-
-  var getDoc = function getDoc() {
-    return (0, _ownerDocument.default)(mountNodeRef.current);
-  };
-
-  var getModal = function getModal() {
-    modal.current.modalRef = modalRef.current;
-    modal.current.mountNode = mountNodeRef.current;
-    return modal.current;
-  };
-
-  var handleMounted = function handleMounted() {
-    manager.mount(getModal(), {
-      disableScrollLock: disableScrollLock
-    }); // Fix a bug on Chrome where the scroll isn't initially 0.
-
-    modalRef.current.scrollTop = 0;
-  };
-
-  var handleOpen = (0, _useEventCallback.default)(function () {
-    var resolvedContainer = getContainer(container) || getDoc().body;
-    manager.add(getModal(), resolvedContainer); // The element was already mounted.
-
-    if (modalRef.current) {
-      handleMounted();
-    }
-  });
-  var isTopModal = React.useCallback(function () {
-    return manager.isTopModal(getModal());
-  }, [manager]);
-  var handlePortalRef = (0, _useEventCallback.default)(function (node) {
-    mountNodeRef.current = node;
-
-    if (!node) {
-      return;
-    }
-
-    if (onRendered) {
-      onRendered();
-    }
-
-    if (open && isTopModal()) {
-      handleMounted();
-    } else {
-      (0, _ModalManager.ariaHidden)(modalRef.current, true);
-    }
-  });
-  var handleClose = React.useCallback(function () {
-    manager.remove(getModal());
-  }, [manager]);
-  React.useEffect(function () {
-    return function () {
-      handleClose();
-    };
-  }, [handleClose]);
-  React.useEffect(function () {
-    if (open) {
-      handleOpen();
-    } else if (!hasTransition || !closeAfterTransition) {
-      handleClose();
-    }
-  }, [open, handleClose, hasTransition, closeAfterTransition, handleOpen]);
-
-  if (!keepMounted && !open && (!hasTransition || exited)) {
-    return null;
-  }
-
-  var handleEnter = function handleEnter() {
-    setExited(false);
-  };
-
-  var handleExited = function handleExited() {
-    setExited(true);
-
-    if (closeAfterTransition) {
-      handleClose();
-    }
-  };
-
-  var handleBackdropClick = function handleBackdropClick(event) {
-    if (event.target !== event.currentTarget) {
-      return;
-    }
-
-    if (onBackdropClick) {
-      onBackdropClick(event);
-    }
-
-    if (!disableBackdropClick && onClose) {
-      onClose(event, 'backdropClick');
-    }
-  };
-
-  var handleKeyDown = function handleKeyDown(event) {
-    // The handler doesn't take event.defaultPrevented into account:
-    //
-    // event.preventDefault() is meant to stop default behaviours like
-    // clicking a checkbox to check it, hitting a button to submit a form,
-    // and hitting left arrow to move the cursor in a text input etc.
-    // Only special HTML elements have these default behaviors.
-    if (event.key !== 'Escape' || !isTopModal()) {
-      return;
-    } // Swallow the event, in case someone is listening for the escape key on the body.
-
-
-    event.stopPropagation();
-
-    if (onEscapeKeyDown) {
-      onEscapeKeyDown(event);
-    }
-
-    if (!disableEscapeKeyDown && onClose) {
-      onClose(event, 'escapeKeyDown');
-    }
-  };
-
-  var inlineStyle = styles(theme || {
-    zIndex: _zIndex.default
-  });
-  var childProps = {};
-
-  if (children.props.tabIndex === undefined) {
-    childProps.tabIndex = children.props.tabIndex || '-1';
-  } // It's a Transition like component
-
-
-  if (hasTransition) {
-    childProps.onEnter = (0, _createChainedFunction.default)(handleEnter, children.props.onEnter);
-    childProps.onExited = (0, _createChainedFunction.default)(handleExited, children.props.onExited);
-  }
-
-  return /*#__PURE__*/React.createElement(_Portal.default, {
-    ref: handlePortalRef,
-    container: container,
-    disablePortal: disablePortal
-  }, /*#__PURE__*/React.createElement("div", (0, _extends2.default)({
-    ref: handleRef,
-    onKeyDown: handleKeyDown,
-    role: "presentation"
-  }, other, {
-    style: (0, _extends2.default)({}, inlineStyle.root, {}, !open && exited ? inlineStyle.hidden : {}, {}, other.style)
-  }), hideBackdrop ? null : /*#__PURE__*/React.createElement(BackdropComponent, (0, _extends2.default)({
-    open: open,
-    onClick: handleBackdropClick
-  }, BackdropProps)), /*#__PURE__*/React.createElement(_TrapFocus.default, {
-    disableEnforceFocus: disableEnforceFocus,
-    disableAutoFocus: disableAutoFocus,
-    disableRestoreFocus: disableRestoreFocus,
-    getDoc: getDoc,
-    isEnabled: isTopModal,
-    open: open
-  }, React.cloneElement(children, childProps))));
-});
-"development" !== "production" ? Modal.propTypes = {
-  /**
-   * A backdrop component. This prop enables custom backdrop rendering.
-   */
-  BackdropComponent: _propTypes.default.elementType,
-
-  /**
-   * Props applied to the [`Backdrop`](/api/backdrop/) element.
-   */
-  BackdropProps: _propTypes.default.object,
-
-  /**
-   * A single child content element.
-   */
-  children: _utils.elementAcceptingRef.isRequired,
-
-  /**
-   * When set to true the Modal waits until a nested Transition is completed before closing.
-   */
-  closeAfterTransition: _propTypes.default.bool,
-
-  /**
-   * A node, component instance, or function that returns either.
-   * The `container` will have the portal children appended to it.
-   */
-  container: _propTypes.default.oneOfType([_propTypes.default.object, _propTypes.default.func]),
-
-  /**
-   * If `true`, the modal will not automatically shift focus to itself when it opens, and
-   * replace it to the last focused element when it closes.
-   * This also works correctly with any modal children that have the `disableAutoFocus` prop.
-   *
-   * Generally this should never be set to `true` as it makes the modal less
-   * accessible to assistive technologies, like screen readers.
-   */
-  disableAutoFocus: _propTypes.default.bool,
-
-  /**
-   * If `true`, clicking the backdrop will not fire any callback.
-   */
-  disableBackdropClick: _propTypes.default.bool,
-
-  /**
-   * If `true`, the modal will not prevent focus from leaving the modal while open.
-   *
-   * Generally this should never be set to `true` as it makes the modal less
-   * accessible to assistive technologies, like screen readers.
-   */
-  disableEnforceFocus: _propTypes.default.bool,
-
-  /**
-   * If `true`, hitting escape will not fire any callback.
-   */
-  disableEscapeKeyDown: _propTypes.default.bool,
-
-  /**
-   * Disable the portal behavior.
-   * The children stay within it's parent DOM hierarchy.
-   */
-  disablePortal: _propTypes.default.bool,
-
-  /**
-   * If `true`, the modal will not restore focus to previously focused element once
-   * modal is hidden.
-   */
-  disableRestoreFocus: _propTypes.default.bool,
-
-  /**
-   * Disable the scroll lock behavior.
-   */
-  disableScrollLock: _propTypes.default.bool,
-
-  /**
-   * If `true`, the backdrop is not rendered.
-   */
-  hideBackdrop: _propTypes.default.bool,
-
-  /**
-   * Always keep the children in the DOM.
-   * This prop can be useful in SEO situation or
-   * when you want to maximize the responsiveness of the Modal.
-   */
-  keepMounted: _propTypes.default.bool,
-
-  /**
-   * @ignore
-   */
-  manager: _propTypes.default.object,
-
-  /**
-   * Callback fired when the backdrop is clicked.
-   */
-  onBackdropClick: _propTypes.default.func,
-
-  /**
-   * Callback fired when the component requests to be closed.
-   * The `reason` parameter can optionally be used to control the response to `onClose`.
-   *
-   * @param {object} event The event source of the callback.
-   * @param {string} reason Can be: `"escapeKeyDown"`, `"backdropClick"`.
-   */
-  onClose: _propTypes.default.func,
-
-  /**
-   * Callback fired when the escape key is pressed,
-   * `disableEscapeKeyDown` is false and the modal is in focus.
-   */
-  onEscapeKeyDown: _propTypes.default.func,
-
-  /**
-   * Callback fired once the children has been mounted into the `container`.
-   * It signals that the `open={true}` prop took effect.
-   *
-   * This prop will be deprecated and removed in v5, the ref can be used instead.
-   */
-  onRendered: _propTypes.default.func,
-
-  /**
-   * If `true`, the modal is open.
-   */
-  open: _propTypes.default.bool.isRequired
-} : void 0;
-var _default = Modal;
-exports.default = _default;
-},{"@babel/runtime/helpers/esm/objectWithoutProperties":"../node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js","@babel/runtime/helpers/esm/extends":"../node_modules/@babel/runtime/helpers/esm/extends.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","@material-ui/styles":"../node_modules/@material-ui/styles/esm/index.js","@material-ui/utils":"../node_modules/@material-ui/utils/esm/index.js","../utils/ownerDocument":"../node_modules/@material-ui/core/esm/utils/ownerDocument.js","../Portal":"../node_modules/@material-ui/core/esm/Portal/index.js","../utils/createChainedFunction":"../node_modules/@material-ui/core/esm/utils/createChainedFunction.js","../utils/useForkRef":"../node_modules/@material-ui/core/esm/utils/useForkRef.js","../utils/useEventCallback":"../node_modules/@material-ui/core/esm/utils/useEventCallback.js","../styles/zIndex":"../node_modules/@material-ui/core/esm/styles/zIndex.js","./ModalManager":"../node_modules/@material-ui/core/esm/Modal/ModalManager.js","./TrapFocus":"../node_modules/@material-ui/core/esm/Modal/TrapFocus.js","./SimpleBackdrop":"../node_modules/@material-ui/core/esm/Modal/SimpleBackdrop.js"}],"../node_modules/@material-ui/core/esm/Modal/index.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "default", {
-  enumerable: true,
-  get: function () {
-    return _Modal.default;
-  }
-});
-Object.defineProperty(exports, "ModalManager", {
-  enumerable: true,
-  get: function () {
-    return _ModalManager.default;
-  }
-});
-
-var _Modal = _interopRequireDefault(require("./Modal"));
-
-var _ModalManager = _interopRequireDefault(require("./ModalManager"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./Modal":"../node_modules/@material-ui/core/esm/Modal/Modal.js","./ModalManager":"../node_modules/@material-ui/core/esm/Modal/ModalManager.js"}],"../node_modules/@material-ui/core/esm/transitions/utils.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getTransitionProps = getTransitionProps;
-exports.reflow = void 0;
-
-var reflow = function reflow(node) {
-  return node.scrollTop;
-};
-
-exports.reflow = reflow;
-
-function getTransitionProps(props, options) {
-  var timeout = props.timeout,
-      _props$style = props.style,
-      style = _props$style === void 0 ? {} : _props$style;
-  return {
-    duration: style.transitionDuration || typeof timeout === 'number' ? timeout : timeout[options.mode] || 0,
-    delay: style.transitionDelay
-  };
-}
-},{}],"../node_modules/@material-ui/core/esm/Grow/Grow.js":[function(require,module,exports) {
+},{"./FormHelperText":"../node_modules/@material-ui/core/esm/FormHelperText/FormHelperText.js"}],"../node_modules/@material-ui/core/esm/Grow/Grow.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61032,7 +63219,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = SignIn;
+exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -61062,20 +63249,31 @@ var _styles = require("@material-ui/core/styles");
 
 var _Container = _interopRequireDefault(require("@material-ui/core/Container"));
 
+var _constants = require("./../constants/constants");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function Copyright() {
-  return _react.default.createElement(_Typography.default, {
-    variant: "body2",
-    color: "textSecondary",
-    align: "center"
-  }, 'Copyright © ', _react.default.createElement(_Link.default, {
-    color: "inherit",
-    href: "https://material-ui.com/"
-  }, "Your Website"), ' ', new Date().getFullYear(), '.');
-}
-
-const useStyles = (0, _styles.makeStyles)(theme => ({
+// import { encodeGetParams } from './../constants/constants';
+// const useStyles = makeStyles((theme) => ({
+//   paper: {
+//     marginTop: theme.spacing(8),
+//     display: 'flex',
+//     flexDirection: 'column',
+//     alignItems: 'center',
+//   },
+//   avatar: {
+//     margin: theme.spacing(1),
+//     backgroundColor: theme.palette.secondary.main,
+//   },
+//   form: {
+//     width: '100%', // Fix IE 11 issue.
+//     marginTop: theme.spacing(1),
+//   },
+//   submit: {
+//     margin: theme.spacing(3, 0, 2),
+//   },
+// }));
+const styles = theme => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -61094,79 +63292,228 @@ const useStyles = (0, _styles.makeStyles)(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2)
   }
-}));
+});
 
-function SignIn() {
-  const classes = useStyles();
-  return _react.default.createElement(_Container.default, {
-    component: "main",
-    maxWidth: "xs"
-  }, _react.default.createElement(_CssBaseline.default, null), _react.default.createElement("div", {
-    className: classes.paper
-  }, _react.default.createElement(_Avatar.default, {
-    className: classes.avatar
-  }, _react.default.createElement(_LockOutlined.default, null)), _react.default.createElement(_Typography.default, {
-    component: "h1",
-    variant: "h5"
-  }, "Sign in"), _react.default.createElement("form", {
-    className: classes.form,
-    noValidate: true
-  }, _react.default.createElement(_TextField.default, {
-    variant: "outlined",
-    margin: "normal",
-    required: true,
-    fullWidth: true,
-    id: "email",
-    label: "Email Address",
-    name: "email",
-    autoComplete: "email",
-    autoFocus: true
-  }), _react.default.createElement(_TextField.default, {
-    variant: "outlined",
-    margin: "normal",
-    required: true,
-    fullWidth: true,
-    name: "password",
-    label: "Password",
-    type: "password",
-    id: "password",
-    autoComplete: "current-password"
-  }), _react.default.createElement(_FormControlLabel.default, {
-    control: _react.default.createElement(_Checkbox.default, {
-      value: "remember",
-      color: "primary"
-    }),
-    label: "Remember me"
-  }), _react.default.createElement(_Button.default, {
-    type: "submit",
-    fullWidth: true,
-    variant: "contained",
-    color: "primary",
-    className: classes.submit
-  }, "Sign In"), _react.default.createElement(_Grid.default, {
-    container: true
-  }, _react.default.createElement(_Grid.default, {
-    item: true,
-    xs: true
-  }, _react.default.createElement(_Link.default, {
-    href: "#",
-    variant: "body2"
-  }, "Forgot password?")), _react.default.createElement(_Grid.default, {
-    item: true
-  }, _react.default.createElement(_Link.default, {
-    href: "#",
-    variant: "body2"
-  }, "Don't have an account? Sign Up"))))), _react.default.createElement(_Box.default, {
-    mt: 8
-  }, _react.default.createElement(Copyright, null)));
+class SignIn extends _react.default.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      usernameEmail: '',
+      password: ''
+    };
+  } // componentDidMount() {
+  //     const params = {
+  //       usernameEmail: "AliceCustomer",
+  //       password: "abcdefghijklmnopqrstuvwxyx"
+  //     };
+  //     // fetch(SERVER_URL + '/api/auth/login?' + encodeGetParams(params), { mode: 'no-cors'})
+  //     //   .then(response => response.json())
+  //     //   .then(data => console.log(data))
+  //     //   .catch(error => console.log("error"));
+  //     fetch(SERVER_URL + '/restaurants', { mode: 'no-cors'})
+  //       .then(response => response.json())
+  //       .then(data => console.log(data))
+  //       .catch(error => console.log("error"));
+  //     fetch(SERVER_URL + '/api/auth/login', {
+  //         method: 'POST',
+  //         mode: 'no-cors',
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         },
+  //         body: JSON.stringify(params)
+  //       })
+  //       .then(response => response.json())
+  //       .then(data => console.log(data))
+  //       .catch(error => console.log("error"));
+  // }
+
+
+  login() {
+    const {
+      usernameEmail,
+      password
+    } = this.state;
+    const params = {
+      usernameEmail: usernameEmail,
+      password: password
+    };
+    const req = new Request(`${_constants.SERVER_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        usernameEmail,
+        password
+      })
+    });
+    fetch(req) // fetch(SERVER_URL + '/api/auth/login', {
+    //   method: 'POST',
+    //   mode: 'no-cors',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(params)
+    // })
+    .then(response => response.json()).then(data => {
+      console.log(data);
+    }).catch(error => {
+      console.log("error");
+    });
+    this.setState({
+      usernameEmail: '',
+      password: ''
+    }); // if (TEST) {
+    //   window.location.assign('/restaurantlist')
+    // }
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return _react.default.createElement(_Container.default, {
+      component: "main",
+      maxWidth: "xs"
+    }, _react.default.createElement(_CssBaseline.default, null), _react.default.createElement("div", {
+      className: classes.paper
+    }, _react.default.createElement(_Avatar.default, {
+      className: classes.avatar
+    }, _react.default.createElement(_LockOutlined.default, null)), _react.default.createElement(_Typography.default, {
+      component: "h1",
+      variant: "h5"
+    }, "Sign in"), _react.default.createElement("div", {
+      className: classes.form
+    }, _react.default.createElement(_TextField.default, {
+      variant: "outlined",
+      margin: "normal",
+      required: true,
+      fullWidth: true,
+      id: "email",
+      label: "Email Address",
+      name: "email",
+      autoComplete: "email",
+      autoFocus: true,
+      value: this.state.usernameEmail,
+      onChange: e => {
+        this.setState({
+          usernameEmail: e.target.value
+        });
+      }
+    }), _react.default.createElement(_TextField.default, {
+      variant: "outlined",
+      margin: "normal",
+      required: true,
+      fullWidth: true,
+      name: "password",
+      label: "Password",
+      type: "password",
+      id: "password",
+      autoComplete: "current-password",
+      value: this.state.password,
+      onChange: e => {
+        this.setState({
+          password: e.target.value
+        });
+      }
+    }), _react.default.createElement(_Button.default, {
+      type: "submit",
+      fullWidth: true,
+      variant: "contained",
+      color: "primary",
+      className: classes.submit,
+      onClick: this.login.bind(this)
+    }, "Sign In"), _react.default.createElement(_Grid.default, {
+      container: true,
+      justify: "flex-end"
+    }, _react.default.createElement(_Grid.default, {
+      item: true
+    }, _react.default.createElement(_Link.default, {
+      href: "/signup",
+      variant: "body2"
+    }, "Don't have an account? Sign Up"))))));
+  }
+
 }
-},{"react":"../node_modules/react/index.js","@material-ui/core/Avatar":"../node_modules/@material-ui/core/esm/Avatar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/TextField":"../node_modules/@material-ui/core/esm/TextField/index.js","@material-ui/core/FormControlLabel":"../node_modules/@material-ui/core/esm/FormControlLabel/index.js","@material-ui/core/Checkbox":"../node_modules/@material-ui/core/esm/Checkbox/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Box":"../node_modules/@material-ui/core/esm/Box/index.js","@material-ui/icons/LockOutlined":"../node_modules/@material-ui/icons/LockOutlined.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js"}],"App/pages/SignUp.js":[function(require,module,exports) {
+
+var _default = (0, _styles.withStyles)(styles)(SignIn); // export default function SignIn() {
+//   const classes = useStyles();
+//   return (
+//     <Container component="main" maxWidth="xs">
+//       <CssBaseline />
+//       <div className={classes.paper}>
+//         <Avatar className={classes.avatar}>
+//           <LockOutlinedIcon />
+//         </Avatar>
+//         <Typography component="h1" variant="h5">
+//           Sign in
+//         </Typography>
+//         <form className={classes.form} noValidate>
+//           <TextField
+//             variant="outlined"
+//             margin="normal"
+//             required
+//             fullWidth
+//             id="email"
+//             label="Email Address"
+//             name="email"
+//             autoComplete="email"
+//             autoFocus
+//           />
+//           <TextField
+//             variant="outlined"
+//             margin="normal"
+//             required
+//             fullWidth
+//             name="password"
+//             label="Password"
+//             type="password"
+//             id="password"
+//             autoComplete="current-password"
+//           />
+//           <FormControlLabel
+//             control={<Checkbox value="remember" color="primary" />}
+//             label="Remember me"
+//           />
+//           <Button
+//             type="submit"
+//             fullWidth
+//             variant="contained"
+//             color="primary"
+//             className={classes.submit}
+//           >
+//             Sign In
+//           </Button>
+//           <Grid container>
+//             <Grid item xs>
+//               <Link href="#" variant="body2">
+//                 Forgot password?
+//               </Link>
+//             </Grid>
+//             <Grid item>
+//               <Link href="#" variant="body2">
+//                 {"Don't have an account? Sign Up"}
+//               </Link>
+//             </Grid>
+//           </Grid>
+//         </form>
+//       </div>
+//       <Box mt={8}>
+//         <Copyright />
+//       </Box>
+//     </Container>
+//   );
+// }
+
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","@material-ui/core/Avatar":"../node_modules/@material-ui/core/esm/Avatar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/TextField":"../node_modules/@material-ui/core/esm/TextField/index.js","@material-ui/core/FormControlLabel":"../node_modules/@material-ui/core/esm/FormControlLabel/index.js","@material-ui/core/Checkbox":"../node_modules/@material-ui/core/esm/Checkbox/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Box":"../node_modules/@material-ui/core/esm/Box/index.js","@material-ui/icons/LockOutlined":"../node_modules/@material-ui/icons/LockOutlined.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","./../constants/constants":"App/constants/constants.js"}],"App/pages/SignUp.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = SignUp;
+exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -61196,20 +63543,30 @@ var _styles = require("@material-ui/core/styles");
 
 var _Container = _interopRequireDefault(require("@material-ui/core/Container"));
 
+var _constants = require("./../constants/constants");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function Copyright() {
-  return _react.default.createElement(_Typography.default, {
-    variant: "body2",
-    color: "textSecondary",
-    align: "center"
-  }, 'Copyright © ', _react.default.createElement(_Link.default, {
-    color: "inherit",
-    href: "https://material-ui.com/"
-  }, "Your Website"), ' ', new Date().getFullYear(), '.');
-}
-
-const useStyles = (0, _styles.makeStyles)(theme => ({
+// const useStyles = makeStyles((theme) => ({
+//   paper: {
+//     marginTop: theme.spacing(8),
+//     display: 'flex',
+//     flexDirection: 'column',
+//     alignItems: 'center',
+//   },
+//   avatar: {
+//     margin: theme.spacing(1),
+//     backgroundColor: theme.palette.secondary.main,
+//   },
+//   form: {
+//     width: '100%', // Fix IE 11 issue.
+//     marginTop: theme.spacing(3),
+//   },
+//   submit: {
+//     margin: theme.spacing(3, 0, 2),
+//   },
+// }));
+const styles = theme => ({
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
@@ -61228,68 +63585,132 @@ const useStyles = (0, _styles.makeStyles)(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2)
   }
-}));
+});
 
-function SignUp() {
-  const classes = useStyles();
-  return _react.default.createElement(_Container.default, {
-    component: "main",
-    maxWidth: "xs"
-  }, _react.default.createElement(_CssBaseline.default, null), _react.default.createElement("div", {
-    className: classes.paper
-  }, _react.default.createElement(_Avatar.default, {
-    className: classes.avatar
-  }, _react.default.createElement(_LockOutlined.default, null)), _react.default.createElement(_Typography.default, {
-    component: "h1",
-    variant: "h5"
-  }, "Sign up"), _react.default.createElement("form", {
-    className: classes.form,
-    noValidate: true
-  }, _react.default.createElement(_Grid.default, {
-    container: true,
-    spacing: 2
-  }, _react.default.createElement(_Grid.default, {
-    item: true,
-    xs: 12
-  }, _react.default.createElement(_TextField.default, {
-    variant: "outlined",
-    required: true,
-    fullWidth: true,
-    id: "email",
-    label: "Email Address",
-    name: "email",
-    autoComplete: "email"
-  })), _react.default.createElement(_Grid.default, {
-    item: true,
-    xs: 12
-  }, _react.default.createElement(_TextField.default, {
-    variant: "outlined",
-    required: true,
-    fullWidth: true,
-    name: "password",
-    label: "Password",
-    type: "password",
-    id: "password",
-    autoComplete: "current-password"
-  }))), _react.default.createElement(_Button.default, {
-    type: "submit",
-    fullWidth: true,
-    variant: "contained",
-    color: "primary",
-    className: classes.submit
-  }, "Sign Up"), _react.default.createElement(_Grid.default, {
-    container: true,
-    justify: "flex-end"
-  }, _react.default.createElement(_Grid.default, {
-    item: true
-  }, _react.default.createElement(_Link.default, {
-    href: "#",
-    variant: "body2"
-  }, "Already have an account? Sign in"))))), _react.default.createElement(_Box.default, {
-    mt: 5
-  }, _react.default.createElement(Copyright, null)));
+class SignUp extends _react.default.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      usernameEmail: '',
+      password: ''
+    };
+  }
+
+  signup() {
+    const {
+      usernameEmail,
+      password
+    } = this.state;
+    const params = {
+      usernameEmail: usernameEmail,
+      password: password
+    };
+    const req = new Request(`${_constants.SERVER_URL}/auth/addCustomer`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        usernameEmail,
+        password
+      })
+    });
+    fetch(req) // fetch(SERVER_URL + '/api/auth/login', {
+    //   method: 'POST',
+    //   mode: 'no-cors',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(params)
+    // })
+    .then(response => response.json()).then(data => console.log(data)).catch(error => console.log("error"));
+    this.setState({
+      usernameEmail: '',
+      password: ''
+    });
+
+    if (_constants.TEST) {// window.location.assign('/restaurantlist')
+    }
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return _react.default.createElement(_Container.default, {
+      component: "main",
+      maxWidth: "xs"
+    }, _react.default.createElement(_CssBaseline.default, null), _react.default.createElement("div", {
+      className: classes.paper
+    }, _react.default.createElement(_Avatar.default, {
+      className: classes.avatar
+    }, _react.default.createElement(_LockOutlined.default, null)), _react.default.createElement(_Typography.default, {
+      component: "h1",
+      variant: "h5"
+    }, "Sign up"), _react.default.createElement("div", {
+      className: classes.form
+    }, _react.default.createElement(_Grid.default, {
+      container: true,
+      spacing: 2
+    }, _react.default.createElement(_Grid.default, {
+      item: true,
+      xs: 12
+    }, _react.default.createElement(_TextField.default, {
+      variant: "outlined",
+      required: true,
+      fullWidth: true,
+      id: "email",
+      label: "Email Address",
+      name: "email",
+      autoComplete: "email",
+      value: this.state.usernameEmail,
+      onChange: e => {
+        this.setState({
+          usernameEmail: e.target.value
+        });
+      }
+    })), _react.default.createElement(_Grid.default, {
+      item: true,
+      xs: 12
+    }, _react.default.createElement(_TextField.default, {
+      variant: "outlined",
+      required: true,
+      fullWidth: true,
+      name: "password",
+      label: "Password",
+      type: "password",
+      id: "password",
+      autoComplete: "current-password",
+      value: this.state.password,
+      onChange: e => {
+        this.setState({
+          password: e.target.value
+        });
+      }
+    }))), _react.default.createElement(_Button.default, {
+      type: "submit",
+      fullWidth: true,
+      variant: "contained",
+      color: "primary",
+      className: classes.submit,
+      onClick: this.signup.bind(this)
+    }, "Sign Up"), _react.default.createElement(_Grid.default, {
+      container: true,
+      justify: "flex-end"
+    }, _react.default.createElement(_Grid.default, {
+      item: true
+    }, _react.default.createElement(_Link.default, {
+      href: "signin",
+      variant: "body2"
+    }, "Already have an account? Sign in"))))));
+  }
+
 }
-},{"react":"../node_modules/react/index.js","@material-ui/core/Avatar":"../node_modules/@material-ui/core/esm/Avatar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/TextField":"../node_modules/@material-ui/core/esm/TextField/index.js","@material-ui/core/FormControlLabel":"../node_modules/@material-ui/core/esm/FormControlLabel/index.js","@material-ui/core/Checkbox":"../node_modules/@material-ui/core/esm/Checkbox/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Box":"../node_modules/@material-ui/core/esm/Box/index.js","@material-ui/icons/LockOutlined":"../node_modules/@material-ui/icons/LockOutlined.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js"}],"App/components/Nav.js":[function(require,module,exports) {
+
+var _default = (0, _styles.withStyles)(styles)(SignUp);
+
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","@material-ui/core/Avatar":"../node_modules/@material-ui/core/esm/Avatar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/TextField":"../node_modules/@material-ui/core/esm/TextField/index.js","@material-ui/core/FormControlLabel":"../node_modules/@material-ui/core/esm/FormControlLabel/index.js","@material-ui/core/Checkbox":"../node_modules/@material-ui/core/esm/Checkbox/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Box":"../node_modules/@material-ui/core/esm/Box/index.js","@material-ui/icons/LockOutlined":"../node_modules/@material-ui/icons/LockOutlined.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","./../constants/constants":"App/constants/constants.js"}],"App/components/Nav.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61316,6 +63737,7 @@ const Header = _styledComponents.default.header`
   left: 0;
   z-index: 999;
   width: 100%;
+  background-color: #707070
 `;
 const NavWrapper = _styledComponents.default.nav`
   padding: 16px;
@@ -61403,14 +63825,6 @@ class Nav extends _react.default.Component {
     }, _react.default.createElement(NavButton, {
       onClick: this.toggleMenu
     }, "Menu"), _react.default.createElement(NavList, null, _react.default.createElement(NavItem, null, _react.default.createElement("a", {
-      href: "/"
-    }, "Home")), _react.default.createElement(NavItem, null, _react.default.createElement("a", {
-      href: "/about"
-    }, "About")), _react.default.createElement(NavItem, null, _react.default.createElement("a", {
-      href: "/portfolio"
-    }, "Portfolio")), _react.default.createElement(NavItem, null, _react.default.createElement("a", {
-      href: "/contact"
-    }, "Contact")), _react.default.createElement(NavItem, null, _react.default.createElement("a", {
       href: "/restaurantlist"
     }, "Restaurants")))));
   }
@@ -61446,6 +63860,18 @@ var _SignIn = _interopRequireDefault(require("./pages/SignIn"));
 
 var _SignUp = _interopRequireDefault(require("./pages/SignUp"));
 
+var _Cart = _interopRequireDefault(require("./pages/Cart"));
+
+var _Dialog = _interopRequireDefault(require("@material-ui/core/Dialog"));
+
+var _DialogActions = _interopRequireDefault(require("@material-ui/core/DialogActions"));
+
+var _DialogContent = _interopRequireDefault(require("@material-ui/core/DialogContent"));
+
+var _DialogContentText = _interopRequireDefault(require("@material-ui/core/DialogContentText"));
+
+var _DialogTitle = _interopRequireDefault(require("@material-ui/core/DialogTitle"));
+
 var _Nav = _interopRequireDefault(require("./components/Nav"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -61453,22 +63879,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // Import pages
 // Import nav component
 class Main extends _react.default.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      ordered: [],
+      cartOpen: false
+    };
+  }
+
   render() {
     return _react.default.createElement("div", {
       className: "wrapper"
     }, _react.default.createElement(_Nav.default, null), _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
       exact: true,
       path: "/",
-      component: _Home.default
-    }), _react.default.createElement(_reactRouterDom.Route, {
-      path: "/about",
-      component: _About.default
-    }), _react.default.createElement(_reactRouterDom.Route, {
-      path: "/contact",
-      component: _Contact.default
-    }), _react.default.createElement(_reactRouterDom.Route, {
-      path: "/portfolio",
-      component: _Portfolio.default
+      component: _RestaurantList.default
     }), _react.default.createElement(_reactRouterDom.Route, {
       path: "/signup",
       component: _SignUp.default
@@ -61487,7 +63912,7 @@ class Main extends _react.default.Component {
 }
 
 exports.default = Main;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/About":"App/pages/About.js","./pages/Contact":"App/pages/Contact.js","./pages/Home":"App/pages/Home.js","./pages/Portfolio":"App/pages/Portfolio.js","./pages/RestaurantList":"App/pages/RestaurantList.js","./pages/RestaurantPage":"App/pages/RestaurantPage.js","./pages/SignIn":"App/pages/SignIn.js","./pages/SignUp":"App/pages/SignUp.js","./components/Nav":"App/components/Nav.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./pages/About":"App/pages/About.js","./pages/Contact":"App/pages/Contact.js","./pages/Home":"App/pages/Home.js","./pages/Portfolio":"App/pages/Portfolio.js","./pages/RestaurantList":"App/pages/RestaurantList.js","./pages/RestaurantPage":"App/pages/RestaurantPage.js","./pages/SignIn":"App/pages/SignIn.js","./pages/SignUp":"App/pages/SignUp.js","./pages/Cart":"App/pages/Cart.js","@material-ui/core/Dialog":"../node_modules/@material-ui/core/esm/Dialog/index.js","@material-ui/core/DialogActions":"../node_modules/@material-ui/core/esm/DialogActions/index.js","@material-ui/core/DialogContent":"../node_modules/@material-ui/core/esm/DialogContent/index.js","@material-ui/core/DialogContentText":"../node_modules/@material-ui/core/esm/DialogContentText/index.js","@material-ui/core/DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/index.js","./components/Nav":"App/components/Nav.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -61564,7 +63989,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53187" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51277" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

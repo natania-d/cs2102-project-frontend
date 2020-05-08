@@ -32,22 +32,25 @@ export default function RestaurantCard(props) {
     let history = useHistory();
 
     function handleClick() {
-        history.push(props.restaurantUrl);
+        history.push({
+            pathname: props.restaurantUrl, 
+            state: { props }
+        });
     }
   
     return (
         <Card className={classes.card} onClick={handleClick}>
-            <CardMedia
+            {props.imageUrl && <CardMedia
             className={classes.cardMedia}
             image={props.imageUrl}
-            />
+            />}
             <CardContent className={classes.cardContent}>
             <Typography gutterBottom variant="h5" component="h2">
                 {props.title}
             </Typography>
-            <Typography>
+            {props.description && <Typography>
                 {props.description}
-            </Typography>
+            </Typography>}
             </CardContent>
             {/* <CardActions>
             <Button size="small" color="primary">

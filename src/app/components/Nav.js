@@ -10,6 +10,7 @@ const Header = styled.header`
   left: 0;
   z-index: 999;
   width: 100%;
+  background-color: #707070
 `
 
 const NavWrapper = styled.nav`
@@ -104,7 +105,7 @@ export default class Nav extends React.Component {
           <NavButton onClick={this.toggleMenu}>Menu</NavButton>
 
           <NavList>
-            <NavItem>
+            {/* <NavItem>
               <a href="/">Home</a>
             </NavItem>
 
@@ -118,7 +119,11 @@ export default class Nav extends React.Component {
 
             <NavItem>
               <a href="/contact">Contact</a>
-            </NavItem>
+            </NavItem> */}
+
+            {/* <NavItem>
+              <a href="/cart">Cart</a>
+            </NavItem> */}
             
             <NavItem>
               <a href="/restaurantlist">Restaurants</a>
