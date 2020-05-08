@@ -72,7 +72,7 @@ class SignUp extends React.Component {
         usernameEmail: usernameEmail,
         password: password
     };
-    const req = new Request(`${SERVER_URL}/auth/addCustomer`, {
+    const req = new Request(`${SERVER_URL}/users/addCustomer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -89,7 +89,10 @@ class SignUp extends React.Component {
     //   body: JSON.stringify(params)
     // })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => {
+      console.log(data)
+      window.location.assign('/restaurantlist')
+    })
     .catch(error => console.log("error"));
 
     this.setState({
@@ -122,7 +125,7 @@ class SignUp extends React.Component {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Username"
                   name="email"
                   autoComplete="email"
                   value={this.state.usernameEmail}

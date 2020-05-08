@@ -51342,7 +51342,129 @@ function RestaurantCard(props) {
 //         );
 //     }
 // }
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"App/constants/constants.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"App/components/Nav.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _styledComponents = _interopRequireWildcard(require("styled-components"));
+
+var _Button = _interopRequireDefault(require("./Button"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Import Button component
+const Header = _styledComponents.default.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  background-color: #707070
+`;
+const NavWrapper = _styledComponents.default.nav`
+  padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+
+  @media (max-width: 479px) {
+    flex-direction: column;
+    align-items: flex-end;
+
+    /* If navigation is open (show is true) */
+    ${props => props.isOpen && (0, _styledComponents.css)`
+      ul {
+        position: absolute;
+        top: 64px;
+        max-height: 1000px;
+      }
+    `}
+  }
+`;
+const NavList = _styledComponents.default.ul`
+  margin: 0;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: flex-end;
+  list-style-type: none;
+  height: auto;
+  max-height: 0;
+
+  @media (min-width: 480px) {
+    flex-direction: row;
+    justify-content: flex-end;
+    max-height: 1000px;
+  }
+`;
+const NavItem = _styledComponents.default.li`
+  & + & {
+    margin-top: 12px;
+  }
+
+  @media (min-width: 480px) {
+    & + & {
+      margin-top: 0;
+      margin-left: 32px;
+    }
+  }
+
+  a {
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+    transition: color .25s ease-in-out;
+
+    &:hover {
+      color: #888;
+    }
+  }
+`;
+const NavButton = (0, _styledComponents.default)(_Button.default)`
+  @media (min-width: 479px) {
+    display: none;
+  }
+`;
+
+class Nav extends _react.default.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      show: false
+    };
+    this.toggleMenu = this.toggleMenu.bind(this);
+  }
+
+  toggleMenu() {
+    this.setState({
+      show: !this.state.show
+    });
+  }
+
+  render() {
+    return _react.default.createElement(Header, null, _react.default.createElement(NavWrapper, {
+      isOpen: this.state.show
+    }, _react.default.createElement(NavButton, {
+      onClick: this.toggleMenu
+    }, "Menu"), _react.default.createElement(NavList, null, _react.default.createElement(NavItem, null, _react.default.createElement("a", {
+      href: "/restaurantlist"
+    }, "Restaurants")))));
+  }
+
+}
+
+exports.default = Nav;
+},{"react":"../node_modules/react/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","./Button":"App/components/Button.js"}],"App/constants/constants.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -51390,6 +51512,8 @@ var _Container = _interopRequireDefault(require("@material-ui/core/Container"));
 var _Link = _interopRequireDefault(require("@material-ui/core/Link"));
 
 var _RestaurantCard = _interopRequireDefault(require("./../components/RestaurantCard"));
+
+var _Nav = _interopRequireDefault(require("./../components/Nav"));
 
 var _constants = require("./../constants/constants");
 
@@ -51495,6 +51619,53 @@ class RestaurantList extends _react.default.Component {
       container: true,
       spacing: 4
     }, restaurants.map(restaurant => {
+      if (restaurant.rname === 'McDonalds') {
+        return _react.default.createElement(_Grid.default, {
+          item: true,
+          key: restaurant.rid,
+          xs: 12,
+          sm: 6,
+          md: 4
+        }, _react.default.createElement(_RestaurantCard.default, {
+          imageUrl: "https://source.unsplash.com/wqyanQ8ibTE/640x480",
+          restaurantUrl: "/" + restaurant.rname,
+          title: restaurant.rname,
+          location: restaurant.location,
+          minOrderPrice: restaurant.minimumOrderPrice,
+          rid: restaurant.rid
+        }));
+      } else if (restaurant.rname === 'Domino Pizza') {
+        return _react.default.createElement(_Grid.default, {
+          item: true,
+          key: restaurant.rid,
+          xs: 12,
+          sm: 6,
+          md: 4
+        }, _react.default.createElement(_RestaurantCard.default, {
+          imageUrl: "https://source.unsplash.com/SU1LFoeEUkk/640x423",
+          restaurantUrl: "/" + restaurant.rname,
+          title: restaurant.rname,
+          location: restaurant.location,
+          minOrderPrice: restaurant.minimumOrderPrice,
+          rid: restaurant.rid
+        }));
+      } else if (restaurant.rname === 'Pizza Hut') {
+        return _react.default.createElement(_Grid.default, {
+          item: true,
+          key: restaurant.rid,
+          xs: 12,
+          sm: 6,
+          md: 4
+        }, _react.default.createElement(_RestaurantCard.default, {
+          imageUrl: "https://source.unsplash.com/SU1LFoeEUkk/640x423",
+          restaurantUrl: "/" + restaurant.rname,
+          title: restaurant.rname,
+          location: restaurant.location,
+          minOrderPrice: restaurant.minimumOrderPrice,
+          rid: restaurant.rid
+        }));
+      }
+
       return _react.default.createElement(_Grid.default, {
         item: true,
         key: restaurant.rid,
@@ -51528,7 +51699,7 @@ class RestaurantList extends _react.default.Component {
 var _default = (0, _styles.withStyles)(styles)(RestaurantList);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","./../components/RestaurantCard":"App/components/RestaurantCard.js","./../constants/constants":"App/constants/constants.js"}],"../node_modules/@material-ui/core/esm/utils/ownerDocument.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","./../components/RestaurantCard":"App/components/RestaurantCard.js","./../components/Nav":"App/components/Nav.js","./../constants/constants":"App/constants/constants.js"}],"../node_modules/@material-ui/core/esm/utils/ownerDocument.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53960,108 +54131,7 @@ Object.defineProperty(exports, "default", {
 var _DialogTitle = _interopRequireDefault(require("./DialogTitle"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/DialogTitle.js"}],"App/components/FoodCard.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = RestaurantCard;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _reactRouterDom = require("react-router-dom");
-
-var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
-
-var _Card = _interopRequireDefault(require("@material-ui/core/Card"));
-
-var _CardActions = _interopRequireDefault(require("@material-ui/core/CardActions"));
-
-var _CardContent = _interopRequireDefault(require("@material-ui/core/CardContent"));
-
-var _CardMedia = _interopRequireDefault(require("@material-ui/core/CardMedia"));
-
-var _Dialog = _interopRequireDefault(require("@material-ui/core/Dialog"));
-
-var _DialogActions = _interopRequireDefault(require("@material-ui/core/DialogActions"));
-
-var _DialogContent = _interopRequireDefault(require("@material-ui/core/DialogContent"));
-
-var _DialogContentText = _interopRequireDefault(require("@material-ui/core/DialogContentText"));
-
-var _DialogTitle = _interopRequireDefault(require("@material-ui/core/DialogTitle"));
-
-var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
-
-var _styles = require("@material-ui/core/styles");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const useStyles = (0, _styles.makeStyles)(theme => ({
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  cardMedia: {
-    paddingTop: '56.25%' // 16:9
-
-  },
-  cardContent: {
-    flexGrow: 1
-  }
-}));
-
-function RestaurantCard(props) {
-  const classes = useStyles();
-
-  const [open, setOpen] = _react.default.useState(false);
-
-  function handleClick() {
-    alert("This item has been added to your order");
-  }
-
-  const handleClickOpen = () => {
-    props.addFoodItem({
-      id: props.fid
-    });
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return _react.default.createElement(_Card.default, {
-    className: classes.card
-  }, _react.default.createElement(_CardMedia.default, {
-    className: classes.cardMedia,
-    image: props.imageUrl
-  }), _react.default.createElement(_CardContent.default, {
-    className: classes.cardContent
-  }, _react.default.createElement(_Typography.default, {
-    gutterBottom: true,
-    variant: "h5",
-    component: "h2"
-  }, props.title), props.description && _react.default.createElement(_Typography.default, null, props.description)), _react.default.createElement(_CardActions.default, null, _react.default.createElement(_Button.default, {
-    size: "small",
-    color: "primary",
-    onClick: handleClickOpen
-  }, "Add")), _react.default.createElement(_Dialog.default, {
-    open: open,
-    onClose: handleClose,
-    "aria-labelledby": "alert-dialog-title",
-    "aria-describedby": "alert-dialog-description"
-  }, _react.default.createElement(_DialogTitle.default, {
-    id: "alert-dialog-title"
-  }, "This food item has been added to your order."), _react.default.createElement(_DialogActions.default, null, _react.default.createElement(_Button.default, {
-    onClick: handleClose,
-    color: "primary",
-    autoFocus: true
-  }, "GOT IT!"))));
-}
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Dialog":"../node_modules/@material-ui/core/esm/Dialog/index.js","@material-ui/core/DialogActions":"../node_modules/@material-ui/core/esm/DialogActions/index.js","@material-ui/core/DialogContent":"../node_modules/@material-ui/core/esm/DialogContent/index.js","@material-ui/core/DialogContentText":"../node_modules/@material-ui/core/esm/DialogContentText/index.js","@material-ui/core/DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"../node_modules/@material-ui/core/esm/Table/TableContext.js":[function(require,module,exports) {
+},{"./DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/DialogTitle.js"}],"../node_modules/@material-ui/core/esm/Table/TableContext.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54857,7 +54927,106 @@ Object.defineProperty(exports, "default", {
 var _TableRow = _interopRequireDefault(require("./TableRow"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./TableRow":"../node_modules/@material-ui/core/esm/TableRow/TableRow.js"}],"App/pages/Cart.js":[function(require,module,exports) {
+},{"./TableRow":"../node_modules/@material-ui/core/esm/TableRow/TableRow.js"}],"App/components/FoodCard.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = RestaurantCard;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
+
+var _Card = _interopRequireDefault(require("@material-ui/core/Card"));
+
+var _CardActions = _interopRequireDefault(require("@material-ui/core/CardActions"));
+
+var _CardContent = _interopRequireDefault(require("@material-ui/core/CardContent"));
+
+var _CardMedia = _interopRequireDefault(require("@material-ui/core/CardMedia"));
+
+var _Dialog = _interopRequireDefault(require("@material-ui/core/Dialog"));
+
+var _DialogActions = _interopRequireDefault(require("@material-ui/core/DialogActions"));
+
+var _DialogContent = _interopRequireDefault(require("@material-ui/core/DialogContent"));
+
+var _DialogContentText = _interopRequireDefault(require("@material-ui/core/DialogContentText"));
+
+var _DialogTitle = _interopRequireDefault(require("@material-ui/core/DialogTitle"));
+
+var _Typography = _interopRequireDefault(require("@material-ui/core/Typography"));
+
+var _styles = require("@material-ui/core/styles");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const useStyles = (0, _styles.makeStyles)(theme => ({
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  cardMedia: {
+    paddingTop: '56.25%' // 16:9
+
+  },
+  cardContent: {
+    flexGrow: 1
+  }
+}));
+
+function RestaurantCard(props) {
+  const classes = useStyles();
+
+  const [open, setOpen] = _react.default.useState(false);
+
+  function handleClick() {
+    alert("This item has been added to your order");
+  }
+
+  const handleClickOpen = () => {
+    props.addFoodItem(props.foodItemObject);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return _react.default.createElement(_Card.default, {
+    className: classes.card
+  }, _react.default.createElement(_CardMedia.default, {
+    className: classes.cardMedia,
+    image: props.imageUrl
+  }), _react.default.createElement(_CardContent.default, {
+    className: classes.cardContent
+  }, _react.default.createElement(_Typography.default, {
+    gutterBottom: true,
+    variant: "h5",
+    component: "h2"
+  }, props.title), props.description && _react.default.createElement(_Typography.default, null, props.description)), _react.default.createElement(_CardActions.default, null, _react.default.createElement(_Button.default, {
+    size: "small",
+    color: "primary",
+    onClick: handleClickOpen
+  }, "Add")), _react.default.createElement(_Dialog.default, {
+    open: open,
+    onClose: handleClose,
+    "aria-labelledby": "alert-dialog-title",
+    "aria-describedby": "alert-dialog-description"
+  }, _react.default.createElement(_DialogTitle.default, {
+    id: "alert-dialog-title"
+  }, "This food item has been added to your order."), _react.default.createElement(_DialogActions.default, null, _react.default.createElement(_Button.default, {
+    onClick: handleClose,
+    color: "primary",
+    autoFocus: true
+  }, "GOT IT!"))));
+}
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Card":"../node_modules/@material-ui/core/esm/Card/index.js","@material-ui/core/CardActions":"../node_modules/@material-ui/core/esm/CardActions/index.js","@material-ui/core/CardContent":"../node_modules/@material-ui/core/esm/CardContent/index.js","@material-ui/core/CardMedia":"../node_modules/@material-ui/core/esm/CardMedia/index.js","@material-ui/core/Dialog":"../node_modules/@material-ui/core/esm/Dialog/index.js","@material-ui/core/DialogActions":"../node_modules/@material-ui/core/esm/DialogActions/index.js","@material-ui/core/DialogContent":"../node_modules/@material-ui/core/esm/DialogContent/index.js","@material-ui/core/DialogContentText":"../node_modules/@material-ui/core/esm/DialogContentText/index.js","@material-ui/core/DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js"}],"App/pages/Cart.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54885,6 +55054,16 @@ var _Typography = _interopRequireDefault(require("@material-ui/core/Typography")
 
 var _Button = _interopRequireDefault(require("@material-ui/core/Button"));
 
+var _Dialog = _interopRequireDefault(require("@material-ui/core/Dialog"));
+
+var _DialogActions = _interopRequireDefault(require("@material-ui/core/DialogActions"));
+
+var _DialogContent = _interopRequireDefault(require("@material-ui/core/DialogContent"));
+
+var _DialogContentText = _interopRequireDefault(require("@material-ui/core/DialogContentText"));
+
+var _DialogTitle = _interopRequireDefault(require("@material-ui/core/DialogTitle"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Generate Order Data
@@ -54909,18 +55088,34 @@ const useStyles = (0, _styles.makeStyles)(theme => ({
   seeMore: {
     marginTop: theme.spacing(3)
   },
-  fragment: {// marginTop: '80px'
+  fragment: {
+    // marginTop: '80px'
+    minWidth: '200px',
+    minHeight: '80px'
   }
 }));
 
-function Cart() {
+function Cart(props) {
   const classes = useStyles();
 
-  function deleteItem() {}
+  const [open, setOpen] = _react.default.useState(false);
+
+  function deleteItem(item) {
+    // props.deleteFoodItem(item);
+    console.log("here"); // props.handleClose();
+  }
 
   function addItem() {}
 
   function minusItem() {}
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    false;
+  };
 
   return _react.default.createElement("div", {
     className: classes.fragment
@@ -54929,21 +55124,16 @@ function Cart() {
     variant: "h6",
     color: "primary",
     gutterBottom: true
-  }, "Cart"), _react.default.createElement(_Table.default, {
+  }, "Cart"), props.ordered.length === 0 && _react.default.createElement(_Typography.default, null, "Your cart is empty"), props.ordered.length > 0 && false && _react.default.createElement(_Table.default, {
     size: "small"
-  }, _react.default.createElement(_TableHead.default, null, _react.default.createElement(_TableRow.default, null, _react.default.createElement(_TableCell.default, null, "Food Item"), _react.default.createElement(_TableCell.default, {
-    align: "right"
-  }, "Price"), _react.default.createElement(_TableCell.default, null, "Amount"), _react.default.createElement(_TableCell.default, null), _react.default.createElement(_TableCell.default, null))), _react.default.createElement(_TableBody.default, null, rows.map(row => _react.default.createElement(_TableRow.default, {
-    key: row.id
-  }, _react.default.createElement(_TableCell.default, null, row.shipTo), _react.default.createElement(_TableCell.default, null, row.paymentMethod), _react.default.createElement(_TableCell.default, null, row.amount), _react.default.createElement(_TableCell.default, null, _react.default.createElement(_Button.default, {
-    color: "primary"
-  }, "+1"), _react.default.createElement(_Button.default, {
-    color: "primary"
-  }, "-1")), _react.default.createElement(_TableCell.default, null, _react.default.createElement(_Button.default, {
-    color: "primary"
-  }, "Delete")))))));
+  }, _react.default.createElement(_TableHead.default, null, _react.default.createElement(_TableRow.default, null, _react.default.createElement(_TableCell.default, null, "Food Item"), _react.default.createElement(_TableCell.default, null, "Price"), _react.default.createElement(_TableCell.default, null, "Amount"), _react.default.createElement(_TableCell.default, null), _react.default.createElement(_TableCell.default, null))), _react.default.createElement(_TableBody.default, null, props.ordered.length > 0 && props.ordered.map(row => _react.default.createElement(_TableRow.default, {
+    key: row.foodID
+  }, _react.default.createElement(_TableCell.default, null, row.fname), _react.default.createElement(_TableCell.default, null, row.price), _react.default.createElement(_TableCell.default, null, row.quantity), _react.default.createElement(_TableCell.default, null), _react.default.createElement(_TableCell.default, null, _react.default.createElement(_DialogActions.default, null)))))), _react.default.createElement(_DialogActions.default, null, _react.default.createElement(_Button.default, {
+    color: "primary",
+    onClick: deleteItem(props.ordered[0])
+  }, "Delete")));
 }
-},{"react":"../node_modules/react/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Table":"../node_modules/@material-ui/core/esm/Table/index.js","@material-ui/core/TableBody":"../node_modules/@material-ui/core/esm/TableBody/index.js","@material-ui/core/TableCell":"../node_modules/@material-ui/core/esm/TableCell/index.js","@material-ui/core/TableHead":"../node_modules/@material-ui/core/esm/TableHead/index.js","@material-ui/core/TableRow":"../node_modules/@material-ui/core/esm/TableRow/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js"}],"App/pages/RestaurantPage.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Table":"../node_modules/@material-ui/core/esm/Table/index.js","@material-ui/core/TableBody":"../node_modules/@material-ui/core/esm/TableBody/index.js","@material-ui/core/TableCell":"../node_modules/@material-ui/core/esm/TableCell/index.js","@material-ui/core/TableHead":"../node_modules/@material-ui/core/esm/TableHead/index.js","@material-ui/core/TableRow":"../node_modules/@material-ui/core/esm/TableRow/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/Dialog":"../node_modules/@material-ui/core/esm/Dialog/index.js","@material-ui/core/DialogActions":"../node_modules/@material-ui/core/esm/DialogActions/index.js","@material-ui/core/DialogContent":"../node_modules/@material-ui/core/esm/DialogContent/index.js","@material-ui/core/DialogContentText":"../node_modules/@material-ui/core/esm/DialogContentText/index.js","@material-ui/core/DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/index.js"}],"App/pages/RestaurantPage.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54983,11 +55173,25 @@ var _DialogContentText = _interopRequireDefault(require("@material-ui/core/Dialo
 
 var _DialogTitle = _interopRequireDefault(require("@material-ui/core/DialogTitle"));
 
+var _Paper = _interopRequireDefault(require("@material-ui/core/Paper"));
+
+var _Table = _interopRequireDefault(require("@material-ui/core/Table"));
+
+var _TableBody = _interopRequireDefault(require("@material-ui/core/TableBody"));
+
+var _TableCell = _interopRequireDefault(require("@material-ui/core/TableCell"));
+
+var _TableHead = _interopRequireDefault(require("@material-ui/core/TableHead"));
+
+var _TableRow = _interopRequireDefault(require("@material-ui/core/TableRow"));
+
 var _FoodCard = _interopRequireDefault(require("./../components/FoodCard"));
 
 var _constants = require("./../constants/constants");
 
 var _Cart = _interopRequireDefault(require("./../pages/Cart"));
+
+var _Nav = _interopRequireDefault(require("./../components/Nav"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -55021,6 +55225,11 @@ const styles = theme => ({
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6)
+  },
+  fragment: {
+    // marginTop: '80px'
+    minWidth: '200px',
+    minHeight: '80px'
   }
 }); // const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -55062,7 +55271,7 @@ class RestaurantPage extends _react.default.Component {
     let change = false;
 
     for (let i = 0; i < ordered.length; i++) {
-      if (ordered[i].foodID === item.id) {
+      if (ordered[i].foodID === item.foodID) {
         const existingItem = ordered[i];
         existingItem.quantity++;
         ordered.splice(i, 1);
@@ -55075,11 +55284,61 @@ class RestaurantPage extends _react.default.Component {
     if (!change) {
       console.log('here');
       const newItem = {
-        foodID: item.id,
+        // foodID: item.id, 
         quantity: 1
       };
+      Object.assign(newItem, item);
       ordered.push(newItem);
       newArray = ordered;
+    }
+
+    console.log(newArray);
+    this.setState({
+      ordered: newArray
+    });
+  }
+
+  deleteFoodItem(item) {
+    const {
+      ordered
+    } = this.state;
+    console.log("delete", item);
+    let newArray;
+
+    for (let i = 0; i < ordered.length; i++) {
+      if (ordered[i].foodID === item.foodID) {
+        ordered.splice(i, 1);
+        newArray = ordered;
+      }
+    }
+
+    console.log(newArray);
+    this.setState({
+      ordered: newArray
+    });
+  }
+
+  minusFoodItem(item) {
+    const {
+      ordered
+    } = this.state;
+    console.log("minus", item);
+    let newArray;
+
+    for (let i = 0; i < ordered.length; i++) {
+      if (ordered[i].foodID === item.foodID) {
+        const existingItem = ordered[i];
+        existingItem.quantity--;
+
+        if (existingItem.quantity === 0) {
+          this.deleteFoodItem(item);
+          return;
+        }
+
+        ordered.splice(i, 1);
+        ordered.push(existingItem);
+        newArray = ordered;
+      }
     }
 
     console.log(newArray);
@@ -55110,7 +55369,7 @@ class RestaurantPage extends _react.default.Component {
       cartOpen
     } = this.state;
     console.log(this.state.ordered);
-    return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+    return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_Nav.default, null), _react.default.createElement("div", {
       className: classes.heroContent
     }, _react.default.createElement(_Container.default, {
       maxWidth: "sm"
@@ -55140,14 +55399,33 @@ class RestaurantPage extends _react.default.Component {
       imageUrl: "https://source.unsplash.com/JorKKx5rvA0/640x426",
       title: item.fname,
       fid: item.foodID,
+      foodItemObject: item,
       description: "",
       addFoodItem: this.addFoodItem.bind(this)
     }))))), _react.default.createElement(_Dialog.default, {
       onClose: this.handleClose.bind(this),
       open: cartOpen
-    }, _react.default.createElement(_Cart.default, {
-      ordered: ordered
-    })));
+    }, _react.default.createElement("div", {
+      className: classes.fragment
+    }, _react.default.createElement(_Typography.default, {
+      component: "h2",
+      variant: "h6",
+      color: "primary",
+      gutterBottom: true
+    }, "Cart"), ordered.length === 0 && _react.default.createElement(_Typography.default, null, "Your cart is empty"), ordered.length > 0 && _react.default.createElement(_Table.default, {
+      size: "small"
+    }, _react.default.createElement(_TableHead.default, null, _react.default.createElement(_TableRow.default, null, _react.default.createElement(_TableCell.default, null, "Food Item"), _react.default.createElement(_TableCell.default, null, "Price"), _react.default.createElement(_TableCell.default, null, "Amount"), _react.default.createElement(_TableCell.default, null))), _react.default.createElement(_TableBody.default, null, ordered.length > 0 && ordered.map(row => _react.default.createElement(_TableRow.default, {
+      key: row.foodID
+    }, _react.default.createElement(_TableCell.default, null, row.fname), _react.default.createElement(_TableCell.default, null, row.price), _react.default.createElement(_TableCell.default, null, _react.default.createElement(_Button.default, {
+      color: "primary",
+      onClick: this.addFoodItem.bind(this, row)
+    }, "+"), row.quantity, _react.default.createElement(_Button.default, {
+      color: "primary",
+      onClick: this.minusFoodItem.bind(this, row)
+    }, "-")), _react.default.createElement(_TableCell.default, null), _react.default.createElement(_TableCell.default, null, _react.default.createElement(_DialogActions.default, null, _react.default.createElement(_Button.default, {
+      color: "primary",
+      onClick: this.deleteFoodItem.bind(this, row)
+    }, "Delete"))))))), _react.default.createElement(_DialogActions.default, null))));
   }
 
 }
@@ -55155,7 +55433,7 @@ class RestaurantPage extends _react.default.Component {
 var _default = (0, _styles.withStyles)(styles)(RestaurantPage);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Dialog":"../node_modules/@material-ui/core/esm/Dialog/index.js","@material-ui/core/DialogActions":"../node_modules/@material-ui/core/esm/DialogActions/index.js","@material-ui/core/DialogContent":"../node_modules/@material-ui/core/esm/DialogContent/index.js","@material-ui/core/DialogContentText":"../node_modules/@material-ui/core/esm/DialogContentText/index.js","@material-ui/core/DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/index.js","./../components/FoodCard":"App/components/FoodCard.js","./../constants/constants":"App/constants/constants.js","./../pages/Cart":"App/pages/Cart.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@material-ui/core/AppBar":"../node_modules/@material-ui/core/esm/AppBar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/icons/PhotoCamera":"../node_modules/@material-ui/icons/PhotoCamera.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Toolbar":"../node_modules/@material-ui/core/esm/Toolbar/index.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Dialog":"../node_modules/@material-ui/core/esm/Dialog/index.js","@material-ui/core/DialogActions":"../node_modules/@material-ui/core/esm/DialogActions/index.js","@material-ui/core/DialogContent":"../node_modules/@material-ui/core/esm/DialogContent/index.js","@material-ui/core/DialogContentText":"../node_modules/@material-ui/core/esm/DialogContentText/index.js","@material-ui/core/DialogTitle":"../node_modules/@material-ui/core/esm/DialogTitle/index.js","@material-ui/core/Paper":"../node_modules/@material-ui/core/esm/Paper/index.js","@material-ui/core/Table":"../node_modules/@material-ui/core/esm/Table/index.js","@material-ui/core/TableBody":"../node_modules/@material-ui/core/esm/TableBody/index.js","@material-ui/core/TableCell":"../node_modules/@material-ui/core/esm/TableCell/index.js","@material-ui/core/TableHead":"../node_modules/@material-ui/core/esm/TableHead/index.js","@material-ui/core/TableRow":"../node_modules/@material-ui/core/esm/TableRow/index.js","./../components/FoodCard":"App/components/FoodCard.js","./../constants/constants":"App/constants/constants.js","./../pages/Cart":"App/pages/Cart.js","./../components/Nav":"App/components/Nav.js"}],"../node_modules/@material-ui/core/esm/internal/svg-icons/createSvgIcon.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63337,7 +63615,7 @@ class SignIn extends _react.default.Component {
       usernameEmail: usernameEmail,
       password: password
     };
-    const req = new Request(`${_constants.SERVER_URL}/auth/login`, {
+    const req = new Request(`${_constants.SERVER_URL}/users/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -63356,7 +63634,7 @@ class SignIn extends _react.default.Component {
     //   body: JSON.stringify(params)
     // })
     .then(response => response.json()).then(data => {
-      console.log(data);
+      console.log(data); // window.location.assign('/restaurantlist')
     }).catch(error => {
       console.log("error");
     });
@@ -63390,7 +63668,7 @@ class SignIn extends _react.default.Component {
       required: true,
       fullWidth: true,
       id: "email",
-      label: "Email Address",
+      label: "Username",
       name: "email",
       autoComplete: "email",
       autoFocus: true,
@@ -63605,7 +63883,7 @@ class SignUp extends _react.default.Component {
       usernameEmail: usernameEmail,
       password: password
     };
-    const req = new Request(`${_constants.SERVER_URL}/auth/addCustomer`, {
+    const req = new Request(`${_constants.SERVER_URL}/users/addCustomer`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -63623,7 +63901,10 @@ class SignUp extends _react.default.Component {
     //   },
     //   body: JSON.stringify(params)
     // })
-    .then(response => response.json()).then(data => console.log(data)).catch(error => console.log("error"));
+    .then(response => response.json()).then(data => {
+      console.log(data);
+      window.location.assign('/restaurantlist');
+    }).catch(error => console.log("error"));
     this.setState({
       usernameEmail: '',
       password: ''
@@ -63660,7 +63941,7 @@ class SignUp extends _react.default.Component {
       required: true,
       fullWidth: true,
       id: "email",
-      label: "Email Address",
+      label: "Username",
       name: "email",
       autoComplete: "email",
       value: this.state.usernameEmail,
@@ -63710,129 +63991,7 @@ class SignUp extends _react.default.Component {
 var _default = (0, _styles.withStyles)(styles)(SignUp);
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","@material-ui/core/Avatar":"../node_modules/@material-ui/core/esm/Avatar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/TextField":"../node_modules/@material-ui/core/esm/TextField/index.js","@material-ui/core/FormControlLabel":"../node_modules/@material-ui/core/esm/FormControlLabel/index.js","@material-ui/core/Checkbox":"../node_modules/@material-ui/core/esm/Checkbox/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Box":"../node_modules/@material-ui/core/esm/Box/index.js","@material-ui/icons/LockOutlined":"../node_modules/@material-ui/icons/LockOutlined.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","./../constants/constants":"App/constants/constants.js"}],"App/components/Nav.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _styledComponents = _interopRequireWildcard(require("styled-components"));
-
-var _Button = _interopRequireDefault(require("./Button"));
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Import Button component
-const Header = _styledComponents.default.header`
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  width: 100%;
-  background-color: #707070
-`;
-const NavWrapper = _styledComponents.default.nav`
-  padding: 16px;
-  display: flex;
-  justify-content: flex-end;
-
-  @media (max-width: 479px) {
-    flex-direction: column;
-    align-items: flex-end;
-
-    /* If navigation is open (show is true) */
-    ${props => props.isOpen && (0, _styledComponents.css)`
-      ul {
-        position: absolute;
-        top: 64px;
-        max-height: 1000px;
-      }
-    `}
-  }
-`;
-const NavList = _styledComponents.default.ul`
-  margin: 0;
-  display: flex;
-  overflow: hidden;
-  flex-direction: column;
-  justify-content: flex-end;
-  list-style-type: none;
-  height: auto;
-  max-height: 0;
-
-  @media (min-width: 480px) {
-    flex-direction: row;
-    justify-content: flex-end;
-    max-height: 1000px;
-  }
-`;
-const NavItem = _styledComponents.default.li`
-  & + & {
-    margin-top: 12px;
-  }
-
-  @media (min-width: 480px) {
-    & + & {
-      margin-top: 0;
-      margin-left: 32px;
-    }
-  }
-
-  a {
-    font-size: 16px;
-    font-weight: bold;
-    text-decoration: none;
-    color: #fff;
-    transition: color .25s ease-in-out;
-
-    &:hover {
-      color: #888;
-    }
-  }
-`;
-const NavButton = (0, _styledComponents.default)(_Button.default)`
-  @media (min-width: 479px) {
-    display: none;
-  }
-`;
-
-class Nav extends _react.default.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      show: false
-    };
-    this.toggleMenu = this.toggleMenu.bind(this);
-  }
-
-  toggleMenu() {
-    this.setState({
-      show: !this.state.show
-    });
-  }
-
-  render() {
-    return _react.default.createElement(Header, null, _react.default.createElement(NavWrapper, {
-      isOpen: this.state.show
-    }, _react.default.createElement(NavButton, {
-      onClick: this.toggleMenu
-    }, "Menu"), _react.default.createElement(NavList, null, _react.default.createElement(NavItem, null, _react.default.createElement("a", {
-      href: "/restaurantlist"
-    }, "Restaurants")))));
-  }
-
-}
-
-exports.default = Nav;
-},{"react":"../node_modules/react/index.js","styled-components":"../node_modules/styled-components/dist/styled-components.browser.esm.js","./Button":"App/components/Button.js"}],"App/Main.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","@material-ui/core/Avatar":"../node_modules/@material-ui/core/esm/Avatar/index.js","@material-ui/core/Button":"../node_modules/@material-ui/core/esm/Button/index.js","@material-ui/core/CssBaseline":"../node_modules/@material-ui/core/esm/CssBaseline/index.js","@material-ui/core/TextField":"../node_modules/@material-ui/core/esm/TextField/index.js","@material-ui/core/FormControlLabel":"../node_modules/@material-ui/core/esm/FormControlLabel/index.js","@material-ui/core/Checkbox":"../node_modules/@material-ui/core/esm/Checkbox/index.js","@material-ui/core/Link":"../node_modules/@material-ui/core/esm/Link/index.js","@material-ui/core/Grid":"../node_modules/@material-ui/core/esm/Grid/index.js","@material-ui/core/Box":"../node_modules/@material-ui/core/esm/Box/index.js","@material-ui/icons/LockOutlined":"../node_modules/@material-ui/icons/LockOutlined.js","@material-ui/core/Typography":"../node_modules/@material-ui/core/esm/Typography/index.js","@material-ui/core/styles":"../node_modules/@material-ui/core/esm/styles/index.js","@material-ui/core/Container":"../node_modules/@material-ui/core/esm/Container/index.js","./../constants/constants":"App/constants/constants.js"}],"App/Main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -63890,10 +64049,10 @@ class Main extends _react.default.Component {
   render() {
     return _react.default.createElement("div", {
       className: "wrapper"
-    }, _react.default.createElement(_Nav.default, null), _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
+    }, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
       exact: true,
       path: "/",
-      component: _RestaurantList.default
+      component: _SignIn.default
     }), _react.default.createElement(_reactRouterDom.Route, {
       path: "/signup",
       component: _SignUp.default
@@ -63989,7 +64148,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51277" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56681" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

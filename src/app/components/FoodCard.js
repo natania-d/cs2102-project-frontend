@@ -38,7 +38,7 @@ export default function RestaurantCard(props) {
     }
 
     const handleClickOpen = () => {
-        props.addFoodItem({ id: props.fid })
+        props.addFoodItem(props.foodItemObject)
         setOpen(true);
     };
 

@@ -11,6 +11,7 @@ import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 
 import RestaurantCard from './../components/RestaurantCard';
+import Nav from './../components/Nav';
 
 import { encodeGetParams, TEST, SERVER_URL } from './../constants/constants';
 
@@ -113,6 +114,7 @@ class RestaurantList extends React.Component {
                 </Typography>
                 </Toolbar>
             </AppBar> */}
+            {/* <Nav /> */}
             <main>
                 {/* Hero unit */}
                 <div className={classes.heroContent}>
@@ -143,6 +145,43 @@ class RestaurantList extends React.Component {
                 {/* End hero unit */}
                 <Grid container spacing={4}>
                     {restaurants.map((restaurant)=> {
+                        if (restaurant.rname === 'McDonalds') {
+                            return <Grid item key={restaurant.rid} xs={12} sm={6} md={4}>
+                            <RestaurantCard
+                                imageUrl="https://source.unsplash.com/wqyanQ8ibTE/640x480"
+                                restaurantUrl={"/" + restaurant.rname}
+                                title={restaurant.rname}
+                                location={restaurant.location}
+                                minOrderPrice={restaurant.minimumOrderPrice}
+                                rid={restaurant.rid}
+                            >
+                            </RestaurantCard>
+                        </Grid>
+                        } else if (restaurant.rname === 'Domino Pizza') {
+                            return <Grid item key={restaurant.rid} xs={12} sm={6} md={4}>
+                            <RestaurantCard
+                                imageUrl="https://source.unsplash.com/SU1LFoeEUkk/640x423"
+                                restaurantUrl={"/" + restaurant.rname}
+                                title={restaurant.rname}
+                                location={restaurant.location}
+                                minOrderPrice={restaurant.minimumOrderPrice}
+                                rid={restaurant.rid}
+                            >
+                            </RestaurantCard>
+                        </Grid>
+                        } else if (restaurant.rname === 'Pizza Hut') {
+                            return <Grid item key={restaurant.rid} xs={12} sm={6} md={4}>
+                            <RestaurantCard
+                                imageUrl="https://source.unsplash.com/SU1LFoeEUkk/640x423"
+                                restaurantUrl={"/" + restaurant.rname}
+                                title={restaurant.rname}
+                                location={restaurant.location}
+                                minOrderPrice={restaurant.minimumOrderPrice}
+                                rid={restaurant.rid}
+                            >
+                            </RestaurantCard>
+                        </Grid>
+                        }
                         return <Grid item key={restaurant.rid} xs={12} sm={6} md={4}>
                             <RestaurantCard
                                 imageUrl="https://source.unsplash.com/HYpXP6Zk1dw/640x428"

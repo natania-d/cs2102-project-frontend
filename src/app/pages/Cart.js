@@ -8,6 +8,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 // Generate Order Data
 function createData(id, date, name, shipTo, paymentMethod, amount) {
@@ -32,14 +37,20 @@ const useStyles = makeStyles((theme) => ({
   },
   fragment: {
     // marginTop: '80px'
+    minWidth: '200px',
+    minHeight: '80px'
   }
 }));
 
-export default function Cart() {
+export default function Cart(props) {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
   
 
-    function deleteItem() {
+    function deleteItem(item) {
+        // props.deleteFoodItem(item);
+        console.log("here")
+        // props.handleClose();
 
     }
 
@@ -49,18 +60,28 @@ export default function Cart() {
     function minusItem() {
 
     }
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        (false);
+    };
 
   return (
     <div className={classes.fragment}>
         <Typography component="h2" variant="h6" color="primary" gutterBottom>
             Cart
         </Typography>
-      <Table size="small">
+        {props.ordered.length === 0 &&
+          <Typography>Your cart is empty</Typography>
+          }
+      {props.ordered.length > 0 && false && <Table size="small">
         <TableHead>
           <TableRow>
             {/* <TableCell>Date</TableCell> */}
             <TableCell>Food Item</TableCell>
-            <TableCell align="right">Price</TableCell>
+            <TableCell >Price</TableCell>
             <TableCell>Amount</TableCell>
             
             <TableCell></TableCell>
@@ -69,19 +90,21 @@ export default function Cart() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
+          {props.ordered.length > 0 && props.ordered.map((row) => (
+            <TableRow key={row.foodID}>
               {/* <TableCell>{row.date}</TableCell> */}
               {/* <TableCell>{row.name}</TableCell> */}
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell>{row.amount}</TableCell>
-              <TableCell><Button color="primary">
+              <TableCell>{row.fname}</TableCell>
+              <TableCell>{row.price}</TableCell>
+              <TableCell>{row.quantity}</TableCell>
+              <TableCell>
+                  {/* <Button color="primary" onClick={props.addFoodItem(row)}>
                       +1
                     </Button>
-                    <Button color="primary">
+                    <Button color="primary" onClick={props.minusFoodItem(row)}>
                       -1
-                    </Button></TableCell>
+                    </Button> */}
+                </TableCell>
               <TableCell>
                     {/* <Button color="primary">
                       +1
@@ -89,19 +112,31 @@ export default function Cart() {
                     <Button color="primary">
                       -1
                     </Button> */}
-                    <Button color="primary">
-                      Delete
-                    </Button>
+                    <DialogActions>
+                        {/* <Button color="primary" onClick={props.deleteFoodItem(row)}>
+                        Delete
+                        </Button> */}
+                    </DialogActions>
+                    
                 </TableCell>
             </TableRow>
           ))}
+         
         </TableBody>
-      </Table>
+      </Table>}
       {/* <div className={classes.seeMore}>
         <Link color="primary" href="#" onClick={preventDefault}>
           See more orders
         </Link>
       </div> */}
+      <DialogActions>
+      <Button color="primary" 
+      onClick={deleteItem(props.ordered[0])}
+      >
+                        Delete
+                        </Button>
+      </DialogActions>
+      
     </div>
   );
 }

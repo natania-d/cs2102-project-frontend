@@ -104,7 +104,7 @@ class SignIn extends React.Component {
         usernameEmail: usernameEmail,
         password: password
     };
-    const req = new Request(`${SERVER_URL}/auth/login`, {
+    const req = new Request(`${SERVER_URL}/users/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ class SignIn extends React.Component {
     .then(response => response.json())
     .then(data => {
       console.log(data);
-
+      // window.location.assign('/restaurantlist')
     })
     .catch(error => {
       console.log("error");
@@ -160,7 +160,7 @@ class SignIn extends React.Component {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Username"
               name="email"
               autoComplete="email"
               autoFocus

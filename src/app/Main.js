@@ -33,10 +33,10 @@ export default class Main extends React.Component {
   render () {
     return (
       <div className="wrapper">
-        <Nav />
+        {/* <Nav /> */}
 
         <Switch>
-          <Route exact={true} path="/" component={RestaurantList}/>
+          <Route exact={true} path="/" component={SignIn}/>
           {/* <Route path="/about" component={About}/>
           <Route path="/contact" component={Contact}/>
           <Route path="/portfolio" component={Portfolio}/> */}
